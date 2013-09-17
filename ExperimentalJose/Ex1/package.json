@@ -1,0 +1,16 @@
+{
+  "name": "ex1_app",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "3.3.5",
+    "jade": "*",
+    "less-middleware": "*"
+  },
+  "devDependencies" : {
+    "nodemon": "*"
+  }
+}

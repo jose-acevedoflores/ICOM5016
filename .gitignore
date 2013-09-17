@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-#################
-## Eclipse
-#################
 bin/
 .DS_Store
-
-
-=======
-.DS_Store
->>>>>>> bf3434f54524d36f33a028324b0bd7fbc67bdbbc
+node_modules/
