@@ -2,7 +2,7 @@
 $(document).on('pagebeforeshow', "#home", function( event, ui ) {
 
 	$.ajax({
-		url : "http://192.168.10.106:4000/home",
+		url : "http://localhost:4000/home",
 		contentType: "application/json",
 		success : function(data, textStatus, jqXHR){
 			var itemList = data.items;
@@ -12,11 +12,11 @@ $(document).on('pagebeforeshow', "#home", function( event, ui ) {
 			for (var i=0; i < len; ++i){
 				item = itemList[i];
 
-				if(item.store === "TV_STORE" | item.store === "AUDIO_STORE" | item.store === "PHONE_STORE" | item.store === "VIDEO_STORE"
-					| item.store === "CAMERA_STORE"){
+				if(item.category === "TV_CATEGORY" | item.category === "AUDIO_CATEGORY" | item.category === "PHONE_CATEGORY" | item.category === "VIDEO_CATEGORY"
+					| item.category === "CAMERA_CATEGORY"){
 					list = $("#electronicsList");
 				}
-				else if(item.store === "LAPTOPS_STORE"){
+				else if(item.category === "LAPTOPS_CATEGORY"){
 
 				}
 
@@ -44,7 +44,7 @@ $(document).on('pagebeforeshow', "#home", function( event, ui ) {
 $(document).on('pagebeforeshow', "#shoppingCart", function( event, ui ) {
 	console.log("wooooooooot");
 	$.ajax({
-		url : "http://192.168.10.106:4000/shoppingCart",
+		url : "http://localhost:4000/shoppingCart",
 		contentType: "application/json",
 		success : function(data, textStatus, jqXHR){
 			var itemList = data.items;

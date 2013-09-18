@@ -1,8 +1,8 @@
 module.exports =  { 
-	StoreItem : function (itemName, store, price, description, rating, picture, auctionOrSale){
+	StoreItem : function (itemName, category, price, description, rating, picture, auctionOrSale){
 		this.id = "";
 		this.itemName = itemName;
-		this.store = store;
+		this.category = category;
 		this.price = price;
 		this.description = description;
 		this.rating = rating;

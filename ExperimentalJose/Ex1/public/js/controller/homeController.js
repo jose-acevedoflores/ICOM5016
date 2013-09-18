@@ -37,7 +37,7 @@ function electronicsStore(){
 		$.mobile.loading("show");	
 
 		$.ajax({
-			url : "http://192.168.10.106:4000/electronicsStore",
+			url : "http://localhost:4000/electronicsStore",
 			contentType: "application/json",
 			success : function(data, textStatus, jqXHR){
 
@@ -48,19 +48,19 @@ function electronicsStore(){
 				for (var i=0; i < len; ++i){
 					item = itemList[i];
 
-					if(item.store === "TV_STORE"){
+					if(item.category === "TV_CATEGORY"){
 						list = $("#tvList");
 					}
-					else if(item.store === "AUDIO_STORE"){
+					else if(item.category === "AUDIO_CATEGORY"){
 						list = $("#audioList");
 					}
-					else if(item.store === "PHONE_STORE"){
+					else if(item.category === "PHONE_CATEGORY"){
 						list = $("#phoneList");
 					}
-					else if(item.store === "VIDEO_STORE"){
+					else if(item.category === "VIDEO_CATEGORY"){
 						list = $("#videoList");
 					}
-					else if(item.store === "CAMERA_STORE"){
+					else if(item.category === "CAMERA_CATEGORY"){
 						list = $("#cameraList");
 					}
 
@@ -112,7 +112,7 @@ function tvCategory(){
 	$.mobile.loading("show");
 
 	$.ajax({
-		url : "http://192.168.10.106:4000/tvCategory",
+		url : "http://localhost:4000/tvCategory",
 		method: 'get',
 		contentType: "application/json",
 		dataType:"json",
@@ -168,7 +168,7 @@ function audioCategory(){
 	$.mobile.loading("show");
 
 	$.ajax({
-		url : "http://192.168.10.106:4000/audioCategory",
+		url : "http://localhost:4000/audioCategory",
 		method: 'get',
 		contentType: "application/json",
 		dataType:"json",
@@ -191,7 +191,7 @@ function cameraCategory(){
 	$.mobile.loading("show");
 
 	$.ajax({
-		url : "http://192.168.10.106:4000/cameraCategory",
+		url : "http://localhost:4000/cameraCategory",
 		method: 'get',
 		contentType: "application/json",
 		dataType:"json",
@@ -213,7 +213,7 @@ function phoneStore(){
 	$.mobile.loading("show");
 
 	$.ajax({
-		url : "http://192.168.10.106:4000/phoneStore",
+		url : "http://localhost:4000/phoneStore",
 		method: 'get',
 		contentType: "application/json",
 		dataType:"json",
@@ -235,7 +235,7 @@ function videoStore(){
 	$.mobile.loading("show");
 
 	$.ajax({
-		url : "http://192.168.10.106:4000/videoStore",
+		url : "http://localhost:4000/videoStore",
 		method: 'get',
 		contentType: "application/json",
 		dataType:"json",
