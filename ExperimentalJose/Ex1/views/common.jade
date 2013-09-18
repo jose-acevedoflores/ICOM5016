@@ -1,0 +1,84 @@
+
+div(data-role="panel", id="rightPanel", data-position="right", data-display="push", data-theme="b")	
+	div(class="nav_profile")
+		div(class="nav_name")
+			h3	Stores
+			ul(data-role="listview", data-inset="true")
+				li( data-role="list-divider", data-theme="a")
+					a(href="#") Electronics
+				li 
+					a(onclick="tvCategory()") TV
+				li
+					a(href="#") Audio	
+				li
+					a(href="#") Phones	
+				li
+					a(href="#") Camera	
+				li
+					a(href="#") Video				
+				li(data-role="list-divider", data-theme="a")
+					a(href="#") Books
+				li
+					a(href="#") Children	
+				li
+					a(href="#") Fiction			
+				li
+					a(href="#") Technology
+				li
+					a(href="#") Business			
+				li(data-role="list-divider", data-theme="a")
+					a(href="#") Computers
+				li
+					a(href="#") Laptops
+				li
+					a(href="#") Desktops
+				li
+					a(href="#") Tablets
+				li
+					a(href="#") Printers					
+				li(data-role="list-divider", data-theme="a")
+					a(href="#") Clothing
+				li
+					a(href="#") Children
+				li
+					a(href="#") Men
+				li
+					a(href="#") Women
+				li(data-role="list-divider", data-theme="a")
+					a(href="#") Shoes
+				li
+					a(href="#") Children
+				li
+					a(href="#") Men
+				li
+					a(href="#") Women
+
+div(data-role="panel", id="leftPanel", class="main_nav", data-display="push" , data-dismissible="true" ,data-theme="b")		
+	div(class="nav_profile")			
+		div(class="nav_name")
+			h3 
+				a(onclick="loginForm()") Log In or 
+				a(onclick="registerForm()") Register
+			ul(data-role="listview", data-inset="true" )	
+				li
+					a(href="#shoppingCart") Cart
+				li 
+					a(href="#") Placed Bids
+				li
+					a(href="#") Items Selling
+				li
+					a(href="#")	Items Sold
+				li 
+					a(href="#")	Account
+
+div(data-role="header", data-theme="c")
+	div(data-role="fieldcontain")
+		a(href="#leftPanel", data-role="button", data-inline="true") Panel	
+		a(href="#rightPanel", data-role="button", data-inline="true") Store Menus
+		input(type="search", name="search-2" ,id="search-2", data-theme="c")
+
+
+
+
+
+

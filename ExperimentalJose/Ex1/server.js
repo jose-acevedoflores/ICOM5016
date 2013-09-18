@@ -8,14 +8,18 @@ app.configure(function(){
 	app.set('port', process.env.PORT || 4000);
 	app.set('public', __dirname + '/public');
 	app.use(express.static(__dirname + '/public'));
+	app.use(express.static(__dirname + '/views'));
 });
 
 
 app.get('/', function(request, response) {
-	response.sendfile('public/home.html');
+
+	response.render('home.jade');
+
+	//response.sendfile('public/home.html');
 });
 
-app.get('/home', function(request, response) {
+app.get('/home',function(req, res ) {
 
 	console.log("GET : home");
 
@@ -42,12 +46,45 @@ app.get('/home', function(request, response) {
 			 "https://lh6.googleusercontent.com/-nNyrLwWbpOE/Uh_YB_QPLII/AAAAAAAAADE/zeBzioai3xM/Jeremy-Clarkson-In-Ariel-Atom-AHHHHHHH-bbc-america-top-gear-10491170-480-331.jpg")
 
 		);
-	var res = {"items" : data};
-	response.json(res);
+	var temp = {"items" : data};
+	res.json(temp);
+
+} );
+
+app.get('/electronicsStore', function(request, response) {
+
+	console.log("GET : electronicsStore");
+
+	var data =  new Array(
+
+		new StoreItem("Samsung F8000 High Def TV", "TV_STORE", "$4,000" ,
+			 "onevkbdnv, new description woot woot wooto owtoo", "97", 
+			 "http://pinoytutorial.com/techtorial/wp-content/uploads/2013/01/Samsung-F8000-led-ces.jpg"),
+
+		new StoreItem("Justin Bieber Album", "AUDIO_STORE", "$40" ,
+			 "onevkbdnv, new description woot woot wooto owtoo", "97", 
+			 "http://25.media.tumblr.com/tumblr_lsj02rFcmz1qh2d1ho1_500.jpg"), 
+
+		new StoreItem("HTC ONE", "PHONE_STORE", "$500" ,
+			 "BEST PHONE EVER", "97", 
+			 "http://www.htc.com/managed-assets/shared/desktop/smartphones/htc-one/hero/HTC-ProductDetail-Hero-slide-04.png"),
+
+		new StoreItem("Nikon somethin", "CAMERA_STORE", "$3,400" ,
+			 "40,000 Mega Pixel camera ", "97", 
+			 "http://swotti.starmedia.com/tmp/swotti/cacheBMLRB24GZDQW/imgNikon%20D403.jpg"), 
+
+		new StoreItem("Top Gear season 300", "VIDEO_STORE", "$300" ,
+			 "Catch your favorite TV stars in their latest car journey", "97", 
+			 "https://lh6.googleusercontent.com/-nNyrLwWbpOE/Uh_YB_QPLII/AAAAAAAAADE/zeBzioai3xM/Jeremy-Clarkson-In-Ariel-Atom-AHHHHHHH-bbc-america-top-gear-10491170-480-331.jpg")
+
+		);
+	var temp = {"items" : data};
+	response.json(temp);
 });
 
 
-app.get('/tvStore', function(req, res){
+app.get('/tvCategory', function(req, res){
+	console.log("GET: tvCategory");
 var data =  new Array(
 
 		new StoreItem("Samsung F8000 High Def TV", "TV_STORE", "$4,000" ,

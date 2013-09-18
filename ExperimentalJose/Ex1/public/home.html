@@ -20,7 +20,58 @@
 </head>  
 <body> 
 
+
+
+
 <div data-role="page" id="home">
+
+	<div id="common" >
+	
+	</div>
+
+	<div data-role="content">	
+
+		<!-- <a href="#carListPage" data-role="button" >Star button</a>	 -->
+		<h1>Stores </h1>
+		<p>Browse our wonderful selection of merchandise. Check out today's hot deals </p>
+
+			<ul data-role="listview" id="electronicsList" data-inset="true">
+				<li data-role="list-divider" data-theme="a"><a onclick="electronicsStore()">Electronics</a></li>	
+				
+			</ul>
+			<ul data-role="listview" id="booksList" data-inset="true">
+				<li data-role="list-divider" data-theme="a"><a onclick="bookStore()">Books </a></li>
+		
+			</ul>
+			<ul data-role="listview" id="computersList" data-inset="true">	
+				<li data-role="list-divider" data-theme="a"><a onclick="computerStore()">Computers</a></li>
+			
+			</ul>	
+			<ul data-role="listview" id="clothingList" data-inset="true">
+				<li data-role="list-divider" data-theme="a"><a onclick="clothingStore()">Clothing</a></li>
+			
+			</ul>
+
+			<ul data-role="listview" id="shoesList" data-inset="true">
+				<li data-role="list-divider" data-theme="a"><a onclick="shoeStore()">Shoes</a></li>
+			
+			</ul>
+		
+			<ul data-role="listview" id="sportsList" data-inset="true">
+				<li data-role="list-divider" data-theme="a"><a onclick="sportStore()">Sports</a></li>
+			
+			</ul>
+
+	</div><!-- /content -->
+
+
+</div><!-- /page -->
+
+<!-- ***************************************************************************************************************** 
+	ELECTRONIC STORE PAGE
+	 ***************************************************************************************************************** -->
+
+<div data-role="page" id="store">
 
 	<div data-role="panel" id="rightPanel" data-position="right" data-display="push" data-theme="b">
 		<div class="nav_profile">
@@ -28,7 +79,7 @@
             	<h3>Stores</h3>
 				<ul data-role="listview" data-inset="true" >
 					<li data-role="list-divider" data-theme="a"><a href="#">Electronics</a></li>
-					<li><a href="#">TV</a></li>	
+					<li><a onclick="tvCategory()">TV</a></li>	
 					<li><a href="#">Audio</a></li>
 					<li><a href="#">Phones</a></li>
 					<li><a href="#">Cameras</a></li>
@@ -83,34 +134,7 @@
 
 	</div><!-- /header -->
 
-	<div data-role="content">	
-
-		<!-- <a href="#carListPage" data-role="button" >Star button</a>	 -->
-		<h1>Stores </h1>
-		<p>Browse our wonderful selection of merchandise. Check out today's hot deals </p>
-		<h3>Electronics </h3>
-			<ul data-role="listview" id="tvList" data-inset="true">
-				<li data-role="list-divider" data-theme="a"><a onclick="tvStore()">TV</a></li>	
-				
-			</ul>
-			<ul data-role="listview" id="audioList" data-inset="true">
-				<li data-role="list-divider" data-theme="a"><a onclick="audioStore()">Audio</a></li>
-		
-			</ul>
-			<ul data-role="listview" id="phoneList" data-inset="true">	
-				<li data-role="list-divider" data-theme="a"><a onclick="phoneStore()">Phones</a></li>
-			
-			</ul>	
-			<ul data-role="listview" id="cameraList" data-inset="true">
-				<li data-role="list-divider" data-theme="a"><a onclick="cameraStore()">Cameras</a></li>
-			
-			</ul>
-
-			<ul data-role="listview" id="videoList" data-inset="true">
-				<li data-role="list-divider" data-theme="a"><a onclick="videoStore()">Video</a></li>
-			
-			</ul>
-		
+	<div data-role="content" id="storeContent">	
 
 
 	</div><!-- /content -->
@@ -119,9 +143,10 @@
 </div><!-- /page -->
 
 <!-- ***************************************************************************************************************** 
-	STORE PAGE
+	CATEGORY PAGE
 	 ***************************************************************************************************************** -->
-<div data-role="page" id="store">
+
+<div data-role="page" id="category">
 	
 	<div data-role="header" data-theme="c">
 
@@ -133,10 +158,11 @@
 
 	</div><!-- /header -->
 
-	<div data-role="content" id="carList">
-		<div data-role="controlgroup" data-type="horizontal" id="storeNavigator">
+	<div data-role="content" >
+		<div data-role="controlgroup" data-type="horizontal" id="categoryNavigator">
 
 		</div>
+
 		<div data-role="fieldcontain">
 			<!-- <label for="sortOrder" class="select">Sort By: </label> -->
 			<select name="SortOrder" id="sortOrder">
@@ -157,7 +183,7 @@
 
 		<br>
 
-		<ul data-role="listview" data-inset="true" data-filter="true" id="temps">
+		<ul data-role="listview" data-inset="true" data-filter="true" id="categoryItemList" data-filter-placeholder="Filter items">
 			
 		</ul>
 	</div>	
@@ -181,7 +207,7 @@
 
 	<div data-role="content" >
 		<h3>Items in cart </h3>
-		<ul data-role="listview" data-inset="true" data-filter="true" id="cartItemList">
+		<ul data-role="listview" data-inset="true" data-filter="true" id="cartItemList" data-filter-placeholder="Filter items in cart">
 
 		</ul>
 	</div>	

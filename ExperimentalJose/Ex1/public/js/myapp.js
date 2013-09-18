@@ -1,6 +1,6 @@
 
 $(document).on('pagebeforeshow', "#home", function( event, ui ) {
-	console.log("wooooooooot");
+
 	$.ajax({
 		url : "http://192.168.10.106:4000/home",
 		contentType: "application/json",
@@ -12,20 +12,12 @@ $(document).on('pagebeforeshow', "#home", function( event, ui ) {
 			for (var i=0; i < len; ++i){
 				item = itemList[i];
 
-				if(item.store === "TV_STORE"){
-					list = $("#tvList");
+				if(item.store === "TV_STORE" | item.store === "AUDIO_STORE" | item.store === "PHONE_STORE" | item.store === "VIDEO_STORE"
+					| item.store === "CAMERA_STORE"){
+					list = $("#electronicsList");
 				}
-				else if(item.store === "AUDIO_STORE"){
-					list = $("#audioList");
-				}
-				else if(item.store === "PHONE_STORE"){
-					list = $("#phoneList");
-				}
-				else if(item.store === "VIDEO_STORE"){
-					list = $("#videoList");
-				}
-				else if(item.store === "CAMERA_STORE"){
-					list = $("#cameraList");
+				else if(item.store === "LAPTOPS_STORE"){
+
 				}
 
 				list.append("<li><a href=\"#\">" + 
@@ -45,6 +37,7 @@ $(document).on('pagebeforeshow', "#home", function( event, ui ) {
 		}
 	});
 });
+
 
 
 
@@ -78,6 +71,9 @@ $(document).on('pagebeforeshow', "#shoppingCart", function( event, ui ) {
 		}
 	});
 });
+
+
+
 
 
 
