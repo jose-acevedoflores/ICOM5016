@@ -44,9 +44,12 @@ app.get('/home',function(req, res ) {
 
 		new StoreItem("Top Gear season 300", "VIDEO_CATEGORY", "$300" ,
 			 "Catch your favorite TV stars in their latest car journey", "97", 
-			 "https://lh6.googleusercontent.com/-nNyrLwWbpOE/Uh_YB_QPLII/AAAAAAAAADE/zeBzioai3xM/Jeremy-Clarkson-In-Ariel-Atom-AHHHHHHH-bbc-america-top-gear-10491170-480-331.jpg")
-
+			 "https://lh6.googleusercontent.com/-nNyrLwWbpOE/Uh_YB_QPLII/AAAAAAAAADE/zeBzioai3xM/Jeremy-Clarkson-In-Ariel-Atom-AHHHHHHH-bbc-america-top-gear-10491170-480-331.jpg"),
+		
+		new StoreItem("MacBookPro", "LAPTOPS_CATEGORY", "$1,200", "A Macbook Pro laptop", "97", 
+			"http://images.apple.com/macbook-pro/images/overview_display_hero.png")
 		);
+		
 	var temp = {"items" : data};
 	res.json(temp);
 

@@ -16,7 +16,9 @@ $(document).on('pagebeforeshow', "#home", function( event, ui ) {
 					| item.category === "CAMERA_CATEGORY"){
 					list = $("#electronicsList");
 				}
-				else if(item.category === "LAPTOPS_CATEGORY"){
+				else if(item.category === "LAPTOPS_CATEGORY" | item.category === "DESTOPS_CATEGORY" | item.category === "TABLETS_CATEGORY"  
+					| item.category === "PRINTERS_CATEGORY"){
+					list = $("#computersList");
 
 				}
 
