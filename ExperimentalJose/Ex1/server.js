@@ -46,7 +46,7 @@ app.get('/home',function(req, res ) {
 			 "Catch your favorite TV stars in their latest car journey", "97", 
 			 "https://lh6.googleusercontent.com/-nNyrLwWbpOE/Uh_YB_QPLII/AAAAAAAAADE/zeBzioai3xM/Jeremy-Clarkson-In-Ariel-Atom-AHHHHHHH-bbc-america-top-gear-10491170-480-331.jpg"),
 		
-		new StoreItem("MacBookPro", "LAPTOPS_CATEGORY", "$1,200", "A Macbook Pro laptop", "97", 
+		new StoreItem("MacBookPro", "LAPTOPS_CATEGORY", "$1,200.00", "A Macbook Pro laptop", "97", 
 			"http://images.apple.com/macbook-pro/images/overview_display_hero.png")
 		);
 		
@@ -121,6 +121,19 @@ app.get('/phoneStore', function(req, res){
 
 app.get('/videoStore', function(req, res){
 	res.json({"data" : "video"});
+});
+
+app.get('/computerStore', function(req, res){
+	console.log("GET : computersStore");
+
+	var data =  new Array(
+
+		new StoreItem("MacBookPro", "LAPTOPS_CATEGORY", "$1,200.00", "A Macbook Pro laptop", "97", 
+			"http://images.apple.com/macbook-pro/images/overview_display_hero.png")
+			
+		);
+	var temp = {"items" : data};
+	response.json(temp);
 });
 
 app.get('/shoppingCart', function(req, res){

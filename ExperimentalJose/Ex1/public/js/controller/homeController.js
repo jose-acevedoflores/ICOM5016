@@ -90,7 +90,87 @@ function bookStore(){
 }
 
 function computerStore(){
+$(document).on('pagebeforecreate', "#store", function( event ) {
+	
 
+			var storeContent = $("#storeContent");
+			storeContent.append(" <h1> Stores </h1> " +
+		  	" <p>Browse our wonderful selection of merchandise. Check out today's hot deals </p> " +
+		 	" <h3>Electronics </h3> " + 
+			" <ul data-role=\"listview\" id=\"laptopList\" data-inset=\"true\"> " + 
+				" <li data-role=\"list-divider\" data-theme=\"a\"><a onclick=\"laptopCategory()\">Laptop</a></li>	" +
+				
+		   	"</ul> " +
+			"<ul data-role=\"listview\" id=\"audioList\" data-inset=\"true\">"+
+			"	<li data-role=\"list-divider\" data-theme=\"a\"><a onclick=\"audioStore()\">Audio</a></li> " +
+		
+			" </ul> " +
+			"<ul data-role=\"listview\" id=\"phoneList\" data-inset=\"true\">	"+
+			"	<li data-role=\"list-divider\" data-theme=\"a\"><a onclick=\"phoneStore()\">Phones</a></li> " +
+			
+			"</ul>	"+
+			"<ul data-role=\"listview\" id=\"cameraList\" data-inset=\"true\">"+
+				"<li data-role=\"list-divider\" data-theme=\"a\"><a onclick=\"cameraStore()\">Cameras</a></li>"+
+			
+			"</ul>"+
+
+			"<ul data-role=\"listview\" id=\"videoList\" data-inset=\"true\">"+
+				"<li data-role=\"list-divider\" data-theme=\"a\"><a onclick=\"videoStore()\">Video</a></li>"+
+			
+			"</ul>" );
+
+	});
+		
+
+	$(document).on('pagebeforeshow', "#store", function( event, ui ) {
+
+		$.mobile.loading("show");	
+
+		$.ajax({
+			url : "http://localhost:4000/computersStore",
+			contentType: "application/json",
+			success : function(data, textStatus, jqXHR){
+
+				var itemList = data.items;
+				var len = itemList.length;
+				var list;
+				var item;
+				for (var i=0; i < len; ++i){
+					item = itemList[i];
+
+					if(item.category === "LAPTOPS_CATEGORY"){
+						list = $("#laptopList");
+					}
+					else if(item.category === "DESKTOPS_CATEGORY"){
+						list = $("#desktopList");
+					}
+					else if(item.category === "TABLETS_CATEGORY"){
+						list = $("#tabletList");
+					}
+					else if(item.category === "PRINTERS_CATEGORY"){
+						list = $("#printerList");
+					}
+					
+
+					list.append("<li><a href=\"#\">" + 
+						"<img src="+ item.picture + ">"  + 
+						"<h2>" + item.itemName + "</h2>" + 
+						"<p>" + item.description + "</p>" +
+						"<p> Rating:" + item.rating + " </p>" + 
+						"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
+						"</a></li>");
+					list.listview("refresh");	
+				}
+				$.mobile.loading("hide");
+			},
+			error: function(data, textStatus, jqXHR){
+				console.log("textStatus: " + textStatus);
+				alert("Data not found!");
+			}
+		});
+		
+	});
+	$.mobile.navigate("#store");
 }
 
 function clothingStore(){
