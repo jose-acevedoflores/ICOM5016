@@ -1,0 +1,22 @@
+div(data-role="page", id="tvCategory")				
+			include ../common
+			div(data-role="content")
+				div(data-role="controlgroup", data-type="horizontal", id="tvCategoryNavigator") 	
+					a(href="#", data-role="button") Electronics
+					a(href="#", data-role="button") TV
+				div(data-role="fieldcontain")
+					select(name="SortOrder", id="sortOrder")
+						optgroup(label="Price")
+							option(value="highToLow") High to Low
+							option(value="lowToHigh") Low to High
+						optgroup(label="Brand")	
+							option(value="alphabetical") Alphabetical order (Brand)
+							option(value="revAlphabetical") Reverse Alphabetical (Brand)
+						optgroup(label="Item Name")
+							option(value="alphabetical") Alphabetical order (Item Name)
+							option(value="revAlphabetical") Reverse Alphabetical (Item Name)		
+				br			
+				ul(data-role="listview", data-inset="true", data-filter="true", id="categoryItemList", data-filter-placeholder="Filter items")
+
+
+

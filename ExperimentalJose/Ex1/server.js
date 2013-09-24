@@ -107,8 +107,8 @@ var data =  new Array(
 	res.json(temp);
 });
 
-app.get('/audioStore', function(req, res){
-	res.json({"data" : "audio"});
+app.get('/booksStore', function(req, res){
+	console.log("GET: booksStore");
 });
 
 app.get('/cameraStore', function(req, res){
