@@ -259,9 +259,32 @@ function audioCategory(){
 		contentType: "application/json",
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
-			console.log(data);
+			$(document).on('pagebeforeshow', "#audioCategory", function( event, ui ) {
+	
+				var itemList = data.items;
+				var len = itemList.length;
+				var list = $("#audioCategoryItemList");
+				var item;
+				for (var i=0; i < len; ++i){
+					item = itemList[i];
+
+					list.append("<li><a href=\"#\">" + 
+						"<img src="+ item.picture + ">"  + 
+						"<h2>" + item.itemName + "</h2>" + 
+						"<p>" + item.description + "</p>" +
+						"<p> Rating:" + item.rating + " </p>" + 
+						"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
+						"</a></li>");
+						
+				}
+				list.listview("refresh");
+
+
+				
+			});
 			$.mobile.loading("hide");
-			$.mobile.navigate("#category");
+
+			$.mobile.navigate("#audioCategory");
 		},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
@@ -282,9 +305,31 @@ function cameraCategory(){
 		contentType: "application/json",
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
-			console.log(data);
+			$(document).on('pagebeforeshow', "#cameraCategory", function( event, ui ) {
+	
+				var itemList = data.items;
+				var len = itemList.length;
+				var list = $("#cameraCategoryItemList");
+				var item;
+				for (var i=0; i < len; ++i){
+					item = itemList[i];
+
+					list.append("<li><a href=\"#\">" + 
+						"<img src="+ item.picture + ">"  + 
+						"<h2>" + item.itemName + "</h2>" + 
+						"<p>" + item.description + "</p>" +
+						"<p> Rating:" + item.rating + " </p>" + 
+						"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
+						"</a></li>");
+						
+				}
+				list.listview("refresh");
+
+
+				
+			});
 			$.mobile.loading("hide");
-			$.mobile.navigate("#categorys");
+			$.mobile.navigate("#cameraCategory");
 		},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
@@ -294,19 +339,41 @@ function cameraCategory(){
 	});
 };
 
-function phoneStore(){
+function phoneCategory(){
 
 	$.mobile.loading("show");
 
 	$.ajax({
-		url : "http://localhost:4000/phoneStore",
+		url : "http://localhost:4000/phoneCategory",
 		method: 'get',
 		contentType: "application/json",
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
-			console.log(data);
+			$(document).on('pagebeforeshow', "#phoneCategory", function( event, ui ) {
+	
+				var itemList = data.items;
+				var len = itemList.length;
+				var list = $("#phoneCategoryItemList");
+				var item;
+				for (var i=0; i < len; ++i){
+					item = itemList[i];
+
+					list.append("<li><a href=\"#\">" + 
+						"<img src="+ item.picture + ">"  + 
+						"<h2>" + item.itemName + "</h2>" + 
+						"<p>" + item.description + "</p>" +
+						"<p> Rating:" + item.rating + " </p>" + 
+						"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
+						"</a></li>");
+						
+				}
+				list.listview("refresh");
+
+	
+			});
 			$.mobile.loading("hide");
-			$.mobile.navigate("#stores");
+
+			$.mobile.navigate("#phoneCategory");
 		},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
@@ -316,19 +383,41 @@ function phoneStore(){
 	});
 };
 
-function videoStore(){
+function videoCategory(){
 
 	$.mobile.loading("show");
 
 	$.ajax({
-		url : "http://localhost:4000/videoStore",
+		url : "http://localhost:4000/videoCategory",
 		method: 'get',
 		contentType: "application/json",
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
-			console.log(data);
+
+			$(document).on('pagebeforeshow', "#videoCategory", function( event, ui ) {
+	
+				var itemList = data.items;
+				var len = itemList.length;
+				var list = $("#videoCategoryItemList");
+				var item;
+				for (var i=0; i < len; ++i){
+					item = itemList[i];
+
+					list.append("<li><a href=\"#\">" + 
+						"<img src="+ item.picture + ">"  + 
+						"<h2>" + item.itemName + "</h2>" + 
+						"<p>" + item.description + "</p>" +
+						"<p> Rating:" + item.rating + " </p>" + 
+						"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
+						"</a></li>");
+						
+				}
+				list.listview("refresh");
+				
+			});
+
 			$.mobile.loading("hide");
-			$.mobile.navigate("#stores");
+			$.mobile.navigate("#videoCategory");
 		},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
