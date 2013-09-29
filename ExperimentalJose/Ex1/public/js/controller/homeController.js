@@ -1,3 +1,6 @@
+/*******************************************************************************************************************************************/
+// Electronic Store
+/*******************************************************************************************************************************************/
 function electronicsStore(){
 		
 
@@ -54,6 +57,9 @@ function electronicsStore(){
 	$.mobile.navigate("#electronicsStore");
 }
 
+/*******************************************************************************************************************************************/
+// Book Store
+/*******************************************************************************************************************************************/
 function bookStore(){
 	$(document).on('pagebeforeshow', "#booksStore", function( event, ui ) {
 
@@ -105,327 +111,29 @@ function bookStore(){
 	$.mobile.navigate("#booksStore");
 }
 
-function computerStore(){
-$(document).on('pagebeforecreate', "#store", function( event ) {
-	
 
-			var storeContent = $("#storeContent");
-			storeContent.append(" <h1> Stores </h1> " +
-		  	" <p>Browse our wonderful selection of merchandise. Check out today's hot deals </p> " +
-		 	" <h3>Electronics </h3> " + 
-			" <ul data-role=\"listview\" id=\"laptopList\" data-inset=\"true\"> " + 
-				" <li data-role=\"list-divider\" data-theme=\"a\"><a onclick=\"laptopCategory()\">Laptop</a></li>	" +
-				
-		   	"</ul> " +
-			"<ul data-role=\"listview\" id=\"audioList\" data-inset=\"true\">"+
-			"	<li data-role=\"list-divider\" data-theme=\"a\"><a onclick=\"audioStore()\">Audio</a></li> " +
-		
-			" </ul> " +
-			"<ul data-role=\"listview\" id=\"phoneList\" data-inset=\"true\">	"+
-			"	<li data-role=\"list-divider\" data-theme=\"a\"><a onclick=\"phoneStore()\">Phones</a></li> " +
-			
-			"</ul>	"+
-			"<ul data-role=\"listview\" id=\"cameraList\" data-inset=\"true\">"+
-				"<li data-role=\"list-divider\" data-theme=\"a\"><a onclick=\"cameraStore()\">Cameras</a></li>"+
-			
-			"</ul>"+
 
-			"<ul data-role=\"listview\" id=\"videoList\" data-inset=\"true\">"+
-				"<li data-role=\"list-divider\" data-theme=\"a\"><a onclick=\"videoStore()\">Video</a></li>"+
-			
-			"</ul>" );
-
-	});
-		
-
-	$(document).on('pagebeforeshow', "#store", function( event, ui ) {
-
-		$.mobile.loading("show");	
-
-		$.ajax({
-			url : "http://localhost:4000/computersStore",
-			contentType: "application/json",
-			success : function(data, textStatus, jqXHR){
-
-				var itemList = data.items;
-				var len = itemList.length;
-				var list;
-				var item;
-				for (var i=0; i < len; ++i){
-					item = itemList[i];
-
-					if(item.category === "LAPTOPS_CATEGORY"){
-						list = $("#laptopList");
-					}
-					else if(item.category === "DESKTOPS_CATEGORY"){
-						list = $("#desktopList");
-					}
-					else if(item.category === "TABLETS_CATEGORY"){
-						list = $("#tabletList");
-					}
-					else if(item.category === "PRINTERS_CATEGORY"){
-						list = $("#printerList");
-					}
-					
-
-					list.append("<li><a href=\"#\">" + 
-						"<img src="+ item.picture + ">"  + 
-						"<h2>" + item.itemName + "</h2>" + 
-						"<p>" + item.description + "</p>" +
-						"<p> Rating:" + item.rating + " </p>" + 
-						"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
-						"</a></li>");
-					list.listview("refresh");	
-				}
-				$.mobile.loading("hide");
-			},
-			error: function(data, textStatus, jqXHR){
-				console.log("textStatus: " + textStatus);
-				alert("Data not found!");
-			}
-		});
-		
-	});
-	$.mobile.navigate("#store");
-}
+/*******************************************************************************************************************************************/
+//  Clothing Store
+/*******************************************************************************************************************************************/
 
 function clothingStore(){
 
 }
-
+/*******************************************************************************************************************************************/
+//  Shoe Store
+/*******************************************************************************************************************************************/
 function shoeStore(){
 
 }
 
+/*******************************************************************************************************************************************/
+//  Sports Store
+/*******************************************************************************************************************************************/
 function sportStore(){
 
 }
 
-//CATEGORIES
-
-function tvCategory(){
-
-	$.mobile.loading("show");
-
-	$.ajax({
-		url : "http://localhost:4000/tvCategory",
-		method: 'get',
-		contentType: "application/json",
-		dataType:"json",
-		success : function(data, textStatus, jqXHR){
-			$.mobile.loading("hide");
-			$(document).on('pagebeforeshow', "#tvCategory", function( event, ui ) {
-	
-				var itemList = data.items;
-				var len = itemList.length;
-				var list = $("#tvCategoryItemList");
-				var item;
-				for (var i=0; i < len; ++i){
-					item = itemList[i];
-
-					list.append("<li><a href=\"#\">" + 
-						"<img src="+ item.picture + ">"  + 
-						"<h2>" + item.itemName + "</h2>" + 
-						"<p>" + item.description + "</p>" +
-						"<p> Rating:" + item.rating + " </p>" + 
-						"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
-						"</a></li>");
-						
-				}
-				list.listview("refresh");
-
-
-				
-			});
-			
-			$.mobile.navigate("#tvCategory");
-		}	
-		,
-		error: function(data, textStatus, jqXHR){
-			console.log("textStatus: " + textStatus);
-			$.mobile.loading("hide");
-			alert("NOOOO");
-		}
-	});
-};
-
-function audioCategory(){
-
-	$.mobile.loading("show");
-
-	$.ajax({
-		url : "http://localhost:4000/audioCategory",
-		method: 'get',
-		contentType: "application/json",
-		dataType:"json",
-		success : function(data, textStatus, jqXHR){
-			$(document).on('pagebeforeshow', "#audioCategory", function( event, ui ) {
-	
-				var itemList = data.items;
-				var len = itemList.length;
-				var list = $("#audioCategoryItemList");
-				var item;
-				for (var i=0; i < len; ++i){
-					item = itemList[i];
-
-					list.append("<li><a href=\"#\">" + 
-						"<img src="+ item.picture + ">"  + 
-						"<h2>" + item.itemName + "</h2>" + 
-						"<p>" + item.description + "</p>" +
-						"<p> Rating:" + item.rating + " </p>" + 
-						"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
-						"</a></li>");
-						
-				}
-				list.listview("refresh");
-
-
-				
-			});
-			$.mobile.loading("hide");
-
-			$.mobile.navigate("#audioCategory");
-		},
-		error: function(data, textStatus, jqXHR){
-			console.log("textStatus: " + textStatus);
-			$.mobile.loading("hide");
-			alert("NOOOO");
-		}
-	});
-};
-
-
-function cameraCategory(){
-
-	$.mobile.loading("show");
-
-	$.ajax({
-		url : "http://localhost:4000/cameraCategory",
-		method: 'get',
-		contentType: "application/json",
-		dataType:"json",
-		success : function(data, textStatus, jqXHR){
-			$(document).on('pagebeforeshow', "#cameraCategory", function( event, ui ) {
-	
-				var itemList = data.items;
-				var len = itemList.length;
-				var list = $("#cameraCategoryItemList");
-				var item;
-				for (var i=0; i < len; ++i){
-					item = itemList[i];
-
-					list.append("<li><a href=\"#\">" + 
-						"<img src="+ item.picture + ">"  + 
-						"<h2>" + item.itemName + "</h2>" + 
-						"<p>" + item.description + "</p>" +
-						"<p> Rating:" + item.rating + " </p>" + 
-						"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
-						"</a></li>");
-						
-				}
-				list.listview("refresh");
-
-
-				
-			});
-			$.mobile.loading("hide");
-			$.mobile.navigate("#cameraCategory");
-		},
-		error: function(data, textStatus, jqXHR){
-			console.log("textStatus: " + textStatus);
-			$.mobile.loading("hide");
-			alert("NOOOO");
-		}
-	});
-};
-
-function phoneCategory(){
-
-	$.mobile.loading("show");
-
-	$.ajax({
-		url : "http://localhost:4000/phoneCategory",
-		method: 'get',
-		contentType: "application/json",
-		dataType:"json",
-		success : function(data, textStatus, jqXHR){
-			$(document).on('pagebeforeshow', "#phoneCategory", function( event, ui ) {
-	
-				var itemList = data.items;
-				var len = itemList.length;
-				var list = $("#phoneCategoryItemList");
-				var item;
-				for (var i=0; i < len; ++i){
-					item = itemList[i];
-
-					list.append("<li><a href=\"#\">" + 
-						"<img src="+ item.picture + ">"  + 
-						"<h2>" + item.itemName + "</h2>" + 
-						"<p>" + item.description + "</p>" +
-						"<p> Rating:" + item.rating + " </p>" + 
-						"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
-						"</a></li>");
-						
-				}
-				list.listview("refresh");
-
-	
-			});
-			$.mobile.loading("hide");
-
-			$.mobile.navigate("#phoneCategory");
-		},
-		error: function(data, textStatus, jqXHR){
-			console.log("textStatus: " + textStatus);
-			$.mobile.loading("hide");
-			alert("NOOOO");
-		}
-	});
-};
-
-function videoCategory(){
-
-	$.mobile.loading("show");
-
-	$.ajax({
-		url : "http://localhost:4000/videoCategory",
-		method: 'get',
-		contentType: "application/json",
-		dataType:"json",
-		success : function(data, textStatus, jqXHR){
-
-			$(document).on('pagebeforeshow', "#videoCategory", function( event, ui ) {
-	
-				var itemList = data.items;
-				var len = itemList.length;
-				var list = $("#videoCategoryItemList");
-				var item;
-				for (var i=0; i < len; ++i){
-					item = itemList[i];
-
-					list.append("<li><a href=\"#\">" + 
-						"<img src="+ item.picture + ">"  + 
-						"<h2>" + item.itemName + "</h2>" + 
-						"<p>" + item.description + "</p>" +
-						"<p> Rating:" + item.rating + " </p>" + 
-						"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
-						"</a></li>");
-						
-				}
-				list.listview("refresh");
-				
-			});
-
-			$.mobile.loading("hide");
-			$.mobile.navigate("#videoCategory");
-		},
-		error: function(data, textStatus, jqXHR){
-			console.log("textStatus: " + textStatus);
-			$.mobile.loading("hide");
-			alert("NOOOO");
-		}
-	});
-};
 
 function loginForm(){
 
@@ -437,5 +145,54 @@ function registerForm(){
 
 	console.log("register");
 };
+
+
+/*******************************************************************************************************************************************/
+// General
+/*******************************************************************************************************************************************/
+function generalCategory(category){
+
+	$.mobile.loading("show");
+	console.log("cat: " + category);
+	$.ajax({
+		url : "http://localhost:4000/"+category+"Category",
+		method: 'get',
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+
+			$(document).on('pagebeforeshow', "#"+category+"Category", function( event, ui ) {
+	
+				var itemList = data.items;
+				var len = itemList.length;
+				var list = $("#"+category+"CategoryItemList");
+				var item;
+				for (var i=0; i < len; ++i){
+					item = itemList[i];
+
+					list.append("<li><a href=\"#\">" + 
+						"<img src="+ item.picture + ">"  + 
+						"<h2>" + item.itemName + "</h2>" + 
+						"<p>" + item.description + "</p>" +
+						"<p> Rating:" + item.rating + " </p>" + 
+						"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
+						"</a></li>");
+						
+				}
+				list.listview("refresh");
+				
+			});
+
+			$.mobile.loading("hide");
+			$.mobile.navigate("#"+category+"Category");
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			$.mobile.loading("hide");
+			alert("NOOOO");
+		}
+	});
+};
+
 
 

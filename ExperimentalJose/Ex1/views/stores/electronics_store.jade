@@ -5,22 +5,22 @@ div(data-role="page", id="electronicsStore")
 		h3 Electronics 
 		ul(data-role="listview", id="tvList", data-inset="true")
 			li(data-role="list-divider", data-theme="a")
-				a(onclick="tvCategory()") TV 
+				a(onclick="generalCategory(\"tv\")") TV 
 		ul(data-role="listview", id="audioList", data-inset="true")
 			li(data-role="list-divider", data-theme="a")
-				a(onclick="audioStore()") Audio
+				a(onclick="generalCategory(\"audio\")") Audio
 
 		ul(data-role="listview", id="phoneList", data-inset="true")
 			li(data-role="list-divider", data-theme="a")
-				a(onclick="phoneStore()") Phones
+				a(onclick="generalCategory(\"phone\")") Phones
 
 		ul(data-role="listview", id="cameraList", data-inset="true")
 			li(data-role="list-divider", data-theme="a")
-				a(onclick="cameraStore()") Cameras 
+				a(onclick="generalCategory(\"camera\")") Cameras 
 
 		ul(data-role="listview", id="videoList", data-inset="true")
 			li(data-role="list-divider", data-theme="a")
-				a(onclick="videoStore()") Video
+				a(onclick="generalCategory(\"video\")") Video
 
 div(data-role="page", id="tvCategory")				
 			include ../common
