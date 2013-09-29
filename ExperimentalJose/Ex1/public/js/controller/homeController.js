@@ -117,6 +117,59 @@ function bookStore(){
 //  Clothing Store
 /*******************************************************************************************************************************************/
 
+function computerStore(){
+	$(document).on('pagebeforeshow', "#computersStore", function( event, ui ) {
+
+		$.mobile.loading("show");	
+
+		$.ajax({
+			url : "http://localhost:4000/computersStore",
+			contentType: "application/json",
+			success : function(data, textStatus, jqXHR){
+
+				var itemList = data.items;
+				var len = itemList.length;
+				var list;
+				var item;
+				for (var i=0; i < len; ++i){
+					item = itemList[i];
+
+					if(item.category === "LAPTOPS_CATEGORY"){
+						list = $("#laptopList");
+					}
+					else if(item.category === "DESKTOPS_CATEGORY"){
+						list = $("#desktopList");
+					}
+					else if(item.category === "TABLETS_CATEGORY"){
+						list = $("#tabletList");
+					}
+					else if(item.category === "PRINTERS_CATEGORY"){
+						list = $("#printerList");
+					}
+					
+
+					list.append("<li><a href=\"#\">" + 
+						"<img src="+ item.picture + ">"  + 
+						"<h2>" + item.itemName + "</h2>" + 
+						"<p>" + item.description + "</p>" +
+						"<p> Rating:" + item.rating + " </p>" + 
+						"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
+						"</a></li>");
+					list.listview("refresh");	
+				}
+				$.mobile.loading("hide");
+			},
+			error: function(data, textStatus, jqXHR){
+				console.log("textStatus: " + textStatus);
+				alert("Data not found!");
+			}
+		});
+		
+	});
+	$.mobile.navigate("#computersStore");
+}
+
+
 function clothingStore(){
 
 }
@@ -146,6 +199,99 @@ function registerForm(){
 	console.log("register");
 };
 
+
+function laptopCategory(){
+	
+	$.mobile.loading("show");
+
+	$.ajax({
+		url : "http://localhost:4000/laptopCategory",
+		method: 'get',
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+				$(document).on('pagebeforeshow', "#category", function( event, ui ) {
+	
+				var itemList = data.items;
+				var len = itemList.length;
+				var list = $("#categoryItemList");
+				var item;
+				for (var i=0; i < len; ++i){
+					item = itemList[i];
+
+					list.append("<li><a href=\"#\">" + 
+						"<img src="+ item.picture + ">"  + 
+						"<h2>" + item.itemName + "</h2>" + 
+						"<p>" + item.description + "</p>" +
+						"<p> Rating:" + item.rating + " </p>" + 
+						"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
+						"</a></li>");
+						
+				}
+				list.listview("refresh");
+
+
+				
+			});
+			
+			console.log(data);
+			$.mobile.loading("hide");
+			$.mobile.navigate("#laptopCategorys");
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			$.mobile.loading("hide");
+			alert("IMPLEMENTAME");
+		}
+	});
+};
+
+
+
+function phoneCategory(){
+
+
+	$.mobile.loading("show");
+
+	$.ajax({
+		url : "http://localhost:4000/phoneCategory",
+		method: 'get',
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+			$(document).on('pagebeforeshow', "#phoneCategory", function( event, ui ) {
+	
+				var itemList = data.items;
+				var len = itemList.length;
+				var list = $("#phoneCategoryItemList");
+				var item;
+				for (var i=0; i < len; ++i){
+					item = itemList[i];
+
+					list.append("<li><a href=\"#\">" + 
+						"<img src="+ item.picture + ">"  + 
+						"<h2>" + item.itemName + "</h2>" + 
+						"<p>" + item.description + "</p>" +
+						"<p> Rating:" + item.rating + " </p>" + 
+						"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
+						"</a></li>");
+						
+				}
+				list.listview("refresh");
+
+	
+			});
+			$.mobile.loading("hide");
+
+			$.mobile.navigate("#phoneCategory");
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			$.mobile.loading("hide");
+			alert("NOOOO");
+		}
+	});
+};
 
 /*******************************************************************************************************************************************/
 // General
