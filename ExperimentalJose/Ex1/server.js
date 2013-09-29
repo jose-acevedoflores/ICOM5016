@@ -32,7 +32,7 @@ app.get('/home',function(req, res ) {
 
 		new StoreItem("Justin Bieber Album", "AUDIO_CATEGORY", "$40" ,
 			 "onevkbdnv, new description woot woot wooto owtoo", "97", 
-			 "http://25.media.tumblr.com/tumblr_lsj02rFcmz1qh2d1ho1_500.jpg"), 
+			 "http://25.media.tumblr.com/tumblr_lsj02rFcmz1qh2d1ho1_500.jpg"),
 
 		new StoreItem("HTC ONE", "PHONE_CATEGORY", "$500" ,
 			 "BEST PHONE EVER", "97", 
@@ -40,7 +40,7 @@ app.get('/home',function(req, res ) {
 
 		new StoreItem("Nikon somethin", "CAMERA_CATEGORY", "$3,400" ,
 			 "40,000 Mega Pixel camera ", "97", 
-			 "http://swotti.starmedia.com/tmp/swotti/cacheBMLRB24GZDQW/imgNikon%20D403.jpg"), 
+			 "http://swotti.starmedia.com/tmp/swotti/cacheBMLRB24GZDQW/imgNikon%20D403.jpg"),
 
 		new StoreItem("Top Gear season 300", "VIDEO_CATEGORY", "$300" ,
 			 "Catch your favorite TV stars in their latest car journey", "97", 
@@ -107,21 +107,66 @@ var data =  new Array(
 	res.json(temp);
 });
 
+app.get('/cameraCategory', function(req, res){
+	console.log("GET: cameraCategory");
+	var data =  new Array(
+
+		new StoreItem("Nikon somethin", "CAMERA_CATEGORY", "$3,400" ,
+			 "40,000 Mega Pixel camera ", "97", 
+			 "http://swotti.starmedia.com/tmp/swotti/cacheBMLRB24GZDQW/imgNikon%20D403.jpg")
+
+		);
+	var temp = {"items" : data};
+	res.json(temp);
+
+});
+
+app.get('/phoneCategory', function(req, res){
+	console.log("GET: phoneCategory");
+	var data = new Array (
+		new StoreItem("HTC ONE", "PHONE_CATEGORY", "$500" ,
+			 "BEST PHONE EVER", "97", 
+			 "http://www.htc.com/managed-assets/shared/desktop/smartphones/htc-one/hero/HTC-ProductDetail-Hero-slide-04.png")
+	);
+	var temp = {"items" : data}
+	res.json(temp);
+});
+
+app.get('/videoCategory', function(req, res){
+	console.log("videoCategory");
+	var data = new Array (
+			new StoreItem("Top Gear season 300", "VIDEO_CATEGORY", "$300" ,
+			 "Catch your favorite TV stars in their latest car journey", "97", 
+			 "https://lh6.googleusercontent.com/-nNyrLwWbpOE/Uh_YB_QPLII/AAAAAAAAADE/zeBzioai3xM/Jeremy-Clarkson-In-Ariel-Atom-AHHHHHHH-bbc-america-top-gear-10491170-480-331.jpg")
+		);
+	var temp = {"items" : data};
+	res.json(temp);
+});
+
 app.get('/booksStore', function(req, res){
 	console.log("GET: booksStore");
+
 });
 
-app.get('/cameraStore', function(req, res){
-	res.json({"data" : "camera"});
+app.get("/childrenCategory", function(req, res){
+	console.log("GET: childrenCategory");
+
 });
 
-app.get('/phoneStore', function(req, res){
-	res.json({"data" : "phone"});
+app.get("/fictionCategory", function(req,res) {
+	console.log("GET: fictionCategory");
 });
 
-app.get('/videoStore', function(req, res){
-	res.json({"data" : "video"});
+
+app.get("/businessCategory", function(req,res) {
+	console.log("GET: businessCategory");
 });
+
+app.get("/technologyCategory", function(req,res) {
+	console.log("GET: technologyCategory");
+});
+
+
 
 app.get('/computerStore', function(req, res){
 	console.log("GET : computersStore");

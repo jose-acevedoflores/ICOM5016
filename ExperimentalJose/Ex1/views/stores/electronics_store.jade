@@ -42,5 +42,83 @@ div(data-role="page", id="tvCategory")
 				br			
 				ul(data-role="listview", data-inset="true", data-filter="true", id="tvCategoryItemList", data-filter-placeholder="Filter items")
 
+div(data-role="page", id="audioCategory")				
+			include ../common
+			div(data-role="content")
+				div(data-role="controlgroup", data-type="horizontal", id="audioCategoryNavigator") 	
+					a(href="#", data-role="button") Electronics
+					a(href="#", data-role="button") Audio
+				div(data-role="fieldcontain")
+					select(name="SortOrder", id="sortOrder")
+						optgroup(label="Price")
+							option(value="highToLow") High to Low
+							option(value="lowToHigh") Low to High
+						optgroup(label="Brand")	
+							option(value="alphabetical") Alphabetical order (Brand)
+							option(value="revAlphabetical") Reverse Alphabetical (Brand)
+						optgroup(label="Item Name")
+							option(value="alphabetical") Alphabetical order (Item Name)
+							option(value="revAlphabetical") Reverse Alphabetical (Item Name)		
+				br			
+				ul(data-role="listview", data-inset="true", data-filter="true", id="audioCategoryItemList", data-filter-placeholder="Filter items")
 
+div(data-role="page", id="phoneCategory")				
+			include ../common
+			div(data-role="content")
+				div(data-role="controlgroup", data-type="horizontal", id="phoneCategoryNavigator") 	
+					a(href="#", data-role="button") Electronics
+					a(href="#", data-role="button") Phones
+				div(data-role="fieldcontain")
+					select(name="SortOrder", id="sortOrder")
+						optgroup(label="Price")
+							option(value="highToLow") High to Low
+							option(value="lowToHigh") Low to High
+						optgroup(label="Brand")	
+							option(value="alphabetical") Alphabetical order (Brand)
+							option(value="revAlphabetical") Reverse Alphabetical (Brand)
+						optgroup(label="Item Name")
+							option(value="alphabetical") Alphabetical order (Item Name)
+							option(value="revAlphabetical") Reverse Alphabetical (Item Name)		
+				br			
+				ul(data-role="listview", data-inset="true", data-filter="true", id="phoneCategoryItemList", data-filter-placeholder="Filter items")
+
+div(data-role="page", id="cameraCategory")				
+			include ../common
+			div(data-role="content")
+				div(data-role="controlgroup", data-type="horizontal", id="cameraCategoryNavigator") 	
+					a(href="#", data-role="button") Electronics
+					a(href="#", data-role="button") Cameras
+				div(data-role="fieldcontain")
+					select(name="SortOrder", id="sortOrder")
+						optgroup(label="Price")
+							option(value="highToLow") High to Low
+							option(value="lowToHigh") Low to High
+						optgroup(label="Brand")	
+							option(value="alphabetical") Alphabetical order (Brand)
+							option(value="revAlphabetical") Reverse Alphabetical (Brand)
+						optgroup(label="Item Name")
+							option(value="alphabetical") Alphabetical order (Item Name)
+							option(value="revAlphabetical") Reverse Alphabetical (Item Name)		
+				br			
+				ul(data-role="listview", data-inset="true", data-filter="true", id="cameraCategoryItemList", data-filter-placeholder="Filter items")
+
+div(data-role="page", id="videoCategory")				
+			include ../common
+			div(data-role="content")
+				div(data-role="controlgroup", data-type="horizontal", id="videoCategoryNavigator") 	
+					a(href="#", data-role="button") Electronics
+					a(href="#", data-role="button") Videos
+				div(data-role="fieldcontain")
+					select(name="SortOrder", id="sortOrder")
+						optgroup(label="Price")
+							option(value="highToLow") High to Low
+							option(value="lowToHigh") Low to High
+						optgroup(label="Brand")	
+							option(value="alphabetical") Alphabetical order (Brand)
+							option(value="revAlphabetical") Reverse Alphabetical (Brand)
+						optgroup(label="Item Name")
+							option(value="alphabetical") Alphabetical order (Item Name)
+							option(value="revAlphabetical") Reverse Alphabetical (Item Name)		
+				br			
+				ul(data-role="listview", data-inset="true", data-filter="true", id="videoCategoryItemList", data-filter-placeholder="Filter items")
 
