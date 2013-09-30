@@ -38,7 +38,21 @@ app.configure(function(){
 
 app.get('/', function(request, response) {
 
-	response.render('home.jade');
+	var generate = { "data" :{ 
+			"stores" : [
+				{	"name" : "electronics" ,
+			 		"categories" : ["tv" , "audio" , "camera" , "phone" , "video"], 
+			 		"categoriesLength" : 5 },
+
+				{ 	"name" : "books" ,
+					"categories" : ["fiction" , "business" , "children" , "technology"],
+					"categoriesLength" : 4}
+
+				] ,
+			"dataLength" : 2
+		}
+	} ;
+	response.render('home.jade', generate);
 
 	//response.sendfile('public/home.html');
 });

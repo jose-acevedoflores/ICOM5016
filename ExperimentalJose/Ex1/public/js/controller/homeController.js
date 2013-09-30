@@ -341,7 +341,7 @@ function findStore(store){
 
 }
 
-function generalCategory(store, category){
+function findCategory(store, category){
 
 	$.mobile.loading("show");
 	console.log("cat: " + category);
