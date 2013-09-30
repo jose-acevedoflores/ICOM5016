@@ -12,15 +12,8 @@ $(document).on('pagebeforeshow', "#home", function( event, ui ) {
 			for (var i=0; i < len; ++i){
 				item = itemList[i];
 
-				if(item.category === "TV_CATEGORY" | item.category === "AUDIO_CATEGORY" | item.category === "PHONE_CATEGORY" | item.category === "VIDEO_CATEGORY"
-					| item.category === "CAMERA_CATEGORY"){
-					list = $("#electronicsList");
-				}
-				else if(item.category === "LAPTOPS_CATEGORY" | item.category === "DESTOPS_CATEGORY" | item.category === "TABLETS_CATEGORY"  
-					| item.category === "PRINTERS_CATEGORY"){
-					list = $("#computersList");
-
-				}
+		
+				list = $("#" + item.store +"List");
 
 				list.append("<li><a href=\"#\">" + 
 					"<img src="+ item.picture + ">"  + 

@@ -18,10 +18,10 @@ html
 				p Browse our wonderful selection of merchandise. Check out today's hot deals 
 				ul(data-role="listview", id="electronicsList", data-inset="true")
 					li(data-role="list-divider", data-theme="a")
-						a(onclick="electronicsStore()")	Electronics
+						a(onclick="findStore(\"electronics\")")	Electronics
 				ul(data-role="listview", id="booksList", data-inset="true")
 					li(data-role="list-divider", data-theme="a")
-						a(onclick="bookStore()") Books		
+						a(onclick="findStore(\"books\")") Books		
 				ul(data-role="listview", id="computersList", data-inset="true")
 					li(data-role="list-divider", data-theme="a")
 						a(onclick="computerStore()") Computers
@@ -39,11 +39,7 @@ html
 
 		include stores/books_store
 		include stores/comp_store
-
-
         
-        
-				
 
 		div(data-role="page", id="shoppingCart")
 			include common	

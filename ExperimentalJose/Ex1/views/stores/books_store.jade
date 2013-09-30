@@ -5,18 +5,18 @@ div(data-role="page", id="booksStore")
 		h3 Books
 		ul(data-role="listview", id="childrenList", data-inset="true")
 			li(data-role="list-divider", data-theme="a")
-				a(onclick="tvCategory()") Children 
+				a(onclick="generalCategory(\"books\",\"children\")") Children 
 		ul(data-role="listview", id="fictionList", data-inset="true")
 			li(data-role="list-divider", data-theme="a")
-				a(onclick="generalCategory(\"fiction\")") Fiction
+				a(onclick="generalCategory(\"books\",\"fiction\")") Fiction
 
 		ul(data-role="listview", id="businessList", data-inset="true")
 			li(data-role="list-divider", data-theme="a")
-				a(onclick="phoneStore()") Business
+				a(onclick="generalCategory(\"books\",\"business\")") Business
 
 		ul(data-role="listview", id="technologyList", data-inset="true")
 			li(data-role="list-divider", data-theme="a")
-				a(onclick="cameraStore()") Technology 
+				a(onclick="generalCategory(\"books\",\"technology\")") Technology 
 
 div(data-role="page", id="fictionCategory")				
 			include ../common
@@ -38,5 +38,24 @@ div(data-role="page", id="fictionCategory")
 				br			
 				ul(data-role="listview", data-inset="true", data-filter="true", id="fictionCategoryItemList", data-filter-placeholder="Filter items")
 
+div(data-role="page", id="childrenCategory")				
+			include ../common
+			div(data-role="content")
+				div(data-role="controlgroup", data-type="horizontal", id="childrenCategoryNavigator") 	
+					a(href="#", data-role="button") Books
+					a(href="#", data-role="button") Children
+				div(data-role="fieldcontain")
+					select(name="SortOrder", id="sortOrder")
+						optgroup(label="Price")
+							option(value="highToLow") High to Low
+							option(value="lowToHigh") Low to High
+						optgroup(label="Brand")	
+							option(value="alphabetical") Alphabetical order (Brand)
+							option(value="revAlphabetical") Reverse Alphabetical (Brand)
+						optgroup(label="Item Name")
+							option(value="alphabetical") Alphabetical order (Item Name)
+							option(value="revAlphabetical") Reverse Alphabetical (Item Name)		
+				br			
+				ul(data-role="listview", data-inset="true", data-filter="true", id="childrenCategoryItemList", data-filter-placeholder="Filter items")
 
 
