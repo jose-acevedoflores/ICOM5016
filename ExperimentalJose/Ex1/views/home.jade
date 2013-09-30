@@ -28,7 +28,7 @@ html
 					p Browse our wonderful selection of merchandise. Check out today's hot deals
 					h3 #{data.stores[i].name} 
 					- for(var c = 0 ; c < data.stores[i].categoriesLength ; c++)
-						ul(data-role="listview", id="#{data.stores[i].categories[c]}List", data-inset="true")
+						ul(data-role="listview", id="#{data.stores[i].categories[c]}STORE#{data.stores[i].name}List", data-inset="true")
 							li(data-role="list-divider", data-theme="a")
 								a(onclick="findCategory(\"#{data.stores[i].name}\",\"#{data.stores[i].categories[c]}\")") #{data.stores[i].categories[c]}	
 

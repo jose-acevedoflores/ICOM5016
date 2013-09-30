@@ -315,8 +315,7 @@ function findStore(store){
 				var item;
 				for (var i=0; i < len; ++i){
 					item = itemList[i];
-
-					list = $("#"+item.category+"List")
+					list = $("#"+item.category+"STORE"+item.store+"List")
 					
 					list.append("<li><a href=\"#\">" + 
 						"<img src="+ item.picture + ">"  + 
