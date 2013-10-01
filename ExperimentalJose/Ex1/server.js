@@ -24,6 +24,23 @@ var stores = {
 			TECHNOLOGY : {name : "technology" }
 		}
 	},
+	COMPUTERS : {
+		name: "computers",
+		categories : {
+			LAPTOPS : {name : "laptops"},
+			DESKTOPS : {name : "desktops"},
+			TABLETS : {name : "tablets"},
+			PRINTERS : {name : "printers"}
+		}
+	},
+	CLOTHING : {
+		name : "clothing",
+		categories : {
+			CHILDREN : { name : "children"},
+			MEN : { name : "men"},
+			WOMEN : {name : "women"}
+		}
+	},
 	SHOES : {
 		name : "shoes",
 		categories : {
@@ -69,6 +86,18 @@ app.get('/', function(request, response) {
 					"categoriesLength" : 4
 				},
 
+				{
+					"name" : "computers",
+					"categories" : ["laptops", "desktops", "tablets", "printers"],
+					"categoriesLength" : 4
+				},
+
+				{
+					"name" : "clothing",
+					"categories" : ["childres", "men", "women"],
+					"categoriesLength" : 3
+				},
+
 				{	"name" : "shoes",
 					"categories" : ["children" , "men" , "women"],
 					"categoriesLength" : 3
@@ -81,7 +110,7 @@ app.get('/', function(request, response) {
 				}
 
 				],
-			"dataLength" : 4
+			"dataLength" : 6
 		}
 	} ;
 	response.render('home.jade', generate);
@@ -125,6 +154,20 @@ app.get('/home',function(req, res ) {
 		new StoreItem("Hairy Potter ", stores.BOOKS.name , stores.BOOKS.categories.CHILDREN.name, "$30" ,
 			 "Catch your favorite TV stars in their latest car journey", "97", 
 			 "http://fc02.deviantart.net/fs70/i/2010/125/b/6/Harry_Potter_Logo_by_SprntrlFAN_Livvi.png"),
+		
+		// COMPUTERS
+		
+		new StoreItem("MacBookPro", stores.COMPUTERS.name, stores.COMPUTERS.categories.LAPTOPS.name, "$1,200.00", "A Macbook Pro laptop", "97", 
+			"http://images.apple.com/macbook-pro/images/overview_display_hero.png"),
+
+		new StoreItem("iMac", stores.COMPUTERS.name, stores.COMPUTERS.categories.DESKTOPS.name, "$1,299.00", "A Macbook Pro laptop", "97", 
+			"https://www.apple.com/imac/images/hero.png"),
+
+		new StoreItem("iMac", stores.COMPUTERS.name, stores.COMPUTERS.categories.TABLETS.name, "$1,299.00", "A Macbook Pro laptop", "97", 
+			"https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQ8uL0T_OaIHUI7rEe0U8qvwP5VBszJsJzMX5Fj73jGFHH1STcJy1OiRHjj"),
+
+		new StoreItem("Inkjet", stores.COMPUTERS.name, stores.COMPUTERS.categories.PRINTERS.name, "$1,299.00", "A clumsy printer", "97", 
+			"https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSLHnGBsoKgsKNoRuISGtzZL0sGQoiRjatOll5Nnwop2UX0EmsOUw"),
 
 
 		// SHOES 
@@ -306,6 +349,24 @@ function pseudoQueryStores(store, res){
 		res.json(temp);
 
 	}
+	else if(store === stores.COMPUTERS.name) {
+		var data = new Array (
+			new StoreItem("MacBookPro", stores.COMPUTERS.name, stores.COMPUTERS.categories.LAPTOPS.name, "$1,200.00", "A Macbook Pro laptop", "97", 
+			"http://images.apple.com/macbook-pro/images/overview_display_hero.png"),
+
+			new StoreItem("iMac", stores.COMPUTERS.name, stores.COMPUTERS.categories.DESKTOPS.name, "$1,299.00", "A Macbook Pro laptop", "97", 
+				"https://www.apple.com/imac/images/hero.png"),
+
+			new StoreItem("iMac", stores.COMPUTERS.name, stores.COMPUTERS.categories.TABLETS.name, "$1,299.00", "A Macbook Pro laptop", "97", 
+				"https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQ8uL0T_OaIHUI7rEe0U8qvwP5VBszJsJzMX5Fj73jGFHH1STcJy1OiRHjj"),
+
+			new StoreItem("Inkjet", stores.COMPUTERS.name, stores.COMPUTERS.categories.PRINTERS.name, "$1,299.00", "A clumsy printer", "97", 
+				"https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSLHnGBsoKgsKNoRuISGtzZL0sGQoiRjatOll5Nnwop2UX0EmsOUw")
+			);
+
+		var temp = {"items" : data};
+		res.json(temp);
+	}
 	else if(store === stores.SHOES.name){
 
 		var data = new Array(
@@ -450,6 +511,50 @@ function pseudoQueryCategories(store, category, res){
 			var temp = {"items" : data};
 			res.json(temp);
 
+		}
+	}// COMPUTER Store
+	else if(store === stores.COMPUTERS.name){
+		var categories = stores.COMPUTERS.categories;
+
+		if(category === categories.LAPTOPS.name){
+			var data = new Array(
+				new StoreItem("MacBookPro", stores.COMPUTERS.name, stores.COMPUTERS.categories.LAPTOPS.name, "$1,200.00", "A Macbook Pro laptop", "97", 
+				"http://images.apple.com/macbook-pro/images/overview_display_hero.png")
+
+			
+				);
+			var temp = {"items" : data};
+			res.json(temp);
+		}
+
+		else if(category === categories.DESKTOPS.name){
+			var data = new Array(
+				new StoreItem("iMac", stores.COMPUTERS.name, stores.COMPUTERS.categories.DESKTOPS.name, "$1,299.00", "A Macbook Pro laptop", "97", 
+				"https://www.apple.com/imac/images/hero.png")
+
+				);
+			var temp = {"items" : data};
+			res.json(temp);
+		}
+
+		else if(category === categories.TABLETS.name){
+			var data = new Array(
+				
+				new StoreItem("iMac", stores.COMPUTERS.name, stores.COMPUTERS.categories.TABLETS.name, "$1,299.00", "A Macbook Pro laptop", "97", 
+					"https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQ8uL0T_OaIHUI7rEe0U8qvwP5VBszJsJzMX5Fj73jGFHH1STcJy1OiRHjj")
+			
+				);
+			var temp = {"items" : data};
+			res.json(temp);
+		}
+		else if(category === categories.PRINTERS.name){
+			var data = new Array(
+				new StoreItem("Inkjet", stores.COMPUTERS.name, stores.COMPUTERS.categories.PRINTERS.name, "$1,299.00", "A clumsy printer", "97", 
+					"https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSLHnGBsoKgsKNoRuISGtzZL0sGQoiRjatOll5Nnwop2UX0EmsOUw")
+				
+				);
+			var temp = {"items" : data};
+			res.json(temp);
 		}
 	}
 	else if(store === stores.SHOES.name){
