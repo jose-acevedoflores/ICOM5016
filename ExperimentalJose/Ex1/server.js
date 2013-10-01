@@ -94,7 +94,7 @@ app.get('/', function(request, response) {
 
 				{
 					"name" : "clothing",
-					"categories" : ["childres", "men", "women"],
+					"categories" : ["children", "men", "women"],
 					"categoriesLength" : 3
 				},
 
@@ -169,7 +169,15 @@ app.get('/home',function(req, res ) {
 		new StoreItem("Inkjet", stores.COMPUTERS.name, stores.COMPUTERS.categories.PRINTERS.name, "$1,299.00", "A clumsy printer", "97", 
 			"https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSLHnGBsoKgsKNoRuISGtzZL0sGQoiRjatOll5Nnwop2UX0EmsOUw"),
 
+		// CLOTHING
+		new StoreItem("Puma - Kids Girls 2-6X Active Core Pullover", stores.CLOTHING.name, stores.CLOTHING.categories.CHILDREN.name, "$52.00", "A Puma jacket made in China", "97", 
+			"http://resources.shopstyle.com/sim/1f/6f/1f6fac5c0ff3148029fe5fc2a184161f/puma-amazoncom-kids-girls-26x-active-core-pullover.jpg"),
 
+		new StoreItem("Nautica Men's Big-Tall Wrinkle Resistant Long Sleeve Tartan Woven", stores.CLOTHING.name, stores.CLOTHING.categories.MEN.name, "$52.00", "Long Sleeve Shirt by Nautica", "97", 
+			"http://ecx.images-amazon.com/images/I/51Onkkr85lL._SY246_CR0,0,190,246_.jpg"),
+
+		new StoreItem("Designer White Strapless Long Evening Formal Dress", stores.CLOTHING.name, stores.CLOTHING.categories.WOMEN.name, "$49.99", "Hot and Sexy Designer White Strapless Long Evening Formal Dress", "97", 
+			"http://ecx.images-amazon.com/images/I/311HhlaB1pL.jpg"),
 		// SHOES 
 
 			new StoreItem("Women's Jolt", stores.SHOES.name, stores.SHOES.categories.WOMEN.name, "$99.99" ,
@@ -374,6 +382,22 @@ function pseudoQueryStores(store, res){
 		var temp = {"items" : data};
 		res.json(temp);
 	}
+	else if(store === stores.CLOTHING.name) {
+		var data = new Array(
+			new StoreItem("Puma - Kids Girls 2-6X Active Core Pullover", stores.CLOTHING.name, stores.CLOTHING.categories.CHILDREN.name, "$52.00", "A Puma jacket made in China", "97", 
+			"http://resources.shopstyle.com/sim/1f/6f/1f6fac5c0ff3148029fe5fc2a184161f/puma-amazoncom-kids-girls-26x-active-core-pullover.jpg"),
+
+		new StoreItem("Nautica Men's Big-Tall Wrinkle Resistant Long Sleeve Tartan Woven", stores.CLOTHING.name, stores.CLOTHING.categories.MEN.name, "$52.00", "Long Sleeve Shirt by Nautica", "97", 
+			"http://ecx.images-amazon.com/images/I/51Onkkr85lL._SY246_CR0,0,190,246_.jpg"),
+
+		new StoreItem("Designer White Strapless Long Evening Formal Dress", stores.CLOTHING.name, stores.CLOTHING.categories.WOMEN.name, "$49.99", "Hot and Sexy Designer White Strapless Long Evening Formal Dress", "97", 
+			"http://ecx.images-amazon.com/images/I/311HhlaB1pL.jpg")
+		);
+
+		var temp = {"items" : data};
+		res.json(temp);
+
+	}
 	else if(store === stores.SHOES.name){
 
 		var data = new Array(
@@ -559,6 +583,39 @@ function pseudoQueryCategories(store, category, res){
 				new StoreItem("Inkjet", stores.COMPUTERS.name, stores.COMPUTERS.categories.PRINTERS.name, "$1,299.00", "A clumsy printer", "97", 
 					"https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSLHnGBsoKgsKNoRuISGtzZL0sGQoiRjatOll5Nnwop2UX0EmsOUw")
 				
+				);
+			var temp = {"items" : data};
+			res.json(temp);
+		}
+	}// CLOTHING Store
+	else if(store === stores.CLOTHING.name){
+
+		var categories = stores.CLOTHING.categories;
+		
+		if (category === categories.CHILDREN.name) {
+			var data = new Array(
+				new StoreItem("Puma - Kids Girls 2-6X Active Core Pullover", stores.CLOTHING.name, stores.CLOTHING.categories.CHILDREN.name, "$52.00", "A Puma jacket made in China", "97", 
+				"http://resources.shopstyle.com/sim/1f/6f/1f6fac5c0ff3148029fe5fc2a184161f/puma-amazoncom-kids-girls-26x-active-core-pullover.jpg")
+				);
+			
+			var temp = {"items" : data};
+			res.json(temp);
+		}
+		else if (category === categories.MEN.name) {
+			var data = new Array( 
+				new StoreItem("Nautica Men's Big-Tall Wrinkle Resistant Long Sleeve Tartan Woven", stores.CLOTHING.name, stores.CLOTHING.categories.MEN.name, "$52.00", "Long Sleeve Shirt by Nautica", "97", 
+					"http://ecx.images-amazon.com/images/I/51Onkkr85lL._SY246_CR0,0,190,246_.jpg")
+				);
+			var temp = {"items" : data};
+			res.json(temp);
+
+		
+		}
+		else if(category === categories.WOMEN.name) {
+			var data = new Array(
+
+				new StoreItem("Designer White Strapless Long Evening Formal Dress", stores.CLOTHING.name, stores.CLOTHING.categories.WOMEN.name, "$49.99", "Hot and Sexy Designer White Strapless Long Evening Formal Dress", "97", 
+					"http://ecx.images-amazon.com/images/I/311HhlaB1pL.jpg")
 				);
 			var temp = {"items" : data};
 			res.json(temp);
