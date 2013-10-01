@@ -61,5 +61,14 @@ html
 			include common	
 			div(data-role="content")
 				h3 Items in cart						
-				ul(data-role="listview", data-inset="true", data-filter="true", id="cartItemList", data-filter-placeholder="Filter items in cart")
+				ul(data-role="listview", data-inset="true", id="cartItemList", data-filter-placeholder="Filter items in cart")
+				h3 Order Total: 	
+				h3(id="shoppingCartAmount") pl
+				input(type="submit", value="Proceed to Checkout", onclick="checkoutCart()" )
+
+				div(data-role="popup", id="removeItemFromCart", data-theme="d", data-overlay-theme="b", class="ui-content", style="max-width:340px;")
+					h3 Delete from cart ?
+					p The item will be removed of your cart 
+					a(onclick="removeItemFromCart()", data-role="button", data-rel="back", data-theme="b", data-icon="check", data-inline="true", data-mini="true") Remove
+					a(href="#", data-role="button", data-rel="back", data-inline="true", data-mini="true") Cancel
 

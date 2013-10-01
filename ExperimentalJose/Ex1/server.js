@@ -218,27 +218,41 @@ app.get('/stores/:store' , function(req, res){
 // 	response.json(temp);
 // });
 
-app.get('/shoppingCart', function(req, res){
+var shoppingCartVar =  new Array(
 
-	//QUERY DB
-	var data =  new Array(
-
-		new StoreItem("Lancer Evolution HALTECH flash ECU","empty" ,  "COMPUTER_STORE", "$4,000" ,
+		new StoreItem("Lancer Evolution HALTECH flash ECU","empty" ,  "COMPUTER_STORE", "4000" ,
 			 "onevkbdnv, new description woot woot wooto owtoo", "97", 
-			 "http://www.sonicperformance.com.au/productimages/HT051340.jpg"),
+			 "http://www.sonicperformance.com.au/productimages/HT051340.jpg", "90124"),
 
-		new StoreItem("Avenged 7fold LBC","empty" , "AUDIO_STORE", "$40" ,
+		new StoreItem("Avenged 7fold LBC", stores.ELECTRONICS.name , stores.ELECTRONICS.categories.AUDIO.name , "40" ,
 			 "Rock on with Avenged Sevenfold in Long Beach", "97", 
-			 "http://userserve-ak.last.fm/serve/_/82208421/Avenged+Sevenfold+original.png"), 
+			 "http://userserve-ak.last.fm/serve/_/82208421/Avenged+Sevenfold+original.png", "1345246"), 
 
-		new StoreItem("HTC ONE", "empty","PHONE_STORE", "$500" ,
+		new StoreItem("HTC ONE", stores.ELECTRONICS.name, stores.ELECTRONICS.categories.PHONE.name, "500" ,
 			 "BEST PHONE EVER", "97", 
-			 "http://www.htc.com/managed-assets/shared/desktop/smartphones/htc-one/hero/HTC-ProductDetail-Hero-slide-04.png")
+			 "http://www.htc.com/managed-assets/shared/desktop/smartphones/htc-one/hero/HTC-ProductDetail-Hero-slide-04.png", "25326")
 
 
 		);
-	var temp = {"items" : data};
+
+app.get('/shoppingCart', function(req, res){
+
+	//QUERY DB
+	
+	var temp = {"items" : shoppingCartVar};
 	res.json(temp);
+});
+
+app.del("/shoppingCart/delete/:id", function(req, res){
+	var id = req.params.id;
+	console.log("DEL: id= " +id);
+
+	for (var i = 0 ; i < shoppingCartVar.length ; i++){
+		if(shoppingCartVar[i].id === id)
+			shoppingCartVar.splice(i, 1);
+	}
+	res.json(true);
+
 });
 
 
@@ -254,23 +268,23 @@ function pseudoQueryStores(store, res){
 		var data =  new Array(
 			new StoreItem("Samsung F8000 High Def TV", stores.ELECTRONICS.name , stores.ELECTRONICS.categories.TV.name, "$4,000" ,
 				 "onevkbdnv, new description woot woot wooto owtoo", "97", 
-				 "http://pinoytutorial.com/techtorial/wp-content/uploads/2013/01/Samsung-F8000-led-ces.jpg"),
+				 "http://pinoytutorial.com/techtorial/wp-content/uploads/2013/01/Samsung-F8000-led-ces.jpg", "34135"),
 
 			new StoreItem("Justin Bieber Album", stores.ELECTRONICS.name ,stores.ELECTRONICS.categories.AUDIO.name, "$40" ,
 				 "onevkbdnv, new description woot woot wooto owtoo", "97", 
-				 "http://25.media.tumblr.com/tumblr_lsj02rFcmz1qh2d1ho1_500.jpg"), 
+				 "http://25.media.tumblr.com/tumblr_lsj02rFcmz1qh2d1ho1_500.jpg", "215643"), 
 
 			new StoreItem("HTC ONE", stores.ELECTRONICS.name ,stores.ELECTRONICS.categories.PHONE.name, "$500" ,
 				 "BEST PHONE EVER", "97", 
-				 "http://www.htc.com/managed-assets/shared/desktop/smartphones/htc-one/hero/HTC-ProductDetail-Hero-slide-04.png"),
+				 "http://www.htc.com/managed-assets/shared/desktop/smartphones/htc-one/hero/HTC-ProductDetail-Hero-slide-04.png", "124546"),
 
 			new StoreItem("Nikon somethin",stores.ELECTRONICS.name , stores.ELECTRONICS.categories.CAMERA.name, "$3,400" ,
 				 "40,000 Mega Pixel camera ", "97", 
-				 "http://swotti.starmedia.com/tmp/swotti/cacheBMLRB24GZDQW/imgNikon%20D403.jpg"), 
+				 "http://swotti.starmedia.com/tmp/swotti/cacheBMLRB24GZDQW/imgNikon%20D403.jpg", "54736"), 
 
 			new StoreItem("Top Gear season 300", stores.ELECTRONICS.name , stores.ELECTRONICS.categories.VIDEO.name, "$300" ,
 				 "Catch your favorite TV stars in their latest car journey", "97", 
-				 "https://lh6.googleusercontent.com/-nNyrLwWbpOE/Uh_YB_QPLII/AAAAAAAAADE/zeBzioai3xM/Jeremy-Clarkson-In-Ariel-Atom-AHHHHHHH-bbc-america-top-gear-10491170-480-331.jpg")
+				 "https://lh6.googleusercontent.com/-nNyrLwWbpOE/Uh_YB_QPLII/AAAAAAAAADE/zeBzioai3xM/Jeremy-Clarkson-In-Ariel-Atom-AHHHHHHH-bbc-america-top-gear-10491170-480-331.jpg","34564")
 
 			);
 		var temp = {"items" : data};
@@ -281,11 +295,11 @@ function pseudoQueryStores(store, res){
 		var data =  new Array(
 			new StoreItem("Star Wars old republic ", stores.BOOKS.name , stores.BOOKS.categories.FICTION.name, "$30" ,
 			 "Catch your favorite TV stars in their latest car journey", "97", 
-			 "http://notentirelystable.org/wp-content/uploads/2011/06/logo-galactic-republic.png"),
+			 "http://notentirelystable.org/wp-content/uploads/2011/06/logo-galactic-republic.png", "57653"),
 
 			new StoreItem("Hairy Potter ", stores.BOOKS.name , stores.BOOKS.categories.CHILDREN.name, "$30" ,
 				 "Catch your favorite TV stars in their latest car journey", "97", 
-			 	"http://fc02.deviantart.net/fs70/i/2010/125/b/6/Harry_Potter_Logo_by_SprntrlFAN_Livvi.png")
+			 	"http://fc02.deviantart.net/fs70/i/2010/125/b/6/Harry_Potter_Logo_by_SprntrlFAN_Livvi.png","457568")
 
 		);
 		var temp = {"items" : data};
@@ -297,23 +311,23 @@ function pseudoQueryStores(store, res){
 		var data = new Array(
 			new StoreItem("Women's Jolt", stores.SHOES.name, stores.SHOES.categories.WOMEN.name, "$99.99" ,
 			 "Look fashion forward in the Chinese Laundry Jolt dress sandals.", "98", 
-			 "http://www.shoes.com/ProductImages/shoes_iaec1372292.jpg"),
+			 "http://www.shoes.com/ProductImages/shoes_iaec1372292.jpg", "5484571"),
 
 			new StoreItem("Sperry Top-Sider" , stores.SHOES.name,  stores.SHOES.categories.MEN.name, "$40" ,
 				 "Classic Nautical Style", "95", 
-				 "http://a2.zassets.com/images/z/2/1/7/0/7/3/2170731-p-MULTIVIEW.jpg"), 
+				 "http://a2.zassets.com/images/z/2/1/7/0/7/3/2170731-p-MULTIVIEW.jpg","53278874"), 
 
 			new StoreItem("Women's Dantie",  stores.SHOES.name,  stores.SHOES.categories.WOMEN.name, "$500" ,
 				 "Add a little edge to your flirty side wearing these Chinese Laundry Dantie booties.", "94", 
-				 "http://www.shoes.com/ProductImages/shoes_iaec1239887.jpg"),
+				 "http://www.shoes.com/ProductImages/shoes_iaec1239887.jpg", "89625"),
 
 			new StoreItem("Onitsuka Tiger by Fencis" ,  stores.SHOES.name,  stores.SHOES.categories.MEN.name, "$80" ,
 				 "Awesome running shoes. ", "97", 
-				 "http://a3.zassets.com/images/z/1/8/4/7/3/9/1847391-p-MULTIVIEW.jpg"), 
+				 "http://a3.zassets.com/images/z/1/8/4/7/3/9/1847391-p-MULTIVIEW.jpg", "8935315"), 
 
 			new StoreItem("Pom Pom Ballet Flat",  stores.SHOES.name ,  stores.SHOES.categories.CHILDREN.name, "$50" ,
 				 "Have your little girl look fabulous in these flats!", "90", 
-				 "http://content.childrensplace.com/www/b/TCP/images/cloudzoom/p/069942_p.jpg")
+				 "http://content.childrensplace.com/www/b/TCP/images/cloudzoom/p/069942_p.jpg", "12463454")
 
 
 		);
@@ -326,7 +340,7 @@ function pseudoQueryStores(store, res){
 			var data = new Array(
 				new StoreItem("Spalding San Antonio Spurs Basketball", stores.SPORTS.name, stores.SPORTS.categories.BASKETBALL.name, "$14.95" ,
 					 "This item only comes in one size", "100", 
-					 "http://nba.frgimages.com/FFImage/thumb.aspx?i=/productimages/_566000/altimages/FF_566091ALT2_xl.jpg&w=600"),
+					 "http://nba.frgimages.com/FFImage/thumb.aspx?i=/productimages/_566000/altimages/FF_566091ALT2_xl.jpg&w=600", "46354"),
 
 				new StoreItem("Cabela's Spinning Rod", stores.SPORTS.name, stores.SPORTS.categories.FISHING.name, "$40" ,
 					 "Improved graphite reel seats with padded hoods", "96", 
@@ -334,15 +348,15 @@ function pseudoQueryStores(store, res){
 
 				new StoreItem("Vuelta Corsa SLR Road Wheelset", stores.SPORTS.name, stores.SPORTS.categories.BICYCLES.name, "$500" ,
 					 "Ideal for racing and serious training.", "94", 
-					 "http://media.nashbar.com/images/nashbar/products/250/VL-CSLR-NCL-PAIR.jpg"),
+					 "http://media.nashbar.com/images/nashbar/products/250/VL-CSLR-NCL-PAIR.jpg","748567"),
 
 				new StoreItem("St. Louis Cardinals Authentic Yadier Molina Home Cool Base Jersey",stores.SPORTS.name, stores.SPORTS.categories.BASEBALL.name, "$380" ,
 					 "Just like the Big Leaguers. ", "97", 
-					 "http://mlb.imageg.net/graphics/product_images/pMLB2-15819162dt.jpg"), 
+					 "http://mlb.imageg.net/graphics/product_images/pMLB2-15819162dt.jpg", "25773"), 
 
 				new StoreItem("Summer Series Spikeless Golf Shoes", stores.SPORTS.name, stores.SPORTS.categories.GOLF.name, "$190" ,
 					 "Features a super-soft upper blend combined with ultra-cushioned midsoles to create pillows for your feet.", "45", 
-					 "http://www.golfsmith.com/images/30081268_thm.jpg")
+					 "http://www.golfsmith.com/images/30081268_thm.jpg","64387343")
 			);
 		var temp = {"items" : data};
 		res.json(temp);

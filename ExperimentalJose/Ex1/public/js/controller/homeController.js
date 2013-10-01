@@ -1,297 +1,43 @@
+
+
 /*******************************************************************************************************************************************/
-// Electronic Store
+// Home 
 /*******************************************************************************************************************************************/
-// function electronicsStore(){
+
+$(document).on('pagebeforeshow', "#home", function( event, ui ) {
+
+	$.ajax({
+		url : "http://localhost:4000/home",
+		contentType: "application/json",
+		success : function(data, textStatus, jqXHR){
+			var itemList = data.items;
+			var len = itemList.length;
+			var list;
+			var item;
+			for (var i=0; i < len; ++i){
+				item = itemList[i];
+
 		
+				list = $("#" + item.store +"List");
 
-// 	$(document).on('pagebeforeshow', "#electronicsStore", function( event, ui ) {
-
-// 		$.mobile.loading("show");	
-
-// 		$.ajax({
-// 			url : "http://localhost:4000/stores/electronics",
-// 			contentType: "application/json",
-// 			success : function(data, textStatus, jqXHR){
-
-// 				var itemList = data.items;
-// 				var len = itemList.length;
-// 				var list;
-// 				var item;
-// 				for (var i=0; i < len; ++i){
-// 					item = itemList[i];
-
-// 					if(item.category === "TV_CATEGORY"){
-// 						list = $("#tvList");
-// 					}
-// 					else if(item.category === "AUDIO_CATEGORY"){
-// 						list = $("#audioList");
-// 					}
-// 					else if(item.category === "PHONE_CATEGORY"){
-// 						list = $("#phoneList");
-// 					}
-// 					else if(item.category === "VIDEO_CATEGORY"){
-// 						list = $("#videoList");
-// 					}
-// 					else if(item.category === "CAMERA_CATEGORY"){
-// 						list = $("#cameraList");
-// 					}
-
-// 					list.append("<li><a href=\"#\">" + 
-// 						"<img src="+ item.picture + ">"  + 
-// 						"<h2>" + item.itemName + "</h2>" + 
-// 						"<p>" + item.description + "</p>" +
-// 						"<p> Rating:" + item.rating + " </p>" + 
-// 						"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
-// 						"</a></li>");
-// 					list.listview("refresh");	
-// 				}
-// 				$.mobile.loading("hide");
-// 			},
-// 			error: function(data, textStatus, jqXHR){
-// 				console.log("textStatus: " + textStatus);
-// 				alert("Data not found!");
-// 			}
-// 		});
-		
-// 	});
-// 	$.mobile.navigate("#electronicsStore");
-// }
-
-/*******************************************************************************************************************************************/
-// Book Store
-/*******************************************************************************************************************************************/
-// function bookStore(){
-// 	$(document).on('pagebeforeshow', "#booksStore", function( event, ui ) {
-
-// 		$.mobile.loading("show");	
-
-// 		$.ajax({
-// 			url : "http://localhost:4000/booksStore",
-// 			contentType: "application/json",
-// 			success : function(data, textStatus, jqXHR){
-
-// 				var itemList = data.items;
-// 				var len = itemList.length;
-// 				var list;
-// 				var item;
-// 				for (var i=0; i < len; ++i){
-// 					item = itemList[i];
-
-// 					if(item.category === "FICTION_CATEGORY"){
-// 						list = $("#tvList");
-// 					}
-// 					else if(item.category === "CHILDREN_CATEGORY"){
-// 						list = $("#audioList");
-// 					}
-// 					else if(item.category === "BUSINESS_CATEGORY"){
-// 						list = $("#phoneList");
-// 					}
-// 					else if(item.category === "TECHNOLOGY_CATEGORY"){
-// 						list = $("#videoList");
-// 					}
-
-// 					list.append("<li><a href=\"#\">" + 
-// 						"<img src="+ item.picture + ">"  + 
-// 						"<h2>" + item.itemName + "</h2>" + 
-// 						"<p>" + item.description + "</p>" +
-// 						"<p> Rating:" + item.rating + " </p>" + 
-// 						"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
-// 						"</a></li>");
-// 					list.listview("refresh");	
-// 				}
-// 				$.mobile.loading("hide");
-// 			},
-// 			error: function(data, textStatus, jqXHR){
-// 				console.log("textStatus: " + textStatus);
-// 				alert("Data not found!");
-// 			}
-// 		});
-		
-// 	});
-// 	$.mobile.navigate("#booksStore");
-// }
-
-
-
-/*******************************************************************************************************************************************/
-//  Clothing Store
-/*******************************************************************************************************************************************/
-
-function computerStore(){
-	$(document).on('pagebeforeshow', "#computersStore", function( event, ui ) {
-
-		$.mobile.loading("show");	
-
-		$.ajax({
-			url : "http://localhost:4000/computersStore",
-			contentType: "application/json",
-			success : function(data, textStatus, jqXHR){
-
-				var itemList = data.items;
-				var len = itemList.length;
-				var list;
-				var item;
-				for (var i=0; i < len; ++i){
-					item = itemList[i];
-
-					if(item.category === "LAPTOPS_CATEGORY"){
-						list = $("#laptopList");
-					}
-					else if(item.category === "DESKTOPS_CATEGORY"){
-						list = $("#desktopList");
-					}
-					else if(item.category === "TABLETS_CATEGORY"){
-						list = $("#tabletList");
-					}
-					else if(item.category === "PRINTERS_CATEGORY"){
-						list = $("#printerList");
-					}
-					
-
-					list.append("<li><a href=\"#\">" + 
-						"<img src="+ item.picture + ">"  + 
-						"<h2>" + item.itemName + "</h2>" + 
-						"<p>" + item.description + "</p>" +
-						"<p> Rating:" + item.rating + " </p>" + 
-						"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
-						"</a></li>");
-					list.listview("refresh");	
-				}
-				$.mobile.loading("hide");
-			},
-			error: function(data, textStatus, jqXHR){
-				console.log("textStatus: " + textStatus);
-				alert("Data not found!");
+				list.append("<li><a href=\"#\">" + 
+					"<img src="+ item.picture + ">"  + 
+					"<h2>" + item.itemName + "</h2>" + 
+					"<p>" + item.description + "</p>" +
+					"<p> Rating:" + item.rating + " </p>" + 
+					"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
+					"</a></li>");
+				list.listview("refresh");	
 			}
-		});
-		
-	});
-	$.mobile.navigate("#computersStore");
-}
-
-
-function clothingStore(){
-
-}
-/*******************************************************************************************************************************************/
-//  Shoe Store
-/*******************************************************************************************************************************************/
-function shoeStore(){
-
-}
-
-/*******************************************************************************************************************************************/
-//  Sports Store
-/*******************************************************************************************************************************************/
-function sportStore(){
-
-}
-
-
-function loginForm(){
-
-	console.log("login");
-
-};
-
-function registerForm(){
-
-	console.log("register");
-};
-
-
-function laptopCategory(){
-	
-	$.mobile.loading("show");
-
-	$.ajax({
-		url : "http://localhost:4000/laptopCategory",
-		method: 'get',
-		contentType: "application/json",
-		dataType:"json",
-		success : function(data, textStatus, jqXHR){
-				$(document).on('pagebeforeshow', "#category", function( event, ui ) {
-	
-				var itemList = data.items;
-				var len = itemList.length;
-				var list = $("#categoryItemList");
-				var item;
-				for (var i=0; i < len; ++i){
-					item = itemList[i];
-
-					list.append("<li><a href=\"#\">" + 
-						"<img src="+ item.picture + ">"  + 
-						"<h2>" + item.itemName + "</h2>" + 
-						"<p>" + item.description + "</p>" +
-						"<p> Rating:" + item.rating + " </p>" + 
-						"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
-						"</a></li>");
-						
-				}
-				list.listview("refresh");
-
-
-				
-			});
 			
-			console.log(data);
-			$.mobile.loading("hide");
-			$.mobile.navigate("#laptopCategorys");
 		},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
-			$.mobile.loading("hide");
-			alert("IMPLEMENTAME");
+			alert("Data not found!");
 		}
 	});
-};
+});
 
-
-
-function phoneCategory(){
-
-
-	$.mobile.loading("show");
-
-	$.ajax({
-		url : "http://localhost:4000/phoneCategory",
-		method: 'get',
-		contentType: "application/json",
-		dataType:"json",
-		success : function(data, textStatus, jqXHR){
-			$(document).on('pagebeforeshow', "#phoneCategory", function( event, ui ) {
-	
-				var itemList = data.items;
-				var len = itemList.length;
-				var list = $("#phoneCategoryItemList");
-				var item;
-				for (var i=0; i < len; ++i){
-					item = itemList[i];
-
-					list.append("<li><a href=\"#\">" + 
-						"<img src="+ item.picture + ">"  + 
-						"<h2>" + item.itemName + "</h2>" + 
-						"<p>" + item.description + "</p>" +
-						"<p> Rating:" + item.rating + " </p>" + 
-						"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
-						"</a></li>");
-						
-				}
-				list.listview("refresh");
-
-	
-			});
-			$.mobile.loading("hide");
-
-			$.mobile.navigate("#phoneCategory");
-		},
-		error: function(data, textStatus, jqXHR){
-			console.log("textStatus: " + textStatus);
-			$.mobile.loading("hide");
-			alert("NOOOO");
-		}
-	});
-};
 
 /*******************************************************************************************************************************************/
 // General
@@ -385,4 +131,88 @@ function findCategory(store, category){
 };
 
 
+/*******************************************************************************************************************************************/
+// Shopping cart
+/*******************************************************************************************************************************************/
+
+$(document).on('pagebeforeshow', "#shoppingCart", function( event, ui ) {
+	console.log("wooooooooot");
+	$.ajax({
+		url : "http://localhost:4000/shoppingCart",
+		contentType: "application/json",
+		success : function(data, textStatus, jqXHR){
+			var itemList = data.items;
+			var len = itemList.length;
+			var list = $("#cartItemList");
+			list.empty();
+			var item;
+			var totalAmount = 0 ;
+			for (var i=0; i < len; ++i){
+				item = itemList[i];
+				totalAmount += parseFloat(item.price);
+				list.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
+					"<img src="+ item.picture + ">"  + 
+					"<h2>" + item.itemName + "</h2>" + 
+					"<p>" + item.description + "</p>" +
+					"<p> Rating:" + item.rating + " </p>" + 
+					"<p class=\"ui-li-aside\"> Price: $" + item.price + "</p>" +
+					"</a>"+
+					"<a onclick=\"toRemove("+item.id+")\" href=\"#removeItemFromCart\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\">remove from cart</li>");
+				list.listview("refresh");	
+			}
+
+			var totalAmountField = $("#shoppingCartAmount");
+			totalAmountField.empty();
+			totalAmountField.append("$"+totalAmount);
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Data not found!");
+		}
+	});
+});
+//Global Variable to know which item the user wants to remove
+var itemToRemove;
+function toRemove(itemId){
+	itemToRemove = itemId;
+}
+
+function checkoutCart(){
+	console.log("Checkout");
+}
+
+function removeItemFromCart(){
+	$.mobile.loading("show");
+	console.log("remove item: "+ itemToRemove);
+	$.ajax({
+		url : "http://localhost:4000/shoppingCart/delete/"+itemToRemove,
+		method : "delete",
+		contentType: "application/json",
+		dataType : "json",
+		success : function(data, textStatus, jqXHR){
+			console.log("mierd");
+			$.mobile.loading("hide");
+
+			$.mobile.changePage(
+		    $("#shoppingCart") ,
+		    {
+				allowSamePageTransition : true,
+				transition              : 'none',
+				showLoadMsg             : false,
+				reloadPage              : true
+		    }
+			);
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Data not found!");
+		}
+	});
+	itemToRemove = undefined;
+
+}
+
+/*******************************************************************************************************************************************/
+// Items Sold 
+/*******************************************************************************************************************************************/
 
