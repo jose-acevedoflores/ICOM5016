@@ -286,6 +286,13 @@ app.get('/shoppingCart', function(req, res){
 	res.json(temp);
 });
 
+app.get("/itemsSold", function(req, res){
+
+	console.log("GET : Load itemsSold");
+	//Should response with a list of up to 10 invoices at a time. Every time the user hits the "Load more" button 
+	pseudoQueryItemsSold(res);
+});
+
 app.del("/shoppingCart/delete/:id", function(req, res){
 	var id = req.params.id;
 	console.log("DEL: id= " +id);
@@ -595,5 +602,14 @@ function pseudoQueryCategories(store, category, res){
 			res.json(temp);
 		}
 	}
+}
 
+function pseudoQueryItemsSold(res){
+		var data = new Array(
+				new StoreItem("Pom Pom Ballet Flat",  stores.SHOES.name ,  stores.SHOES.categories.CHILDREN.name, "$50" ,
+				 "Have your little girl look fabulous in these flats!", "90", 
+				 "http://content.childrensplace.com/www/b/TCP/images/cloudzoom/p/069942_p.jpg")
+				);
+		var temp = {"items" : data};
+		res.json(temp);
 }

@@ -215,4 +215,38 @@ function removeItemFromCart(){
 /*******************************************************************************************************************************************/
 // Items Sold 
 /*******************************************************************************************************************************************/
+$(document).on('pagebeforeshow', "#itemsSold", function( event, ui ) {
 
+	$.ajax({
+		url : "http://localhost:4000/itemsSold",
+		contentType: "application/json",
+		success : function(data, textStatus, jqXHR){
+			var itemList = data.items;
+			var len = itemList.length;
+			var list = $("#itemsSoldList");
+			list.empty();
+			var item;
+			var totalAmount = 0 ;
+			for (var i=0; i < len; ++i){
+				item = itemList[i];
+				list.append("<li data-role=\"list-divider\", data-theme=\"a\"> Invoice Date  <p class=\"ui-li-aside\"> Total Amount Paid: $3</p> </li>");
+				list.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
+					"<img src="+ item.picture + ">"  + 
+					"<h2>" + item.itemName + "</h2>" + 
+					"<p>" + item.description + "</p>" +
+					"<p> Rating:" + item.rating + " </p>" + 
+					"<p class=\"ui-li-aside\"> Purchased Price: $" + item.price + "</p>" +
+					"</a>");
+				list.listview("refresh");	
+			}
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Data not found!");
+		}
+	});
+});
+
+function loadMoreItemsSold(){
+	console.log("Load More items sold");
+}

@@ -61,9 +61,9 @@ html
 			include common	
 			div(data-role="content")
 				h3 Items in cart						
-				ul(data-role="listview", data-inset="true", id="cartItemList", data-filter-placeholder="Filter items in cart")
+				ul(data-role="listview", data-inset="true", id="cartItemList")
 				h3 Order Total: 	
-				h3(id="shoppingCartAmount") pl
+				h3(id="shoppingCartAmount") 
 				input(type="submit", value="Proceed to Checkout", onclick="checkoutCart()" )
 
 				div(data-role="popup", id="removeItemFromCart", data-theme="d", data-overlay-theme="b", class="ui-content", style="max-width:340px;")
@@ -72,3 +72,11 @@ html
 					a(onclick="removeItemFromCart()", data-role="button", data-rel="back", data-theme="b", data-icon="check", data-inline="true", data-mini="true") Remove
 					a(href="#", data-role="button", data-rel="back", data-inline="true", data-mini="true") Cancel
 
+
+		div(data-role="page", id="itemsSold")
+			include common	
+			div(data-role="content")
+				h3 History of Sold Items
+				ul(data-role="listview", data-inset="true", id="itemsSoldList", data-filter="true", data-filter-placeholder="Search your Sold items")
+
+				input(type="submit", value="Load More", onclick="loadMoreItemsSold()" )	
