@@ -9,7 +9,7 @@ module.exports =  {
 		this.shoppingID = shoppingID;
 		this.emailAddress = emailAddress;
 		this.userType = userType;
-		//this.auctionOrSale = auctionOrSale;
+		
 	}
 
 }

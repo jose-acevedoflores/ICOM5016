@@ -104,9 +104,19 @@ html
 		div(data-role="page", id="register")
 			include common
 			div(data-role="content")
-				form(id ="logInForm", method ="post", data-transition="pop")
-					label(for="Username:") Username
-					input(type ="text", name="Username")
-					label(for="Password") Password
-					input(type ="text", name="Password", value="******")
-					input(type="submit", value="Log In", onclick="loginForm()")
+				h1 Register:
+				form(id ="registerForm", method ="post", data-transition="pop")
+					label(for="First Name") First Name:
+					input(type ="text", name="First Name")
+					label(for="Last Name") Last Name:
+					input(type ="text", name="Last Name")
+					label(for="Email") Email:
+					input(type="text", name="Email")
+					label(for="Password") Password:
+					input(type="text", name="Password")
+					label(for="Confirm Password") Confirm Password:
+					input(type="text", name="Confirm Password")
+
+					a(href="#", type="submit",data-rel="back", data-inline="true", data-theme="b", value="Log In", onclick="registerForm()", data-mini="true") Register
+							
+					a(href="#", data-icon = "delete", data-rel="back", data-inline="true", type="submit", value="Cancel", data-mini="true") Cancel
