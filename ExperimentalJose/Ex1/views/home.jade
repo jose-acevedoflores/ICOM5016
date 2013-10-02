@@ -85,11 +85,20 @@ html
 			include common
 			div(data-role="content")
 				form(id ="logInForm", method ="post", data-transition="pop")
-					label(for="Username:") Username
-					input(type ="text", name="Username")
-					label(for="Password") Password
-					input(type ="text", name="Password", value="******")
-					input(type="submit", value="Log In", onclick="loginForm()")
+					h1 Login:
+					div(data-role="fieldcontain")
+					label(for="Username") Username:
+					input(class = "required", type ="text", name="Username")
+					div(data-role="fieldcontain")
+					label(for="Password") Password:
+					input(class = "required", type ="text", name="Password", value="******")
+
+					//- div(class ="ui-grid-a")
+					//- 	div(class="ui-body ui-body-b")
+					//- 		div(class="ui-block-a")
+					input(data-icon = "delete", data-theme="a", type="submit", value="Cancel", onclick="loginForm()")
+							//- div(class="ui-block-b")
+					input(type="submit", data-theme="c", value="Log In", onclick="loginForm()")
 
 		div(data-role="page", id="register")
 			include common
