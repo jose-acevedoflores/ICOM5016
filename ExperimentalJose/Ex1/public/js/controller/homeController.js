@@ -97,11 +97,11 @@ function findCategory(store, category){
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
 
-			$(document).on('pagebeforeshow', "#"+category+"Category", function( event, ui ) {
+			$(document).on('pagebeforeshow', "#"+category+"CategorySTORE"+store, function( event, ui ) {
 	
 				var itemList = data.items;
 				var len = itemList.length;
-				var list = $("#"+category+"CategoryItemList");
+				var list = $("#"+category+"CategoryItemListSTORE"+store);
 				var item;
 				for (var i=0; i < len; ++i){
 					item = itemList[i];
@@ -120,7 +120,7 @@ function findCategory(store, category){
 			});
 
 			$.mobile.loading("hide");
-			$.mobile.navigate("#"+category+"Category");
+			$.mobile.navigate("#"+category+"CategorySTORE"+store);
 		},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);

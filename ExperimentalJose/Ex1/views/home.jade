@@ -35,10 +35,10 @@ html
 		//Add categories divs						
 		-for(var i = 0 ; i < data.dataLength ; i++)
 			-for(var c = 0 ; c < data.stores[i].categoriesLength ; c++)
-				div(data-role="page", id="#{data.stores[i].categories[c]}Category")				
+				div(data-role="page", id="#{data.stores[i].categories[c]}CategorySTORE#{data.stores[i].name}")				
 					include common
 					div(data-role="content")
-						div(data-role="controlgroup", data-type="horizontal", id="#{data.stores[i].categories[c]}CategoryNavigator") 	
+						div(data-role="controlgroup", data-type="horizontal", id="#{data.stores[i].categories[c]}CategoryNavigatorSTORE#{data.stores[i].name}") 	
 							a(href="#", data-role="button") #{data.stores[i].name}
 							a(href="#", data-role="button") #{data.stores[i].categories[c]}
 						div(data-role="fieldcontain")
@@ -53,7 +53,7 @@ html
 									option(value="alphabetical") Alphabetical order (Item Name)
 									option(value="revAlphabetical") Reverse Alphabetical (Item Name)		
 						br			
-						ul(data-role="listview", data-inset="true", data-filter="true", id="#{data.stores[i].categories[c]}CategoryItemList", data-filter-placeholder="Filter items")						
+						ul(data-role="listview", data-inset="true", data-filter="true", id="#{data.stores[i].categories[c]}CategoryItemListSTORE#{data.stores[i].name}", data-filter-placeholder="Filter items")						
 
         
 
@@ -80,7 +80,7 @@ html
 				ul(data-role="listview", data-inset="true", id="itemsSoldList", data-filter="true", data-filter-placeholder="Search your Sold items")
 
 				input(type="submit", value="Load More", onclick="loadMoreItemsSold()" )	
-
+		// Login
 		div(data-role="page", id="logIn")
 			include common
 			div(data-role="content")
