@@ -80,3 +80,23 @@ html
 				ul(data-role="listview", data-inset="true", id="itemsSoldList", data-filter="true", data-filter-placeholder="Search your Sold items")
 
 				input(type="submit", value="Load More", onclick="loadMoreItemsSold()" )	
+
+		div(data-role="page", id="logIn")
+			include common
+			div(data-role="content")
+				form(id ="logInForm", method ="post", data-transition="pop")
+					label(for="Username:") Username
+					input(type ="text", name="Username")
+					label(for="Password") Password
+					input(type ="text", name="Password", value="******")
+					input(type="submit", value="Log In", onclick="loginForm()")
+
+		div(data-role="page", id="register")
+			include common
+			div(data-role="content")
+				form(id ="logInForm", method ="post", data-transition="pop")
+					label(for="Username:") Username
+					input(type ="text", name="Username")
+					label(for="Password") Password
+					input(type ="text", name="Password", value="******")
+					input(type="submit", value="Log In", onclick="loginForm()")
