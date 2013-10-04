@@ -213,6 +213,80 @@ function removeItemFromCart(){
 }
 
 /*******************************************************************************************************************************************/
+// Placed Bids
+/*******************************************************************************************************************************************/
+$(document).on('pagebeforeshow', "#placedBids", function( event, ui ) {
+	console.log("Placed");
+	$.ajax({
+		url : "http://localhost:4000/placedBids",
+		contentType: "application/json",
+		success : function(data, textStatus, jqXHR){
+			var itemList = data.items;
+			var len = itemList.length;
+			var list = $("#bidItemList");
+			list.empty();
+			var item;
+			var totalAmount = 0 ;
+			for (var i=0; i < len; ++i){
+				item = itemList[i];
+				totalAmount += parseFloat(item.price);
+				list.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
+					"<img src="+ item.picture + ">"  + 
+					"<h2>" + item.itemName + "</h2>" + 
+					"<p>" + item.description + "</p>" +
+					"<p> Rating:" + item.rating + " </p>" + 
+					"<p class=\"ui-li-aside\"> Price: $" + item.price + "</p>" +
+					"</a>"+
+					"<a onclick=\"itemToIncreaseBid("+item.id+")\" href=\"#increaseBid\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\">increa bid</li>");
+				list.listview("refresh");	
+			}
+
+			// var totalAmountField = $("#shoppingCartAmount");
+			// totalAmountField.empty();
+			// totalAmountField.append("$"+totalAmount);
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Data not found!");
+		}
+	});
+});
+
+var toIncreaseBid;
+function itemToIncreaseBid(itemId){
+	toIncreaseBid = itemId;
+}
+
+function increaseBid(){
+	$.mobile.loading("show");
+	console.log("Increase Bid: "+ toIncreaseBid);
+	$.ajax({
+		url : "http://localhost:4000/placedBids/increaseBid/"+ toIncreaseBid,
+		method : "put",
+		contentType: "application/json",
+		dataType : "json",
+		success : function(data, textStatus, jqXHR){
+			console.log("mierd");
+			$.mobile.loading("hide");
+
+			$.mobile.changePage(
+		    $("#placedBids") ,
+		    {
+				allowSamePageTransition : true,
+				transition              : 'none',
+				showLoadMsg             : false,
+				reloadPage              : true
+		    }
+			);
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Data not found!");
+		}
+	});
+	toIncreaseBid= undefined;
+}
+/*******************************************************************************************************************************************/
 // Items Sold 
 /*******************************************************************************************************************************************/
 $(document).on('pagebeforeshow', "#itemsSold", function( event, ui ) {

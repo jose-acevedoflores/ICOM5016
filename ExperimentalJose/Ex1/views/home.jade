@@ -72,6 +72,22 @@ html
 					a(onclick="removeItemFromCart()", data-role="button", data-rel="back", data-theme="b", data-icon="check", data-inline="true", data-mini="true") Remove
 					a(href="#", data-role="button", data-rel="back", data-inline="true", data-mini="true") Cancel
 
+		div(data-role="page", id="placedBids")
+			include common
+			div(data-role="content")
+				h3 Recent Bids:
+				ul(data-role="listview", data-inset="true", id="bidItemList")
+
+				div(data-role="popup", id="increaseBid", data-theme="d", data-overlay-theme="b", class="ui-content", style="max-width:340px;")
+					p Increase your bid
+					div(data-role="content")
+						form(method="post", data-transition="pop")
+							div(data-role="fieldcontain")
+								label Email
+					a(onclick="increaseBid()", data-role="button", data-rel="back", data-theme="b", data-icon="check", data-inline="true", data-mini="true") Increse Bid
+					a(href="#", data-role="button", data-rel="back", data-inline="true", data-mini="true") Cancel
+
+
 
 		div(data-role="page", id="itemsSold")
 			include common	
@@ -80,6 +96,7 @@ html
 				ul(data-role="listview", data-inset="true", id="itemsSoldList", data-filter="true", data-filter-placeholder="Search your Sold items")
 
 				input(type="submit", value="Load More", onclick="loadMoreItemsSold()" )	
+		
 		// Login
 		div(data-role="page", id="logIn")
 			include common
@@ -100,7 +117,7 @@ html
 							//- div(class="ui-block-b")
 					a(href="#", data-icon = "delete", data-rel="back", data-inline="true", type="submit", value="Cancel", data-mini="true") Cancel
 					
-
+		// Register
 		div(data-role="page", id="register")
 			include common
 			div(data-role="content")
