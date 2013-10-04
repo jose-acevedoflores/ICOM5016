@@ -1,4 +1,4 @@
-
+var host = "192.168.1.3:4000";
 
 /*******************************************************************************************************************************************/
 // Home 
@@ -7,7 +7,7 @@
 $(document).on('pagebeforeshow', "#home", function( event, ui ) {
 
 	$.ajax({
-		url : "http://localhost:4000/home",
+		url : "http://"+host+"/home",
 		contentType: "application/json",
 		success : function(data, textStatus, jqXHR){
 			var itemList = data.items;
@@ -51,7 +51,7 @@ function findStore(store){
 		$.mobile.loading("show");	
 
 		$.ajax({
-			url : "http://localhost:4000/stores/"+store,
+			url : "http://"+host+"/stores/"+store,
 			contentType: "application/json",
 			success : function(data, textStatus, jqXHR){
 
@@ -91,7 +91,7 @@ function findCategory(store, category){
 	$.mobile.loading("show");
 	console.log("cat: " + category);
 	$.ajax({
-		url : "http://localhost:4000/stores/"+store+"/"+category,
+		url : "http://"+host+"/stores/"+store+"/"+category,
 		method: 'get',
 		contentType: "application/json",
 		dataType:"json",
@@ -138,7 +138,7 @@ function findCategory(store, category){
 $(document).on('pagebeforeshow', "#shoppingCart", function( event, ui ) {
 	console.log("wooooooooot");
 	$.ajax({
-		url : "http://localhost:4000/shoppingCart",
+		url : "http://"+host+"/shoppingCart",
 		contentType: "application/json",
 		success : function(data, textStatus, jqXHR){
 			var itemList = data.items;
@@ -185,7 +185,7 @@ function removeItemFromCart(){
 	$.mobile.loading("show");
 	console.log("remove item: "+ itemToRemove);
 	$.ajax({
-		url : "http://localhost:4000/shoppingCart/delete/"+itemToRemove,
+		url : "http://"+host+"/shoppingCart/delete/"+itemToRemove,
 		method : "delete",
 		contentType: "application/json",
 		dataType : "json",
@@ -218,7 +218,7 @@ function removeItemFromCart(){
 $(document).on('pagebeforeshow', "#placedBids", function( event, ui ) {
 	console.log("Placed");
 	$.ajax({
-		url : "http://localhost:4000/placedBids",
+		url : "http://"+host+"/placedBids",
 		contentType: "application/json",
 		success : function(data, textStatus, jqXHR){
 			var itemList = data.items;
@@ -261,7 +261,7 @@ function increaseBid(){
 	$.mobile.loading("show");
 	console.log("Increase Bid: "+ toIncreaseBid);
 	$.ajax({
-		url : "http://localhost:4000/placedBids/increaseBid/"+ toIncreaseBid,
+		url : "http://"+host+"/placedBids/increaseBid/"+ toIncreaseBid,
 		method : "put",
 		contentType: "application/json",
 		dataType : "json",
@@ -292,7 +292,7 @@ function increaseBid(){
 $(document).on('pagebeforeshow', "#itemsSold", function( event, ui ) {
 
 	$.ajax({
-		url : "http://localhost:4000/itemsSold",
+		url : "http://"+host+"/itemsSold",
 		contentType: "application/json",
 		success : function(data, textStatus, jqXHR){
 			var itemList = data.items;
