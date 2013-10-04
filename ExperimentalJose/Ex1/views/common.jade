@@ -63,9 +63,15 @@ div(data-role="panel", id="leftPanel", class="main_nav", data-display="reveal" ,
 
 			-	}
 			-else {
-					a(href="#logIn", onclick="loginForm()") Log In 
+					a(href="#logIn", data-role="button", data-inline="true"
+						data-icon="check", data-theme="a", data-transition="flip", dat-corners="true"
+						data-icon-shadow="true", onclick="loginForm()", data-mini="true") Log In 
+
+
 					| or
-					a(href= "#register",onclick="registerForm()")  Register
+					a(href= "#register", data-role="button", data-inline="true"
+						data-icon="plus", data-theme="a", data-transition="flip", dat-corners="true"
+						data-icon-shadow="true", onclick="registerForm()", data-mini="true")  Register
 			-	}
 
 

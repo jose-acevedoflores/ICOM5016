@@ -149,6 +149,7 @@ $(document).on('pagebeforeshow', "#shoppingCart", function( event, ui ) {
 			var totalAmount = 0 ;
 			for (var i=0; i < len; ++i){
 				item = itemList[i];
+				console.log(item.id);
 				totalAmount += parseFloat(item.price);
 				list.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
 					"<img src="+ item.picture + ">"  + 
@@ -229,6 +230,7 @@ $(document).on('pagebeforeshow', "#placedBids", function( event, ui ) {
 			var totalAmount = 0 ;
 			for (var i=0; i < len; ++i){
 				item = itemList[i];
+				console.log(item.id);
 				totalAmount += parseFloat(item.price);
 				list.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
 					"<img src="+ item.picture + ">"  + 
@@ -237,7 +239,8 @@ $(document).on('pagebeforeshow', "#placedBids", function( event, ui ) {
 					"<p> Rating:" + item.rating + " </p>" + 
 					"<p class=\"ui-li-aside\"> Price: $" + item.price + "</p>" +
 					"</a>"+
-					"<a onclick=\"itemToIncreaseBid("+item.id+")\" href=\"#increaseBid\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\">increa bid</li>");
+					"<a onclick=\"toIncreaseBid("+item.id+")\" href=\"#increaseBid\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\">increase bid</li>");
+
 				list.listview("refresh");	
 			}
 
@@ -252,16 +255,16 @@ $(document).on('pagebeforeshow', "#placedBids", function( event, ui ) {
 	});
 });
 
-var toIncreaseBid;
-function itemToIncreaseBid(itemId){
-	toIncreaseBid = itemId;
+var itemToIncreaseBid;
+function toIncreaseBid(itemId){
+	itemToIncreaseBid = itemId;
 }
 
 function increaseBid(){
 	$.mobile.loading("show");
-	console.log("Increase Bid: "+ toIncreaseBid);
+	console.log("Increase Bid: "+ itemToIncreaseBid);
 	$.ajax({
-		url : "http://"+host+"/placedBids/increaseBid/"+ toIncreaseBid,
+		url : "http://"+host+"/placedBids/item"+itemToIncreaseBid,
 		method : "put",
 		contentType: "application/json",
 		dataType : "json",
@@ -284,7 +287,7 @@ function increaseBid(){
 			alert("Data not found!");
 		}
 	});
-	toIncreaseBid= undefined;
+	itemToIncreaseBid = undefined;
 }
 /*******************************************************************************************************************************************/
 // Items Sold 
