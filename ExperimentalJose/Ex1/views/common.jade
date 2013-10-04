@@ -1,4 +1,3 @@
-
 div(data-role="panel", id="rightPanel", data-position="right", data-display="reveal", data-theme="b")	
 	div(class="nav_profile")
 		div(class="nav_name")
@@ -58,9 +57,14 @@ div(data-role="panel", id="leftPanel", class="main_nav", data-display="reveal" ,
 	div(class="nav_profile")			
 		div(class="nav_name")
 			h3 
-				a(href= "#logIn",onclick="loginForm()") Log In 
-				| or
-				a(href="#register", onclick="registerForm()")  Register
+			- if (loggedIn) {
+					a(href="#")  Juan del Pueblo
+				-}
+				- else {
+					a(onclick="loginForm()") Log In 
+					| or
+					a(onclick="registerForm()")  Register
+				-}
 			ul(data-role="listview", data-inset="true" )	
 				li
 					a(href="#shoppingCart") Cart
