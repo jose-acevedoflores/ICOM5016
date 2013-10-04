@@ -58,15 +58,15 @@ div(data-role="panel", id="leftPanel", class="main_nav", data-display="reveal" ,
 		div(class="nav_name")
 			h3 
 
-			if (loggedIn) {
+			-if (loggedIn) {
 					a(href="#")  Juan del Pueblo
 
-				}
-			else {
+			-	}
+			-else {
 					a(onclick="loginForm()") Log In 
 					| or
 					a(onclick="registerForm()")  Register
-				}
+			-	}
 
 
 			ul(data-role="listview", data-inset="true" )	
