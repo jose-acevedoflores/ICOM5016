@@ -112,6 +112,7 @@ app.get('/', function(request, response) {
 				],
 			"dataLength" : 6
 		}
+		"loggedIn" : false 
 	} ;
 	response.render('home.jade', generate);
 
