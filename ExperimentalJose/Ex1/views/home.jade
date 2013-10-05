@@ -107,42 +107,57 @@ html
 		div(data-role="page", id="logIn")
 			include common
 			div(data-role="content")
-				form(id ="logInForm", method ="post", data-transition="pop")
 					h1 Login:
-					div(data-role="fieldcontain")
-					label(for="Email") Email:
-					input(class = "required", type ="text", name="Email", value="papasote_el_papaso@papaso.com")
-					div(data-role="fieldcontain")
-					label(for="Password") Password:
-					input(class = "required", type ="text", name="Password", value="******")
+					form(id ="logInForm", data-transition="pop")
+						fieldset(data-role="controlgroup")
+							ul
+								li
+									label(for="Email") Email:
+										input(class = "required", type ="text", name="Email", placeholder="john_doe@domain.com")
+								li
+									label(for="Password") Password:
+										input(class = "required", type ="password", name="Password", placeholder ="Password")
 
 					//- div(class ="ui-grid-a")
 					//- 	div(class="ui-body ui-body-b")
 					//- 		div(class="ui-block-a")
-					a(href="#", type="submit",data-rel="back", data-inline="true", data-theme="b", value="Log In", onclick="loginForm()", data-mini="true") Login
+					center
+						a(href="#", type="submit",data-rel="back", data-inline="true", data-theme="b", value="Log In", onclick="loginForm()", data-mini="true") Login
 							//- div(class="ui-block-b")
-					a(href="#", data-icon = "delete", data-rel="back", data-inline="true", type="submit", value="Cancel", data-mini="true") Cancel
+						a(href="#home", data-icon = "delete", data-rel="back", data-inline="true", type="submit", value="Cancel", data-mini="true") Cancel
 					
 		// Register
 		div(data-role="page", id="register")
 			include common
 			div(data-role="content")
 				h1 Register:
-				form(id ="registerForm", method ="post", data-transition="pop")
-					label(for="First Name") First Name:
-					input(type ="text", name="First Name")
-					label(for="Last Name") Last Name:
-					input(type ="text", name="Last Name")
-					label(for="Email") Email:
-					input(type="text", name="Email")
-					label(for="Password") Password:
-					input(type="text", name="Password")
-					label(for="Confirm Password") Confirm Password:
-					input(type="text", name="Confirm Password")
-
-					a(href="#", type="submit",data-rel="back", data-inline="true", data-theme="b", value="Log In", onclick="registerForm()", data-mini="true") Register
+				form(id ="registerForm", data-transition="pop")
+					fieldset(data-role='controlgroup')
+						ul
+							li
+								label(for="fname") First Name:
+									input(id="fname", type ="text", name="fname", placeholder = "Firstname")
+							li
+								label(for="lname") Last Name:
+									input(id="lname",type ="text", name="lname", placeholder="Lastname")
+							li 
+								label(for="emailAddress") Email:
+									input(id="emailAddress", type="text", name="emailAddress", placeholder="john_doe@domain.com")
+							li
+								label(for="password") Password:
+									input(id="password", type="password", name="password", placeholder="Password")
+							li
+								label(for="confirmPassword") Confirm Password:
+									input(id="confirmPassword", type="password", name="confirmPassword"
+										placeholder ="Password")
+					center
+						a(data-role="button", data-inline="true",
+						data-icon="check", data-theme="a", data-transition="flip", dat-corners="true"
+						data-icon-shadow="true", data-mini="true", onclick="registerForm()") Register
 							
-					a(href="#", data-icon = "delete", data-rel="back", data-inline="true", type="submit", value="Cancel", data-mini="true") Cancel
+						a(href="#home",data-role="button", data-inline="true",
+						data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+						data-icon-shadow="true", data-mini="true") Cancel
 					
 		
 		div(data-role="page", id = "profilePage")

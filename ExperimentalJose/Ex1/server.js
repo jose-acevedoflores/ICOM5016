@@ -3,9 +3,10 @@ var http    = require('http');
 var app     = express();
 var item = require("./public/js/objects.js");
 var StoreItem = item.StoreItem;
+var user = require("./public/js/user.js");
+var User = user.User;
 
-
-
+app.use(express.bodyParser());
 var stores = {
 	ELECTRONICS : { 
 		name : "electronics" ,
@@ -64,7 +65,6 @@ var stores = {
 	}
 };
 
-var userNextId = 0;
 
 
 app.configure(function(){
@@ -272,6 +272,14 @@ app.get('/stores/:store' , function(req, res){
 // 	var temp = {"items" : data};
 // 	response.json(temp);
 // });
+var userNextId = 0;
+var userList = new Array(
+	new User("Andres", "Malines", "bababa", "andres.malines@upr.edu")
+);
+
+for (var i = 0; i<userList.length; i++) {
+	userList[i].shoppingID[i]=userNextId++;
+}
 
 var shoppingCartVar =  new Array(
 
@@ -372,18 +380,20 @@ app.del("/shoppingCart/delete/:id", function(req, res){
 
 
 // REST Operation - HTTP POST to add a new user
-app.post("/register/new-user", function(req, res) {
+app.post('/register/newUser', function(req, res) {
 	console.log("POST");
-
-	if(!req.body.hasOwnProperty('accountNumber') || !req.body.hasOwnProperty('constumerNumber')
-  	|| !req.body.hasOwnProperty('password') || !req.body.hasOwnProperty('ccNumber') || !req.body.hasOwnProperty('mAddressID') 
-  	|| !req.body.hasOwnProperty('bAddressID') || !req.body.hasOwnProperty('shoppingID') || !req.body.hasOwnProperty('emailAddress')
-  	|| !req.body.hasOwnProperty('userType')) {
+	console.log(req.body);
+	if(!req.body.hasOwnProperty('fname') || !req.body.hasOwnProperty('lname')
+  		|| !req.body.hasOwnProperty('password')  || !req.body.hasOwnProperty('emailAddress') ){
     	res.statusCode = 400;
     	return res.send('Error: Missing fields for user registration.');
   	}
-  	var newUser = new User( req.body.accountNumber, req.body.constumerNumber, req.body.password, req.body.ccNumber, req.body.mAddressID, req.body.bAddressID, req.body.shoppingID,req.body.emailAddress,
-  		req.body.userType);
+
+  	if(req.body.password != req.body.confirmPassword) {
+  		res.statusCode = 400;
+  		return res.send("Error: Password doesn't match");
+	}
+  	var newUser = new User( req.body.fname, req.body.lname, req.body.password, req.body.emailAddress);
   	console.log("New User: " + JSON.stringify(newUser));
   	newUser.id = userNextId++;
   	userList.push(newUser);

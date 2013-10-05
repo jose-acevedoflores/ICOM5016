@@ -339,7 +339,39 @@ function loginForm(){
 /*******************************************************************************************************************************************/
 // Register
 /*******************************************************************************************************************************************/
-
+function ConvertToJSON(formData) {
+	var result = {};
+	$.each(formData, function(i,o){
+		result[o.name] = o.value;
+	});
+	return result;
+}
 function registerForm(){
 	console.log("Registered");
+	$.mobile.loading("show");
+	var form = $("#registerForm");
+	var formData = form.serializeArray();
+	console.log("form Data: " + formData);
+	var newUser = ConvertToJSON(formData);
+	console.log("New User: " + JSON.stringify(newUser));
+	var newUserJSON = JSON.stringify(newUser);
+	$.ajax({
+		url : "http://"+host+"/register/newUser",
+		method: 'post',
+		data : newUserJSON,
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+			$.mobile.loading("hide");
+			$.mobile.navigate("#home");
+			console.log("To home");
+
+		},
+		error : function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			$.mobile.loading("hide");
+			alert("Data could not be added!");
+		}
+	});
+
 }
