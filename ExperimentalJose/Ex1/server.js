@@ -4,6 +4,8 @@ var app     = express();
 var item = require("./public/js/objects.js");
 var StoreItem = item.StoreItem;
 
+
+
 var stores = {
 	ELECTRONICS : { 
 		name : "electronics" ,
@@ -62,6 +64,7 @@ var stores = {
 	}
 };
 
+var userNextId = 0;
 
 
 app.configure(function(){
@@ -293,7 +296,7 @@ var placedBidsVar = new Array(
 			new StoreItem("iMac", stores.COMPUTERS.name, stores.COMPUTERS.categories.DESKTOPS.name, "$1,299.00", "A Macbook Pro laptop", "97", 
 				"https://www.apple.com/imac/images/hero.png", "0921"),
 
-			new StoreItem("iMac", stores.COMPUTERS.name, stores.COMPUTERS.categories.TABLETS.name, "$1,299.00", "A Macbook Pro laptop", "97", 
+			new StoreItem("iPad", stores.COMPUTERS.name, stores.COMPUTERS.categories.TABLETS.name, "$1,299.00", "A Macbook Pro laptop", "97", 
 				"https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQ8uL0T_OaIHUI7rEe0U8qvwP5VBszJsJzMX5Fj73jGFHH1STcJy1OiRHjj", "9281"),
 
 			new StoreItem("Inkjet", stores.COMPUTERS.name, stores.COMPUTERS.categories.PRINTERS.name, "$1,299.00", "A clumsy printer", "97", 
@@ -321,7 +324,7 @@ app.get("/itemsSold", function(req, res){
 	pseudoQueryItemsSold(res);
 });
 
-app.put("placedBids/put/:id", function(req, res){
+app.put("/placedBids/item:id", function(req, res){
 	var id = req.params.id;
 		console.log("PUT ITEM: " +id);
 	if((id < 0)){
@@ -363,6 +366,25 @@ app.del("/shoppingCart/delete/:id", function(req, res){
 
 });
 
+
+// REST Operation - HTTP POST to add a new user
+app.post("/register/new-user", function(req, res) {
+	console.log("POST");
+
+	if(!req.body.hasOwnProperty('accountNumber') || !req.body.hasOwnProperty('constumerNumber')
+  	|| !req.body.hasOwnProperty('password') || !req.body.hasOwnProperty('ccNumber') || !req.body.hasOwnProperty('mAddressID') 
+  	|| !req.body.hasOwnProperty('bAddressID') || !req.body.hasOwnProperty('shoppingID') || !req.body.hasOwnProperty('emailAddress')
+  	|| !req.body.hasOwnProperty('userType')) {
+    	res.statusCode = 400;
+    	return res.send('Error: Missing fields for user registration.');
+  	}
+  	var newUser = new User( req.body.accountNumber, req.body.constumerNumber, req.body.password, req.body.ccNumber, req.body.mAddressID, req.body.bAddressID, req.body.shoppingID,req.body.emailAddress,
+  		req.body.userType);
+  	console.log("New User: " + JSON.stringify(newUser));
+  	newUser.id = userNextId++;
+  	userList.push(newUser);
+  	res.json(true);
+});
 
 http.createServer(app).listen(app.get('port'), function(){
 	console.log('Express server listening on port ' + app.get('port'));

@@ -1,5 +1,5 @@
 module.exports =  { 
-	user : function (accounNumber, costumerName, password, ccNumber, mAddressID, bAddressID, shoppingID, emailAddress, userType){
+	User : function (accounNumber, costumerName, password, ccNumber, mAddressID, bAddressID, shoppingID, emailAddress, userType){
 		this.accountNumber = accountNumber;
 		this.costumerName = costumerName;
 		this.password = password;
