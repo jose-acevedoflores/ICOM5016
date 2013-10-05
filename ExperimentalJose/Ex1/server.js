@@ -324,6 +324,7 @@ app.get("/itemsSold", function(req, res){
 	pseudoQueryItemsSold(res);
 });
 
+// REST Operation - HTTP PUT to update a bid
 app.put("/placedBids/item:id", function(req, res){
 	var id = req.params.id;
 		console.log("PUT ITEM: " +id);
@@ -353,6 +354,9 @@ app.put("/placedBids/item:id", function(req, res){
 		} 
 	}
 });
+
+// REST Operation - HTTP Post to add a new item to Computer Store
+
 
 app.del("/shoppingCart/delete/:id", function(req, res){
 	var id = req.params.id;
