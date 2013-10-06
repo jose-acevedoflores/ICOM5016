@@ -331,14 +331,6 @@ function loadMoreItemsSold(){
 /*******************************************************************************************************************************************/
 // Log In
 /*******************************************************************************************************************************************/
-
-function loginForm(){
-	console.log("Loggin");
-}
-
-/*******************************************************************************************************************************************/
-// Register
-/*******************************************************************************************************************************************/
 function ConvertToJSON(formData) {
 	var result = {};
 	$.each(formData, function(i,o){
@@ -346,6 +338,39 @@ function ConvertToJSON(formData) {
 	});
 	return result;
 }
+function loginForm(){
+	console.log("Login");
+	$.mobile.loading("show");
+	var form = $("#loginForm");
+	var formData = form.serializeArray();
+	console.log("form data : "+ formData);
+	var user = ConvertToJSON(formData);
+	console.log("User to login : " + JSON.stringify(user));
+	var userJSON = JSON.stringify(user);
+	$.ajax({
+		url : "http://"+host+"/userLogin",
+		method : 'post',
+		data : userJSON,
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus,jqXHR){
+			$.mobile.loading("hide");
+			$.mobile.navigate("#home");
+
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus : " + textStatus);
+			$.mobile.loading("hide");
+			alert("There was an error with your e-mail/password combination.");
+		}
+	});
+
+}
+
+/*******************************************************************************************************************************************/
+// Register
+/*******************************************************************************************************************************************/
+
 function registerForm(){
 	console.log("Registered");
 	$.mobile.loading("show");

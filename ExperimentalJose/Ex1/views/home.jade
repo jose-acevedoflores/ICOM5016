@@ -104,19 +104,19 @@ html
 				input(type="submit", value="Load More", onclick="loadMoreItemsSold()" )	
 		
 		// Login
-		div(data-role="page", id="logIn")
+		div(data-role="page", id="login")
 			include common
 			div(data-role="content")
 					h1 Login:
-					form(id ="logInForm", data-transition="pop")
+					form(id ="loginForm", data-transition="pop")
 						fieldset(data-role="controlgroup")
 							ul
 								li
 									label(for="Email") Email:
-										input(class = "required", type ="text", name="Email", placeholder="john_doe@domain.com")
+										input(id="userEmailAddress", class = "required", type ="text", name="emailAddress", placeholder="john_doe@domain.com")
 								li
 									label(for="Password") Password:
-										input(class = "required", type ="password", name="Password", placeholder ="Password")
+										input(id="userPassword",class = "required", type ="password", name="password", placeholder ="Password")
 
 					//- div(class ="ui-grid-a")
 					//- 	div(class="ui-body ui-body-b")

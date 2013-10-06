@@ -274,7 +274,7 @@ app.get('/stores/:store' , function(req, res){
 // });
 var userNextId = 0;
 var userList = new Array(
-	new User("Andres", "Malines", "bababa", "andres.malines@upr.edu")
+	new User("Andres", "Malines", "b", "andres.malines@upr.edu")
 );
 
 for (var i = 0; i<userList.length; i++) {
@@ -314,13 +314,14 @@ var placedBidsVar = new Array(
 app.get('/shoppingCart', function(req, res){
 
 	//QUERY DB
-	
+	console.log("GET: ShoppingCart");
 	var temp = {"items" : shoppingCartVar};
 	res.json(temp);
 });
 
 app.get('/placedBids', function(req, res) {
 
+	console.log("GET : PlacedBids");
 	var temp = {'items' : placedBidsVar};
 	res.json(temp);
 });
@@ -330,6 +331,36 @@ app.get("/itemsSold", function(req, res){
 	console.log("GET : Load itemsSold");
 	//Should response with a list of up to 10 invoices at a time. Every time the user hits the "Load more" button 
 	pseudoQueryItemsSold(res);
+});
+
+// REST Operation - HTTP POST to login
+app.post("/userLogin", function(req, res){
+	console.log("GET  : Login");
+	console.log(req.body.hasOwnProperty('emailAddress'));
+	
+	var email = req.body.userEmail;
+	var password = req.body.userPassword;
+	console.log(req.body.emailAddress);
+	console.log(req.body.password);
+	var target = -1;
+	for(var i =0; i<userList.length; i++) {
+		var userEmail = userList[i].emailAddress;
+		var userPassword = userList[i].password;
+		if ((String(userEmail)=== String(email)) ){
+			target = i;
+			break;
+		}
+	}
+	if(target==-1){
+		res.statusCode = 401;
+		res.send("There was an error with your e-mail/password combination.");
+
+	}
+	else {
+		var response = {"user" : userList[target]};
+		res.json(response);
+	}
+	
 });
 
 // REST Operation - HTTP PUT to update a bid
@@ -381,8 +412,8 @@ app.del("/shoppingCart/delete/:id", function(req, res){
 
 // REST Operation - HTTP POST to add a new user
 app.post('/register/newUser', function(req, res) {
-	console.log("POST");
-	console.log(req.body);
+	console.log("POST : newUser");
+	
 	if(!req.body.hasOwnProperty('fname') || !req.body.hasOwnProperty('lname')
   		|| !req.body.hasOwnProperty('password')  || !req.body.hasOwnProperty('emailAddress') ){
     	res.statusCode = 400;
