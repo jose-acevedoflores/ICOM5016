@@ -349,7 +349,7 @@ function loginForm(){
 	var userJSON = JSON.stringify(user);
 	$.ajax({
 		url : "http://"+host+"/userLogin",
-		method : 'post',
+		method : 'get',
 		data : userJSON,
 		contentType: "application/json",
 		dataType:"json",
