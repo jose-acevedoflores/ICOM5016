@@ -2,56 +2,16 @@ div(data-role="panel", id="rightPanel", data-position="right", data-display="rev
 	div(class="nav_profile")
 		div(class="nav_name")
 			a(href="#home")
-				h3	Stores
+				h3	Stores	
+				
 			ul(data-role="listview", data-inset="true")
-				li( data-role="list-divider", data-theme="a")
-					a(onclick="electronicsStore()") Electronics
-				li 
-					a(onclick="tvCategory()") TV
-				li
-					a(href="#") Audio	
-				li
-					a(href="#") Phones	
-				li
-					a(href="#") Camera	
-				li
-					a(href="#") Video				
-				li(data-role="list-divider", data-theme="a")
-					a(href="#") Books
-				li
-					a(href="#") Children	
-				li
-					a(href="#") Fiction			
-				li
-					a(href="#") Technology
-				li
-					a(href="#") Business			
-				li(data-role="list-divider", data-theme="a")
-					a(onclick="computersStore()") Computers
-				li
-					a(href="#") Laptops
-				li
-					a(href="#") Desktops
-				li
-					a(href="#") Tablets
-				li
-					a(href="#") Printers					
-				li(data-role="list-divider", data-theme="a")
-					a(href="#") Clothing
-				li
-					a(href="#") Children
-				li
-					a(href="#") Men
-				li
-					a(href="#") Women
-				li(data-role="list-divider", data-theme="a")
-					a(href="#") Shoes
-				li
-					a(href="#") Children
-				li
-					a(href="#") Men
-				li
-					a(href="#") Women
+				-for(var g = 0 ; g < data.dataLength ; g++)	
+					li( data-role="list-divider", data-theme="a")
+						a(onclick="findStore(\"#{data.stores[g].name}\")") #{data.stores[g].name}
+					- for(var t = 0 ; t < data.stores[g].categoriesLength ; t++)	
+						li
+							a(onclick="findCategory(\"#{data.stores[g].name}\",\"#{data.stores[g].categories[t]}\")") #{data.stores[g].categories[t]}
+				
 
 div(data-role="panel", id="leftPanel", class="main_nav", data-display="reveal" , data-dismissible="true" ,data-theme="b")		
 	div(class="nav_profile")			
