@@ -354,7 +354,10 @@ app.put("/placedBids/item:id", function(req, res){
 	}
 });
 
-
+app.put("/signOut", function(req, res){
+	loggedIn = false;
+	res.json(true);
+})
 // REST Operation - HTTP Post to add a new item to Computer Store
 
 
@@ -396,6 +399,9 @@ http.createServer(app).listen(app.get('port'), function(){
 	console.log('Express server listening on port ' + app.get('port'));
 });
 
+app.post('/newItem', function(req, res){
+	res.json(true);
+});
 //This function is just a placeholder for what will actually be the query to the db. Right now we
 //need to make this IFs structure to differentiate between the hard wired stores
 function pseudoQueryStores(store, res){

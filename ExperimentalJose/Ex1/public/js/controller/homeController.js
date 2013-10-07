@@ -376,6 +376,69 @@ function loginForm(){
 }
 
 /*******************************************************************************************************************************************/
+// Sign Out
+/*******************************************************************************************************************************************/
+function signOut(){
+	console.log("Sign Out");
+	$.ajax({
+		url : "http://"+host+"/signOut",
+		method : 'put',
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus,jqXHR){
+			$.mobile.loading("hide");
+			console.log("algo");
+			$.mobile.changePage('#home', 
+				{ allowSamePageTransition : true,
+				transition              : 'none',
+				showLoadMsg             : false,
+				reloadPage              : true});
+			//$.mobile.navigate('#home');
+			alert("Good Bye");
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus : " + textStatus);
+			$.mobile.loading("hide");
+			alert("There was an error with your e-mail/password combination.");
+		}
+	});
+
+}
+/*******************************************************************************************************************************************/
+// Add Item
+/*******************************************************************************************************************************************/
+
+function addItem(){
+	console.log("Add Item");
+	$.mobile.loading("show");
+	var form = $("#newItemForm");
+	var formData = form.serializeArray();
+	console.log("form data : "+ formData);
+	var user = ConvertToJSON(formData);
+	console.log("User to login : " + JSON.stringify(user));
+	var userJSON = JSON.stringify(user);
+	$.ajax({
+		url : "http://"+host+"/newItem",
+		method : 'post',
+		data : userJSON,
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus,jqXHR){
+			$.mobile.loading("hide");
+			console.log("algo");
+			
+			//$.mobile.navigate('#home');
+			
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus : " + textStatus);
+			$.mobile.loading("hide");
+			alert("Item could not be added.");
+		}
+	});
+
+}
+/*******************************************************************************************************************************************/
 // Register
 /*******************************************************************************************************************************************/
 
