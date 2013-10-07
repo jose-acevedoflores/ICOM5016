@@ -177,19 +177,50 @@ html
 			include common
 			div(data-role="content")
 				h3 My Store:
-				ul(data-role="listview", data-inset="true", id="itemsSellingList")
+				center
+					a(href="#newItemForm", data-role="button", data-inline="true", data-theme="a", data-rel="back"
+						, data-transition="flip", data-icon="check", data-inline="true", data-mini="true") Add Item
+				
+					ul(data-role="listview", data-inset="true", id="itemsSellingList")
 
-				//div(data-role="popup", id="increaseBid", data-theme="d", data-overlay-theme="b", class="ui-content", style="max-width:340px;"
-
-
-					a(onclick="increaseBid()", data-role="button", data-rel="back", data-theme="b", data-icon="check", data-inline="true", data-mini="true") Place Bid
-					a(href="#", data-role="button", data-rel="back", data-inline="true", data-mini="true") Cancel
-
+		// Add New Item Form
+		div(data-role="page", id="newItemForm")
+			div(data-role="content")
+				h1 Add New Item:
+				form(id ="registerForm", data-transition="pop")
+					fieldset(data-role='controlgroup')
+						ul
+							li
+							//(itemName, store, category, price, description, rating, picture, id)
+								label(for="iName") Item Name:
+									input(id="iName", type ="text", name="iName", placeholder = "Item Name")
+							li
+								label(for="iDescript") Item Description:
+									input(id="iDescript",type ="text", name="iDescript", placeholder="Item Description")
+							li 
+								label(for="iPrice") Item Price:
+									input(id="iPrice", type="text", name="iPrice", placeholder="$1.99")
+							li
+								label(for="iPic") Item Picture:
+									input(id="iPic", type="text", name="iPic", placeholder="Password")
+							//- li
+							//- 	label(for="confirmPassword") Confirm Password:
+							//- 		input(id="confirmPassword", type="password", name="confirmPassword"
+							//- 			placeholder ="Password")
+					center
+						a(data-role="button", data-inline="true",
+						data-icon="check", data-theme="a", data-transition="flip", dat-corners="true"
+						data-icon-shadow="true", data-mini="true", onclick="addItem()") Add Item
+							
+						a(href="#home",data-role="button", data-inline="true",
+						data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+						data-icon-shadow="true", data-mini="true") Cancel	
 			
 		// Profile
 		div(data-role="page", id = "profilePage")
 			include common
 			div(data-role= "content", data-theme="b", data-content-theme="b")
+					
 				div(class="ui-grid-a")
 					div(class="ui-block-a")
 						h3 Juan del Pueblo
@@ -198,8 +229,11 @@ html
 
 				div(class="ui-grid-a")
 					div(class="ui-block-a")
-						img(src = "http://www.icm.espol.edu.ec/estudiantes/2005/200511889/images/Juan%20Pueblo.jpg", border = "true")
+						img(src = "http://www.icm.espol.edu.ec/estudiantes/2005/200511889/images/Juan%20Pueblo.jpg", border = "true", onclick="editProfile()")
+
 						br
+						a(href="#", type="submit",data-rel="back", data-inline="true", data-theme="b", value="Log In", onclick="editProfile()", data-mini="true") Edit Profile
+						
 					div(class="ui-block-b")
 						p 
 							b Current Seller Rank: 4.5
@@ -252,4 +286,10 @@ html
 				div(data-role="popup", id="addCategoryForm", data-theme="d", data-overlay-theme="b", class="ui-content", style="max-width:340px;")
 					h3 Store Name
 					a(onclick="addCategory()", data-role="button", data-rel="back", data-theme="b", data-icon="check", data-inline="true", data-mini="true") Add 
-					a(href="#", data-role="button", data-rel="back", data-inline="true", data-mini="true") Cancel			
+					a(href="#", data-role="button", data-rel="back", data-inline="true", data-mini="true") Cancel
+
+			div(data-role="page", id="cChildren")
+
+			div(data-role="page", id ="cMen")
+
+			div(data-role="page", id="cWomen")			

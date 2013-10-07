@@ -228,6 +228,7 @@ $(document).on('pagebeforeshow', "#placedBids", function( event, ui ) {
 			list.empty();
 			var item;
 			var totalAmount = 0 ;
+			list.append("<li data-role=\"list-divider\", data-theme=\"a\"> Bidding On");
 			for (var i=0; i < len; ++i){
 				item = itemList[i];
 				console.log(item.id);
@@ -426,10 +427,12 @@ $(document).on('pagebeforeshow', "#itemsSelling", function( event, ui ) {
 			list.empty();
 			var item;
 			var totalAmount = 0 ;
+			list.append("<li data-role=\"list-divider\", data-theme=\"a\"> Selling ");
 			for (var i=0; i < len; ++i){
 				item = itemList[i];
 				console.log(item.id);
 				totalAmount += parseFloat(item.price);
+
 				list.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
 					"<img src="+ item.picture + ">"  + 
 					"<h2>" + item.itemName + "</h2>" + 
