@@ -299,22 +299,22 @@ var shoppingCartVar =  new Array(
 
 		);
 var placedBidsVar = new Array(
-		new StoreItem("MacBookPro", stores.COMPUTERS.name, stores.COMPUTERS.categories.LAPTOPS.name, "$1,200.00", "A Macbook Pro laptop", "97", 
+		new StoreItem("MacBookPro", stores.COMPUTERS.name, stores.COMPUTERS.categories.LAPTOPS.name, "1,200.00", "A Macbook Pro laptop", "97", 
 			"http://images.apple.com/macbook-pro/images/overview_display_hero.png", "1221"),
 
-			new StoreItem("iMac", stores.COMPUTERS.name, stores.COMPUTERS.categories.DESKTOPS.name, "$1,299.00", "A Macbook Pro laptop", "97", 
+			new StoreItem("iMac", stores.COMPUTERS.name, stores.COMPUTERS.categories.DESKTOPS.name, "1,299.00", "A Macbook Pro laptop", "97", 
 				"https://www.apple.com/imac/images/hero.png", "0921"),
 
-			new StoreItem("iPad", stores.COMPUTERS.name, stores.COMPUTERS.categories.TABLETS.name, "$1,299.00", "A Macbook Pro laptop", "97", 
+			new StoreItem("iPad", stores.COMPUTERS.name, stores.COMPUTERS.categories.TABLETS.name, "1,299.00", "A Macbook Pro laptop", "97", 
 				"https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQ8uL0T_OaIHUI7rEe0U8qvwP5VBszJsJzMX5Fj73jGFHH1STcJy1OiRHjj", "9281"),
 
-			new StoreItem("Inkjet", stores.COMPUTERS.name, stores.COMPUTERS.categories.PRINTERS.name, "$1,299.00", "A clumsy printer", "97", 
+			new StoreItem("Inkjet", stores.COMPUTERS.name, stores.COMPUTERS.categories.PRINTERS.name, "1,299.00", "A clumsy printer", "97", 
 				"https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSLHnGBsoKgsKNoRuISGtzZL0sGQoiRjatOll5Nnwop2UX0EmsOUw", "817")
 	);
 
 var itemsSellingVar = new Array(
 
-		new StoreItem("MacBookPro", stores.COMPUTERS.name, stores.COMPUTERS.categories.LAPTOPS.name, "$1,200.00", "A Macbook Pro laptop", "97", 
+		new StoreItem("MacBookPro", stores.COMPUTERS.name, stores.COMPUTERS.categories.LAPTOPS.name, "1,200.00", "A Macbook Pro laptop", "97", 
 			"http://images.apple.com/macbook-pro/images/overview_display_hero.png", "1221"),
 
 		new StoreItem("Avenged 7fold LBC", stores.ELECTRONICS.name , stores.ELECTRONICS.categories.AUDIO.name , "40" ,

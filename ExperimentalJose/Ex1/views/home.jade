@@ -72,26 +72,39 @@ html
 					a(onclick="removeItemFromCart()", data-role="button", data-rel="back", data-theme="b", data-icon="check", data-inline="true", data-mini="true") Remove
 					a(href="#", data-role="button", data-rel="back", data-inline="true", data-mini="true") Cancel
 
-
+		// Placed Bids
 		div(data-role="page", id="placedBids")
 			include common
 			div(data-role="content")
 				h3 Recent Bids:
+
 				ul(data-role="listview", data-inset="true", id="bidItemList")
 
-				div(data-role="popup", id="increaseBid", data-theme="d", data-overlay-theme="b", class="ui-content", style="max-width:340px;")
+				div(data-role="popup", id="increaseBid", data-theme="d", data-overlay-theme="b", class="ui-content")
 					
 					
 
 					div(data-role="content")
-						form(method="post", data-transition="pop")
-							div(data-role="fieldcontain")
-							label(for="upd-bid") Increase Bid:
-								input(type="text", name="newBid")
+						div(data-role="header", data-theme="c")
+							center
+								p Increase Bid
+						dive(data-role="content")
+							form(method="post", data-transition="pop")
+								fieldset(data-role="controlgroup")
+									ul
+										li
+									
+											p Next Acceptable Bid is: 
+										li
+											p(id="nextAcceptableBid")
+										li
+											label(for="upd-bid") Increase Bid:
+										li
+											input(type="text", name="newBid", placeholder="nextAcceptableBid")
 
-
-					a(onclick="increaseBid()", data-role="button", data-rel="back", data-theme="b", data-icon="check", data-inline="true", data-mini="true") Place Bid
-					a(href="#", data-role="button", data-rel="back", data-inline="true", data-mini="true") Cancel
+					center
+						a(onclick="increaseBid()", data-role="button", data-rel="back", data-theme="b", data-icon="check", data-inline="true", data-mini="true") Place Bid
+						a(href="#", data-role="button", data-rel="back", data-inline="true", data-mini="true") Cancel
 
 
 

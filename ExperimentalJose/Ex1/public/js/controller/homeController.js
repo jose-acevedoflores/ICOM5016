@@ -231,7 +231,7 @@ $(document).on('pagebeforeshow', "#placedBids", function( event, ui ) {
 			for (var i=0; i < len; ++i){
 				item = itemList[i];
 				console.log(item.id);
-				totalAmount += parseFloat(item.price);
+				totalAmount += parseFloat(item.price) + 1.00;
 				list.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
 					"<img src="+ item.picture + ">"  + 
 					"<h2>" + item.itemName + "</h2>" + 
@@ -242,11 +242,12 @@ $(document).on('pagebeforeshow', "#placedBids", function( event, ui ) {
 					"<a onclick=\"toIncreaseBid("+item.id+")\" href=\"#increaseBid\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\">increase bid</li>");
 
 				list.listview("refresh");	
+				var totalAmountField = $("#nextAcceptableBid");
+			 	totalAmountField.empty();
+			 	totalAmountField.append("$"+totalAmount);
 			}
 
-			// var totalAmountField = $("#shoppingCartAmount");
-			// totalAmountField.empty();
-			// totalAmountField.append("$"+totalAmount);
+			
 		},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
@@ -362,6 +363,7 @@ function loginForm(){
 				showLoadMsg             : false,
 				reloadPage              : true});
 			//$.mobile.navigate('#home');
+			alert("You won NVIDIA GPU bid");
 		},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus : " + textStatus);
