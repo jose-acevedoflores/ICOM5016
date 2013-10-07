@@ -308,3 +308,13 @@ html
 			div(data-role="page", id ="cMen")
 
 			div(data-role="page", id="cWomen")			
+			
+		// Items
+		
+		div(data-role="page", id = "itemPage")
+			include common
+			div(data-role= "content", data-theme="b", data-content-theme="b" id ="itemsPage")
+				ul(data-role="listview", id="itemsPageList")
+				a(href = "#placedBids", data-role= "button", data-inline = "false") Buy Now
+				a(href = "#placedBids", data-role= "button", data-inline = "false") Place Bid
+				
