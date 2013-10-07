@@ -130,6 +130,50 @@ function findCategory(store, category){
 	});
 };
 
+function findItem(store,item){
+
+	$.mobile.loading("show");
+	console.log("item: " + item);
+	$.ajax({
+		url : "http://"+host+"/item/"+store+"/"+item,
+		method: 'get',
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+
+			$(document).on('pagebeforeshow', "#itemsPage", function( event, ui ) {
+	
+				var itemList = data.items;
+				var list = $("#itemsPageList");
+				var item;
+
+				list.append("<div(class=\"ui-grid-a\")>" + 
+					"<div(class=\"ui-block-a\")>" +
+					"<h3>" + item.itemName + "</h3></br>" +
+					"<h6> Product ID: " + item.id + "</h6>" +
+					"</div><div(class=\"ui-block-b\")></div></div>" +
+					"<div(class=\"ui-grid-a\")>" + 
+					"<div(class=\"ui-block-a\")>" + "<img src="+ item.picture + ">" +
+					"</br></div>" + "<div(class=\"ui-block-b\")>" +
+					"<p> Rating" + item.rating + "</p>" + 
+					"<p>" + item.description + "</p></div></div>");
+						
+				
+				list.listview("refresh");
+				
+			});
+
+			$.mobile.loading("hide");
+			$.mobile.navigate("#itemsPage");
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			$.mobile.loading("hide");
+			alert("D:");
+		}
+	});
+};
+
 
 /*******************************************************************************************************************************************/
 // Shopping cart
