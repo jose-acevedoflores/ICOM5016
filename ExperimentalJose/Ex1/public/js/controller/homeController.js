@@ -561,7 +561,7 @@ function addStore(){
 }
 
 function removeStore(){
-	console.log("REMOVE STORE");
+	console.log("REMOVE STORE "+ storeToRemove);
 	$.mobile.loading("show");
 	$.ajax({
 		url : "http://"+host+"/removeStore/storeName/"+storeToRemove,
@@ -573,7 +573,7 @@ function removeStore(){
 			$.mobile.loading("hide");
 
 			$.mobile.changePage(
-		    $("#adminAddStore") ,
+		    "#home" ,
 		    {
 				allowSamePageTransition : true,
 				transition              : 'none',

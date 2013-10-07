@@ -407,11 +407,27 @@ app.post('/addStore/storeName/:storeName', function(req, res){
 	res.json(true);
 });
 
+app.del("/removeStore/storeName/:storeName", function(req, res){
+	var storeToRemove = req.params.storeName;
+	console.log("DELETE: "+storeToRemove);
+	for(var i = 0 ; i < generate.data.dataLength; i++){
+		if(generate.data.stores[i].name === storeToRemove)
+		{
+			generate.data.stores.splice(i,1);
+			break;
+		}	
+
+	}
+	res.json(true);
+});
+
 http.createServer(app).listen(app.get('port'), function(){
 	console.log('Express server listening on port ' + app.get('port'));
 });
 
 app.post('/newItem', function(req, res){
+	var newItem = new StoreItem(req.body.iName, stores.ELECTRONICS.name, stores.ELECTRONICS.categories.TV.name, req.body.iPrice, req.body.iDescript, "","", "91347");
+	data.push(newItem);
 	res.json(true);
 });
 //This function is just a placeholder for what will actually be the query to the db. Right now we
