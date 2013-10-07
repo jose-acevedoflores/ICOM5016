@@ -178,20 +178,21 @@ html
 			div(data-role="content")
 				h3 My Store:
 				center
-					a(href="#newItemForm", data-role="button", data-inline="true", data-theme="a", data-rel="back"
+					a(href="#newItemPage", data-role="button", data-inline="true", data-theme="a"
 						, data-transition="flip", data-icon="check", data-inline="true", data-mini="true") Add Item
 				
 					ul(data-role="listview", data-inset="true", id="itemsSellingList")
 
 		// Add New Item Form
-		div(data-role="page", id="newItemForm")
+		div(data-role="page", id="newItemPage")
+			include common
 			div(data-role="content")
 				h1 Add New Item:
-				form(id ="registerForm", data-transition="pop")
+				form(id ="newItemForm", data-transition="pop")
 					fieldset(data-role='controlgroup')
 						ul
 							li
-							//(itemName, store, category, price, description, rating, picture, id)
+							
 								label(for="iName") Item Name:
 									input(id="iName", type ="text", name="iName", placeholder = "Item Name")
 							li
@@ -202,7 +203,18 @@ html
 									input(id="iPrice", type="text", name="iPrice", placeholder="$1.99")
 							li
 								label(for="iPic") Item Picture:
-									input(id="iPic", type="text", name="iPic", placeholder="Password")
+									input(id="iPic", type="file", name="iPic", accept="image/*", capture)
+							p Selling or Actioning?
+							li
+								label Selling
+									input(id="iCheckSale", type="radio", name="iCheckSale") 
+							li
+								label Auctioning
+									input(id="iCheckAuction", type="radio", name="iCheckAuction") 
+
+
+
+									
 							//- li
 							//- 	label(for="confirmPassword") Confirm Password:
 							//- 		input(id="confirmPassword", type="password", name="confirmPassword"
