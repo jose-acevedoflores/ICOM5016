@@ -115,7 +115,8 @@ app.get('/', function(request, response) {
 				],
 			"dataLength" : 6
 		},
-		"loggedIn" : false 
+		"loggedIn" : false,
+		"isAdmin" : true
 	} ;
 	response.render('home.jade', generate);
 
