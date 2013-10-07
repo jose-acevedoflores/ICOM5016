@@ -177,7 +177,7 @@ var itemToRemove;
 function toRemove(itemId){
 	itemToRemove = itemId;
 }
-
+//TODO set function to respond to cancel button.
 function checkoutCart(){
 	console.log("Checkout");
 }
@@ -191,7 +191,7 @@ function removeItemFromCart(){
 		contentType: "application/json",
 		dataType : "json",
 		success : function(data, textStatus, jqXHR){
-			console.log("mierd");
+
 			$.mobile.loading("hide");
 
 			$.mobile.changePage(
@@ -269,7 +269,7 @@ function increaseBid(){
 		contentType: "application/json",
 		dataType : "json",
 		success : function(data, textStatus, jqXHR){
-			console.log("mierd");
+
 			$.mobile.loading("hide");
 
 			$.mobile.changePage(
@@ -450,6 +450,57 @@ $(document).on('pagebeforeshow', "#itemsSelling", function( event, ui ) {
 	});
 });
 
+/*******************************************************************************************************************************************/
+// Admin Section
+/*******************************************************************************************************************************************/
+var storeToRemove = undefined;
+//Sets storeToRemove in order for the call to removeStore to work with the parameter.
+function toRemoveStore(storeName){
+	console.log("Store to remove: " + storeName);
+	storeToRemove = storeName;
+}
+
+//Clears storeToRemove
+function undoRemoveStore(){
+	storeToRemove = undefined;
+}
+
+function addStore(){
+	console.log("ADD STORE");
+}
+
+function removeStore(){
+	console.log("REMOVE STORE");
+	$.mobile.loading("show");
+	$.ajax({
+		url : "http://"+host+"/removeStore/storeName/"+storeToRemove,
+		method : "delete",
+		contentType: "application/json",
+		dataType : "json",
+		success : function(data, textStatus, jqXHR){
+
+			$.mobile.loading("hide");
+
+			$.mobile.changePage(
+		    $("#adminAddStore") ,
+		    {
+				allowSamePageTransition : true,
+				transition              : 'none',
+				showLoadMsg             : false,
+				reloadPage              : true
+		    }
+			);
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Data not found!");
+		}
+	});
+	storeToRemove = undefined;
+}
+
+
+//This enables the search bar to send queries to the server
 $(document).ready(function() {
 	$("#mainSearch").on("keypress" ,function(e) { 
 		if(e.keyCode == 13)

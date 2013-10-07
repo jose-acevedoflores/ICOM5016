@@ -197,3 +197,32 @@ html
 				a(href = "#placedBids", data-role= "button", data-inline = "false") Items Juan is bidding on
 				a(href = "#itemsSelling", data-role= "button", data-inline = "false") Items sold by Juan
 				
+		// ADMIN SECTION
+
+		div(data-role="page", id="adminAddStore")	
+			include common	
+			div(data-role="content")
+				ul(data-role="listview", id="adminStoreList", data-inset="true", data-filter="true", data-filter-placeholder="Available stores")
+					- for(var i = 0 ; i < data.dataLength ; i++)
+						li 
+							a #{data.stores[i].name} 
+							a(onclick="toRemoveStore(\"#{data.stores[i].name}\")", href="#adminRemoveStore", data-rel="popup", data-position-to="window", data-transition="pop") Remove Store
+
+				br			
+				a(data-role="button", href="#addStoreForms", data-rel="popup", data-position-to="window", data-transition="pop") Add Store
+
+				div(data-role="popup", id="addStoreForms", data-theme="d", data-overlay-theme="b", class="ui-content", style="max-width:340px;")
+					h3 Store Name
+					input(type="text", id="newStoreName")
+					h2 Add categories separated by semi-colon (;)	
+					input(type="text", id="newStoreName")
+					a(onclick="addStore()", data-role="button", data-rel="back", data-theme="b", data-icon="check", data-inline="true", data-mini="true") Add 
+					a(href="#", data-role="button", data-rel="back", data-inline="true", data-mini="true") Cancel				
+	
+				div(data-role="popup", id="adminRemoveStore", data-theme="d", data-overlay-theme="b", class="ui-content", style="max-width:340px;")
+					h3 Delete Store
+					p Warning, this will delete the store and all its categories 
+					a(onclick="removeStore()", data-role="button", data-rel="back", data-theme="b", data-icon="check", data-inline="true", data-mini="true") Remove
+					a(onclick="undoRemoveStore()", data-role="button", data-rel="back", data-inline="true", data-mini="true") Cancel				
+
+			

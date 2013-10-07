@@ -428,8 +428,6 @@ app.put("/placedBids/item:id", function(req, res){
 
 
 // REST Operation - HTTP Post to add a new item to Computer Store
-
-
 app.del("/shoppingCart/delete/:id", function(req, res){
 	var id = req.params.id;
 	console.log("DEL: id= " +id);
@@ -442,6 +440,11 @@ app.del("/shoppingCart/delete/:id", function(req, res){
 
 });
 
+app.del("/removeStore/storeName/:storeToRemove", function(req,res) {
+	var storeToRemove = req.params.storeToRemove;
+	console.log("DELETE: " + storeToRemove);
+	res.json(true);
+});
 
 // REST Operation - HTTP POST to add a new user
 app.post('/register/newUser', function(req, res) {
