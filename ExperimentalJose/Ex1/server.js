@@ -333,6 +333,12 @@ app.get("/itemsSold", function(req, res){
 	pseudoQueryItemsSold(res);
 });
 
+app.get("/search/:query", function(req, res)  {
+	var query = req.params.query;
+	console.log("GET: query= "+query);
+	res.json(true);
+});
+
 // REST Operation - HTTP GET to login
 app.get("/userLogin", function(req, res){
 	var response = {"user" : userList};
