@@ -406,6 +406,50 @@ function registerForm(){
 
 }
 
+
+/*******************************************************************************************************************************************/
+// Items Selling
+/*******************************************************************************************************************************************/
+
+
+$(document).on('pagebeforeshow', "#itemsSelling", function( event, ui ) {
+	console.log("Placed");
+	$.ajax({
+		url : "http://"+host+"/itemsSelling",
+		contentType: "application/json",
+		success : function(data, textStatus, jqXHR){
+			var itemList = data.items;
+			var len = itemList.length;
+			var list = $("#itemsSellingList");
+			list.empty();
+			var item;
+			var totalAmount = 0 ;
+			for (var i=0; i < len; ++i){
+				item = itemList[i];
+				console.log(item.id);
+				totalAmount += parseFloat(item.price);
+				list.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
+					"<img src="+ item.picture + ">"  + 
+					"<h2>" + item.itemName + "</h2>" + 
+					"<p>" + item.description + "</p>" +
+					"<p> Rating:" + item.rating + " </p>" + 
+					"<p class=\"ui-li-aside\"> Price: $" + item.price + "</p>" +
+					"</a>");
+
+				list.listview("refresh");	
+			}
+
+			// var totalAmountField = $("#shoppingCartAmount");
+			// totalAmountField.empty();
+			// totalAmountField.append("$"+totalAmount);
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Data not found!");
+		}
+	});
+});
+
 $(document).ready(function() {
 	$("#mainSearch").on("keypress" ,function(e) { 
 		if(e.keyCode == 13)
@@ -425,3 +469,4 @@ $(document).ready(function() {
 		}
 	});
 });
+

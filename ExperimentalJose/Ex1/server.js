@@ -312,6 +312,16 @@ var placedBidsVar = new Array(
 				"https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSLHnGBsoKgsKNoRuISGtzZL0sGQoiRjatOll5Nnwop2UX0EmsOUw", "817")
 	);
 
+var itemsSellingVar = new Array(
+
+		new StoreItem("MacBookPro", stores.COMPUTERS.name, stores.COMPUTERS.categories.LAPTOPS.name, "$1,200.00", "A Macbook Pro laptop", "97", 
+			"http://images.apple.com/macbook-pro/images/overview_display_hero.png", "1221"),
+
+		new StoreItem("Avenged 7fold LBC", stores.ELECTRONICS.name , stores.ELECTRONICS.categories.AUDIO.name , "40" ,
+			 "Rock on with Avenged Sevenfold in Long Beach", "97", 
+			 "http://userserve-ak.last.fm/serve/_/82208421/Avenged+Sevenfold+original.png", "1345246")
+	);
+
 app.get('/shoppingCart', function(req, res){
 
 	//QUERY DB
@@ -327,6 +337,13 @@ app.get('/placedBids', function(req, res) {
 	res.json(temp);
 });
 
+app.get('/itemsSelling', function(req, res){
+
+	console.log("GET : ItemsSelling");
+	var temp = {'items' : itemsSellingVar};
+	res.json(temp);
+});
+
 app.get("/itemsSold", function(req, res){
 
 	console.log("GET : Load itemsSold");
@@ -334,11 +351,13 @@ app.get("/itemsSold", function(req, res){
 	pseudoQueryItemsSold(res);
 });
 
+
 app.get("/search/:query", function(req, res)  {
 	var query = req.params.query;
 	console.log("GET: query= "+query);
 	res.json(true);
 });
+
 
 // REST Operation - HTTP GET to login
 app.get("/userLogin", function(req, res){
@@ -406,6 +425,7 @@ app.put("/placedBids/item:id", function(req, res){
 		} 
 	}
 });
+
 
 // REST Operation - HTTP Post to add a new item to Computer Store
 
