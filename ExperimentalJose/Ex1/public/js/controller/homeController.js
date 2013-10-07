@@ -355,8 +355,13 @@ function loginForm(){
 		dataType:"json",
 		success : function(data, textStatus,jqXHR){
 			$.mobile.loading("hide");
-			$.mobile.navigate("#home");
-
+			console.log("algo");
+			$.mobile.changePage('#home', 
+				{ allowSamePageTransition : true,
+				transition              : 'none',
+				showLoadMsg             : false,
+				reloadPage              : true});
+			//$.mobile.navigate('#home');
 		},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus : " + textStatus);
