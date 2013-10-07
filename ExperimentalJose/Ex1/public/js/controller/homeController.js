@@ -499,6 +499,13 @@ function removeStore(){
 	storeToRemove = undefined;
 }
 
+function addCategory(){
+	console.log("add category");
+}
+
+function toAddCategoryToStore(currentStore){
+	console.log(currentStore);
+}
 
 //This enables the search bar to send queries to the server
 $(document).ready(function() {
