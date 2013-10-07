@@ -406,6 +406,7 @@ function registerForm(){
 
 }
 
+
 /*******************************************************************************************************************************************/
 // Items Selling
 /*******************************************************************************************************************************************/
@@ -448,3 +449,24 @@ $(document).on('pagebeforeshow', "#itemsSelling", function( event, ui ) {
 		}
 	});
 });
+
+$(document).ready(function() {
+	$("#mainSearch").on("keypress" ,function(e) { 
+		if(e.keyCode == 13)
+		{
+			var temp = document.getElementById('mainSearch').value ;
+			$.ajax({
+				url : "http://"+host+"/search/"+temp,
+				contentType: "application/json",
+				success : function(data, textStatus, jqXHR){
+					
+				},
+				error: function(data, textStatus, jqXHR){
+					console.log("textStatus: " + textStatus);
+					alert("Data not found!");
+				}
+			});
+		}
+	});
+});
+
