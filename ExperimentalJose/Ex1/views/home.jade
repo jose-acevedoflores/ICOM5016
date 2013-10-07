@@ -161,7 +161,18 @@ html
 		
 		// Items Selling
 		div(data-role="page", id = "itemsSelling" )		
-		
+			include common
+			div(data-role="content")
+				h3 My Store:
+				ul(data-role="listview", data-inset="true", id="itemSellingList")
+
+				//div(data-role="popup", id="increaseBid", data-theme="d", data-overlay-theme="b", class="ui-content", style="max-width:340px;"
+
+
+					a(onclick="increaseBid()", data-role="button", data-rel="back", data-theme="b", data-icon="check", data-inline="true", data-mini="true") Place Bid
+					a(href="#", data-role="button", data-rel="back", data-inline="true", data-mini="true") Cancel
+
+			
 		// Profile
 		div(data-role="page", id = "profilePage")
 			include common
