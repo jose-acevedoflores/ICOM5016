@@ -514,10 +514,10 @@ function toAddCategoryToStore(currentStore){
 
 //This enables the search bar to send queries to the server
 $(document).ready(function() {
-	$("#mainSearch").on("keypress" ,function(e) { 
+	$(".mainSearch").on("keypress" ,function(e) { 
 		if(e.keyCode == 13)
 		{
-			var temp = document.getElementById('mainSearch').value ;
+			var temp = $('.mainSearch').val();
 			$.ajax({
 				url : "http://"+host+"/search/"+temp,
 				contentType: "application/json",
