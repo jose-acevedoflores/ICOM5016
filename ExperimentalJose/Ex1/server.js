@@ -395,6 +395,18 @@ app.post('/register/newUser', function(req, res) {
   	res.json(true);
 });
 
+app.post('/addStore/storeName/:storeName', function(req, res){
+	var storeToAdd = req.params.storeName;
+	generate.data.stores.push(
+		{
+			"name" : storeToAdd,
+			"categories" : [],
+			"categoriesLength" : 0
+		});
+	console.log(generate);
+	res.json(true);
+});
+
 http.createServer(app).listen(app.get('port'), function(){
 	console.log('Express server listening on port ' + app.get('port'));
 });

@@ -534,7 +534,30 @@ function undoRemoveStore(){
 }
 
 function addStore(){
-	console.log("ADD STORE");
+	var storeName = $("#newStoreName").val();
+	console.log("ADD STORE " + storeName);	
+	$.mobile.loading("show");
+	$.ajax({
+		url : "http://"+host+"/addStore/storeName/"+storeName,
+		method : "post",
+		contentType: "application/json",
+		dataType : "json",
+		success : function(data, textStatus, jqXHR){
+
+			$.mobile.loading("hide");
+
+			$.mobile.changePage('#home', 
+				{ allowSamePageTransition : true,
+				transition              : 'none',
+				showLoadMsg             : false,
+				reloadPage              : true
+			});
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Data not found!");
+		}
+	});
 }
 
 function removeStore(){
@@ -570,9 +593,14 @@ function removeStore(){
 function addCategory(){
 	console.log("add category");
 }
-
+var storeToAdd = undefined;
 function toAddCategoryToStore(currentStore){
 	console.log(currentStore);
+	storeToAdd = currentStore;
+}
+
+function cancelAddStore(){
+	storeToAdd = undefined;
 }
 
 //This enables the search bar to send queries to the server
