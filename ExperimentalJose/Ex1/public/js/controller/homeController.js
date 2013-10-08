@@ -284,12 +284,13 @@ $(document).on('pagebeforeshow', "#placedBids", function( event, ui ) {
 			var list = $("#bidItemList");
 			list.empty();
 			var item;
-			var totalAmount = 0 ;
+			
 			list.append("<li data-role=\"list-divider\", data-theme=\"a\"> Bidding On:");
 			for (var i=0; i < len; ++i){
+				var totalAmount =0;
 				item = itemList[i];
 				console.log(item.id);
-				totalAmount += parseFloat(item.price) + 1.00;
+				totalAmount += parseFloat(item.price) ;
 				list.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
 					"<img src="+ item.picture + ">"  + 
 					"<h2>" + item.itemName + "</h2>" + 
@@ -301,10 +302,10 @@ $(document).on('pagebeforeshow', "#placedBids", function( event, ui ) {
 
 				list.listview("refresh");	
 				var totalAmountField = $("#nextAcceptableBid");
-			 	totalAmountField.empty();
-			 	totalAmountField.append("$"+totalAmount);
+				totalAmountField.empty();
+				totalAmountField.append("$"+totalAmount);
 			}
-
+			
 			
 		},
 		error: function(data, textStatus, jqXHR){
@@ -331,15 +332,12 @@ function increaseBid(){
 
 			$.mobile.loading("hide");
 
-			$.mobile.changePage(
-		    $("#placedBids") ,
+			$.mobile.changePage("#placedBids" ,
 		    {
 				allowSamePageTransition : true,
 				transition              : 'none',
 				showLoadMsg             : false,
-				reloadPage              : true
-		    }
-			);
+				reloadPage              : true});
 		},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);

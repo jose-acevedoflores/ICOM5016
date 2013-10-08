@@ -362,7 +362,7 @@ app.put("/placedBids/item:id", function(req, res){
 
 		else {
 			var theItem = placedBidsVar[target];
-			theItem = req.body.price;
+			theItem += req.body.price;
 			var response = {"item": theItem};
 			res.json(response);
 		} 
