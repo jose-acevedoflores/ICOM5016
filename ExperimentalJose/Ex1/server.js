@@ -293,39 +293,45 @@ app.get("/search/:query", function(req, res)  {
 });
 
 
-// REST Operation - HTTP GET to login
-app.get("/userLogin", function(req, res){
-	var response = {"user" : userList};
-	loggedIn = true;
-	res.json(response);
-	// console.log("GET  : Login");
-	// console.log(req.body.hasOwnProperty('emailAddress'));
+// REST Operation - HTTP POST to login
+app.put("/userLogin", function(req, res){
 	
-	// var email = new String(req.body.userEmail);
-	// var password = new String(req.body.userPassword);
+	console.log("POST  : Login");
+	console.log(req.body.hasOwnProperty('emailAddress'));
 	
-	// var target = -1;
-	// for(var i =0; i<userList.length; i++) {
-	// 	var userEmail = userList[i].emailAddress;
-	// 	var userPassword = userList[i].password;
-	// 	console.log(i);
-	// 	console.log(userEmail);
-	// 	console.log(userPassword);
+	var email = req.body.emailAddress;
+	var password = req.body.userPassword;
+	console.log(email);
+	
+	var target = -1;
+	for(var i =0; i < userList.length; i++) {
+		var userEmail = userList[i].emailAddress;
+		var userPassword = userList[i].password;
+		console.log(i);
+		console.log(userEmail);
+		console.log(email);
+		console.log(userPassword);
 
-	// 	if (userEmail == email ){
-	// 		target = i;
-	// 		break;
-	// 	}
-	// }
-	// if(target==-1){
-	// 	res.statusCode = 401;
-	// 	res.send("There was an error with your e-mail/password combination.");
+		if (userEmail === email ){
+			target = i;
+			break;
+		}
+	}
+	if(target==-1){
+		res.statusCode = 401;
+		res.send("There was an error with your e-mail/password combination.");
 
-	// }
-	// else {
-	// 	var response = {"user" : userList[target]};
-	// 	res.json(response);
-	// }
+	}
+	else {
+		if(userList[i].password === userPassword){
+			loggedIn = true;
+			res.json(true);
+		}
+		else {
+			res.statusCode = 401;
+			res.send("There was an error with your e-mail/password combination.");
+		}
+	}
 	
 });
 
