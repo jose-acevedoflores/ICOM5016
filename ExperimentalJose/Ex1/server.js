@@ -369,11 +369,12 @@ app.put("/placedBids/item:id", function(req, res){
 	}
 });
 
+// REST Operation - HTTP POST to sign Out
 app.put("/signOut", function(req, res){
 	loggedIn = false;
 	res.json(true);
-})
-// REST Operation - HTTP Post to add a new item to Computer Store
+});
+
 
 
 app.del("/shoppingCart/delete/:id", function(req, res){
