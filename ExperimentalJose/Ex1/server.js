@@ -186,10 +186,13 @@ app.get('/stores/:store' , function(req, res){
 
 });
 
-app.get("/item/:stores/:itemId", function(req,res) {
-	var stores = req.params.stores;
+app.get("/item/:store/:itemId", function(req,res) {
+	var store = req.params.store;
 	var itemId = req.params.itemId;
-	console.log("GET : Load Item");
+	console.log("GET : Load Item "+store);
+	res.json(new StoreItem("Lancer Evolution HALTECH flash ECU","empty" ,  "COMPUTER_STORE", "4000" ,
+			 "onevkbdnv, new description woot woot wooto owtoo", "97", 
+			 "http://www.sonicperformance.com.au/productimages/HT051340.jpg", "90124") );
 });
 
 
@@ -871,7 +874,7 @@ var data =  new Array(
 
 			new StoreItem("Pom Pom Ballet Flat",  stores.SHOES.name ,  stores.SHOES.categories.CHILDREN.name, "$50" ,
 				 "Have your little girl look fabulous in these flats!", "90", 
-				 "http://content.childrensplace.com/www/b/TCP/images/cloudzoom/p/069942_p.jpg"),
+				 "http://content.childrensplace.com/www/b/TCP/images/cloudzoom/p/069942_p.jpg", "78240"),
 
 		// SPORTS
 

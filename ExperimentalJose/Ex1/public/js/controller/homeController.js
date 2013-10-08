@@ -20,7 +20,10 @@ $(document).on('pagebeforeshow', "#home", function( event, ui ) {
 		
 				list = $("#" + item.store +"List");
 
-				list.append("<li><a href=\"#\">" + 
+				//var t = "onclick(+"item.store+")";
+//onclick=\"findItem(\""+ item.store + "\",\" "+ item.id +"\")\"
+				list.append("<li>" +
+					"<a href='#' onclick=\"findItem('"+item.store+"'," +item.id + ")\">" + 
 					"<img src="+ item.picture + ">"  + 
 					"<h2>" + item.itemName + "</h2>" + 
 					"<p>" + item.description + "</p>" +
@@ -38,7 +41,9 @@ $(document).on('pagebeforeshow', "#home", function( event, ui ) {
 	});
 });
 
-
+function test(storeName){
+	console.log("bfad "+ storeName);
+}
 /*******************************************************************************************************************************************/
 // General
 /*******************************************************************************************************************************************/
@@ -141,24 +146,32 @@ function findItem(store,item){
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
 
+			console.log(data);
 			$(document).on('pagebeforeshow', "#itemsPage", function( event, ui ) {
 	
-				var itemList = data.items;
-				var list = $("#itemsPageList");
-				var item;
 
-				list.append("<div(class=\"ui-grid-a\")>" + 
-					"<div(class=\"ui-block-a\")>" +
+				var list = $("#itemsPageList");
+				list.empty();
+				var item = data;
+
+				// list.append("<div(class=\"ui-grid-a\")>" + 
+				// 	"<div(class=\"ui-block-a\")>" +
+				// 	"<h3>" + item.itemName + "</h3></br>" +
+				// 	"<h6> Product ID: " + item.id + "</h6>" +
+				// 	"</div><div(class=\"ui-block-b\")></div></div>" +
+				// 	"<div(class=\"ui-grid-a\")>" + 
+				// 	"<div(class=\"ui-block-a\")>" + "<img src="+ item.picture + ">" +
+				// 	"</br></div>" + "<div(class=\"ui-block-b\")>" +
+				// 	"<p> Rating" + item.rating + "</p>" + 
+				// 	"<p>" + item.description + "</p></div></div>");
+						
+				list.append("<li data-theme=\"c\">" + 
 					"<h3>" + item.itemName + "</h3></br>" +
 					"<h6> Product ID: " + item.id + "</h6>" +
-					"</div><div(class=\"ui-block-b\")></div></div>" +
-					"<div(class=\"ui-grid-a\")>" + 
-					"<div(class=\"ui-block-a\")>" + "<img src="+ item.picture + ">" +
-					"</br></div>" + "<div(class=\"ui-block-b\")>" +
-					"<p> Rating" + item.rating + "</p>" + 
-					"<p>" + item.description + "</p></div></div>");
-						
-				
+					"<img src="+ item.picture + ">" +
+					"<p> Rating: " + item.rating + "</p>" + 
+					"<p>" + item.description + "</p></li>");
+
 				list.listview("refresh");
 				
 			});
