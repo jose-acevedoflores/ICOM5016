@@ -7,10 +7,10 @@ div(data-role="panel", id="rightPanel", data-position="right", data-display="rev
 			ul(data-role="listview", data-inset="true")
 				-for(var g = 0 ; g < data.dataLength ; g++)	
 					li( data-role="list-divider", data-theme="a")
-						a(onclick="findStore(\"#{data.stores[g].name}\")") #{data.stores[g].name}
+						a(onclick="findStore(\"#{data.stores[g].category_id}\")") #{data.stores[g].name}
 					- for(var t = 0 ; t < data.stores[g].categoriesLength ; t++)	
 						li
-							a(onclick="findCategory(\"#{data.stores[g].name}\",\"#{data.stores[g].categories[t]}\")") #{data.stores[g].categories[t]}
+							a(onclick="findCategory(\"#{data.stores[g].category_id}\",\"#{data.stores[g].categories[t]}\")") #{data.stores[g].categories[t]}
 				
 
 div(data-role="panel", id="leftPanel", class="main_nav", data-display="reveal" , data-dismissible="true" ,data-theme="b")		

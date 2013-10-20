@@ -14,20 +14,18 @@ $(document).on('pagebeforeshow', "#home", function( event, ui ) {
 			var len = itemList.length;
 			var list;
 			var item;
+			$("#home .listsHome li:not(:first-child)").remove();
+
 			for (var i=0; i < len; ++i){
 				item = itemList[i];
+				list = $("#List" + item.parent_category_id );
 
-		
-				list = $("#" + item.store +"List");
-
-				//var t = "onclick(+"item.store+")";
-//onclick=\"findItem(\""+ item.store + "\",\" "+ item.id +"\")\"
 				list.append("<li>" +
-					"<a href='#' onclick=\"findItem('"+item.store+"'," +item.id + ")\">" + 
-					"<img src="+ item.picture + ">"  + 
-					"<h2>" + item.itemName + "</h2>" + 
+					"<a href='#' onclick=\"findItem('"+item.parent_category_id+"'," +item.product_id + ")\">" + 
+					"<img src="+ item.photo_url + ">"  + 
+					"<h2>" + item.brand + " " +item.model + "</h2>" + 
 					"<p>" + item.description + "</p>" +
-					"<p> Rating:" + item.rating + " </p>" + 
+					"<p> Rating:" + item.seller_id + " temp" + " </p>" + 
 					"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
 					"</a></li>");
 				list.listview("refresh");	
@@ -36,7 +34,7 @@ $(document).on('pagebeforeshow', "#home", function( event, ui ) {
 		},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
-			alert("Data not found!");
+			alert("Data not found #home!");
 		}
 	});
 });
@@ -50,7 +48,7 @@ function test(storeName){
 
 function findStore(store){
 
-	$(document).on('pagebeforeshow', "#"+store+"Store", function( event, ui ) {
+	$(document).on('pagebeforeshow', "#Store"+store, function( event, ui ) {
 		console.log("Store: "+ store);
 		
 		$.mobile.loading("show");	
@@ -64,15 +62,16 @@ function findStore(store){
 				var len = itemList.length;
 				var list;
 				var item;
+				$("#Store"+store+" .listsHome li:not(:first-child)").remove();
 				for (var i=0; i < len; ++i){
 					item = itemList[i];
-					list = $("#"+item.category+"STORE"+item.store+"List")
+					list = $("#"+item.category_name+"STORE"+item.parent_category_id+"List")
 					
 					list.append("<li><a href=\"#\">" + 
-						"<img src="+ item.picture + ">"  + 
-						"<h2>" + item.itemName + "</h2>" + 
+						"<img src="+ item.photo_url + ">"  + 
+						"<h2>" + item.brand + " "+item.model + "</h2>" + 
 						"<p>" + item.description + "</p>" +
-						"<p> Rating:" + item.rating + " </p>" + 
+						"<p> Rating:" + item.seller_id +" temp" + " </p>" + 
 						"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
 						"</a></li>");
 
@@ -85,10 +84,10 @@ function findStore(store){
 				alert("Data not found!");
 			}
 		});
-		
+		$(document).off('pagebeforeshow');
 	});
-	$.mobile.navigate("#"+store+"Store");
-
+	$.mobile.navigate("#Store"+store);
+	
 }
 
 function findCategory(store, category){
@@ -112,10 +111,10 @@ function findCategory(store, category){
 					item = itemList[i];
 
 					list.append("<li><a href=\"#\">" + 
-						"<img src="+ item.picture + ">"  + 
-						"<h2>" + item.itemName + "</h2>" + 
+						"<img src="+ item.photo_url + ">"  + 
+						"<h2>" + item.brand + " "+item.model + "</h2>" + 
 						"<p>" + item.description + "</p>" +
-						"<p> Rating:" + item.rating + " </p>" + 
+						"<p> Rating:" + item.seller_id +" temp" + " </p>" + 
 						"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
 						"</a></li>");
 						
