@@ -11,7 +11,7 @@ var MAX_NODES = 100;
 
 //DATABASE SETUP
 var pg = require('pg');
-var conString = "postgres://joseacevedo:password@127.0.0.1:5432/fase2";
+var conString = "postgres://joseacevedo:vmpasswordp@acv2.no-ip.org:5432/fase2";
 
 app.use(express.bodyParser());
 var stores = {
