@@ -15,19 +15,19 @@ var conString = "postgres://joseacevedo:vmpasswordp@acv2.no-ip.org:5432/fase2";
 
 app.use(express.bodyParser());
 var stores = {
-	ELECTRONICS : { 
+	ELECTRONICS : {
 		name : "electronics" ,
-		categories : { 
+		categories : {
 			TV : {name : "tv" },
 			AUDIO : {name : "audio"  },
 			CAMERA : {name : "camera" },
 			PHONE : {name : "phone" },
 			VIDEO : {name : "video"}
 		}
-	},	
+	},
 	BOOKS : {
 		name : "books",
-		categories : {		
+		categories : {
 			FICTION : {name : "fiction"  },
 			BUSINESS : {name : "business" },
 			CHILDREN : {name : "children" },
@@ -119,7 +119,7 @@ app.get('/', function(request, response) {
     		storeCatLinkedList.length = MAX_NODES;
 
     		for(var i=0; i < result.rows.length; i++)
-    		{	
+    		{
     			if(result.rows[i].category_id === result.rows[i].parent_category_id)
     			{
     				viewData.data.stores.push(
@@ -131,9 +131,9 @@ app.get('/', function(request, response) {
     				//Save categories of the respective stores using the parent_category_id as the index.
     				storeCatLinkedList[result.rows[i].parent_category_id].push(result.rows[i].name);
     			}
-    		}	
+    		}
 
-    		//Populate categories in the viewData object 
+    		//Populate categories in the viewData object
     		for(var i=0; i < viewData.data.stores.length ; i++)
     		{
     				//Join the empty template array created in the for above this one ("categories" : []) with the one saved in storeCatLinkedList
@@ -144,9 +144,9 @@ app.get('/', function(request, response) {
 
     		viewData.data.dataLength = viewData.data.stores.length;
 
-    		response.render('home.jade', viewData);		
+    		response.render('home.jade', viewData);
   		});
-	});	
+	});
 
 });
 
@@ -160,7 +160,7 @@ app.get('/home',function(req, res ) {
     		return console.error('error fetching client from pool', err);
   		}
 
-  		client.query('SELECT * FROM sale_product, (select category_id,name as category_name, parent_category_id from category )as newcat WHERE sale_product.category_id = newcat.category_id', 
+  		client.query('SELECT * FROM sale_product, (select category_id,name as category_name, parent_category_id from category )as newcat WHERE sale_product.category_id = newcat.category_id',
 
   			function(err, result) {
     		//call `done()` to release the client back to the pool
@@ -174,8 +174,8 @@ app.get('/home',function(req, res ) {
     		var temp = {"items" : result.rows};
 			res.json(temp);
   		});
-	});	
-		
+	});
+
 
 } );
 
@@ -185,7 +185,7 @@ app.get('/stores/:store/:category' , function(req, res){
 	var store = req.params.store;
 	var category = req.params.category;
 
-	console.log("GET: store = "+store +" category: "+category); 
+	console.log("GET: store = "+store +" category: "+category);
 
 
 
@@ -194,14 +194,14 @@ app.get('/stores/:store/:category' , function(req, res){
 app.get('/stores/:store' , function(req, res){
 
 	var store = req.params.store;
-	console.log("GET: store = "+store); 
+	console.log("GET: store = "+store);
 	//QUERY DB for products to display in the individual store pages
 	pg.connect(conString, function(err, client, done) {
  		if(err) {
     		return console.error('error fetching client from pool', err);
   		}
 
-  		client.query('SELECT * FROM sale_product, (select category_id,name as category_name, parent_category_id from category )as newcat WHERE sale_product.category_id = newcat.category_id AND parent_category_id = $1', [store],  
+  		client.query('SELECT * FROM sale_product, (select category_id,name as category_name, parent_category_id from category )as newcat WHERE sale_product.category_id = newcat.category_id AND parent_category_id = $1', [store],
 
   			function(err, result) {
     		//call `done()` to release the client back to the pool
@@ -215,8 +215,8 @@ app.get('/stores/:store' , function(req, res){
     		var temp = {"items" : result.rows};
 			res.json(temp);
   		});
-	});	
-		
+	});
+
 
 
 });
@@ -226,7 +226,7 @@ app.get("/item/:store/:itemId", function(req,res) {
 	var itemId = req.params.itemId;
 	console.log("GET : Load Item "+store);
 	res.json(new StoreItem("Lancer Evolution HALTECH flash ECU","empty" ,  "COMPUTER_STORE", "4000" ,
-			 "onevkbdnv, new description woot woot wooto owtoo", "97", 
+			 "onevkbdnv, new description woot woot wooto owtoo", "97",
 			 "http://www.sonicperformance.com.au/productimages/HT051340.jpg", "90124") );
 });
 
@@ -238,9 +238,9 @@ app.get("/item/:store/:itemId", function(req,res) {
 
 // 	var data =  new Array(
 
-// 		new StoreItem("MacBookPro", "LAPTOPS_CATEGORY", "$1,200.00", "A Macbook Pro laptop", "97", 
+// 		new StoreItem("MacBookPro", "LAPTOPS_CATEGORY", "$1,200.00", "A Macbook Pro laptop", "97",
 // 			"http://images.apple.com/macbook-pro/images/overview_display_hero.png")
-			
+
 // 		);
 // 	var temp = {"items" : data};
 // 	response.json(temp);
@@ -257,40 +257,40 @@ for (var i = 0; i<userList.length; i++) {
 var shoppingCartVar =  new Array(
 
 		new StoreItem("Lancer Evolution HALTECH flash ECU","empty" ,  "COMPUTER_STORE", "4000" ,
-			 "onevkbdnv, new description woot woot wooto owtoo", "97", 
+			 "onevkbdnv, new description woot woot wooto owtoo", "97",
 			 "http://www.sonicperformance.com.au/productimages/HT051340.jpg", "90124"),
 
 		new StoreItem("Avenged 7fold LBC", stores.ELECTRONICS.name , stores.ELECTRONICS.categories.AUDIO.name , "40" ,
-			 "Rock on with Avenged Sevenfold in Long Beach", "97", 
-			 "http://userserve-ak.last.fm/serve/_/82208421/Avenged+Sevenfold+original.png", "1345246"), 
+			 "Rock on with Avenged Sevenfold in Long Beach", "97",
+			 "http://userserve-ak.last.fm/serve/_/82208421/Avenged+Sevenfold+original.png", "1345246"),
 
 		new StoreItem("HTC ONE", stores.ELECTRONICS.name, stores.ELECTRONICS.categories.PHONE.name, "500" ,
-			 "BEST PHONE EVER", "97", 
+			 "BEST PHONE EVER", "97",
 			 "http://www.htc.com/managed-assets/shared/desktop/smartphones/htc-one/hero/HTC-ProductDetail-Hero-slide-04.png", "25326")
 
 
 		);
 var placedBidsVar = new Array(
-		new StoreItem("MacBookPro", stores.COMPUTERS.name, stores.COMPUTERS.categories.LAPTOPS.name, "1,200.00", "A Macbook Pro laptop", "97", 
+		new StoreItem("MacBookPro", stores.COMPUTERS.name, stores.COMPUTERS.categories.LAPTOPS.name, "1,200.00", "A Macbook Pro laptop", "97",
 			"http://images.apple.com/macbook-pro/images/overview_display_hero.png", "1221"),
 
-			new StoreItem("iMac", stores.COMPUTERS.name, stores.COMPUTERS.categories.DESKTOPS.name, "1,299.00", "A Macbook Pro laptop", "97", 
+			new StoreItem("iMac", stores.COMPUTERS.name, stores.COMPUTERS.categories.DESKTOPS.name, "1,299.00", "A Macbook Pro laptop", "97",
 				"https://www.apple.com/imac/images/hero.png", "0921"),
 
-			new StoreItem("iPad", stores.COMPUTERS.name, stores.COMPUTERS.categories.TABLETS.name, "1,299.00", "A Macbook Pro laptop", "97", 
+			new StoreItem("iPad", stores.COMPUTERS.name, stores.COMPUTERS.categories.TABLETS.name, "1,299.00", "A Macbook Pro laptop", "97",
 				"https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQ8uL0T_OaIHUI7rEe0U8qvwP5VBszJsJzMX5Fj73jGFHH1STcJy1OiRHjj", "9281"),
 
-			new StoreItem("Inkjet", stores.COMPUTERS.name, stores.COMPUTERS.categories.PRINTERS.name, "1,299.00", "A clumsy printer", "97", 
+			new StoreItem("Inkjet", stores.COMPUTERS.name, stores.COMPUTERS.categories.PRINTERS.name, "1,299.00", "A clumsy printer", "97",
 				"https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSLHnGBsoKgsKNoRuISGtzZL0sGQoiRjatOll5Nnwop2UX0EmsOUw", "817")
 	);
 
 var itemsSellingVar = new Array(
 
-		new StoreItem("MacBookPro", stores.COMPUTERS.name, stores.COMPUTERS.categories.LAPTOPS.name, "1,200.00", "A Macbook Pro laptop", "97", 
+		new StoreItem("MacBookPro", stores.COMPUTERS.name, stores.COMPUTERS.categories.LAPTOPS.name, "1,200.00", "A Macbook Pro laptop", "97",
 			"http://images.apple.com/macbook-pro/images/overview_display_hero.png", "1221"),
 
 		new StoreItem("Avenged 7fold LBC", stores.ELECTRONICS.name , stores.ELECTRONICS.categories.AUDIO.name , "40" ,
-			 "Rock on with Avenged Sevenfold in Long Beach", "97", 
+			 "Rock on with Avenged Sevenfold in Long Beach", "97",
 			 "http://userserve-ak.last.fm/serve/_/82208421/Avenged+Sevenfold+original.png", "1345246")
 	);
 
@@ -319,7 +319,7 @@ app.get('/itemsSelling', function(req, res){
 app.get("/itemsSold", function(req, res){
 
 	console.log("GET : Load itemsSold");
-	//Should response with a list of up to 10 invoices at a time. Every time the user hits the "Load more" button 
+	//Should response with a list of up to 10 invoices at a time. Every time the user hits the "Load more" button
 	pseudoQueryItemsSold(res);
 });
 
@@ -333,14 +333,14 @@ app.get("/search/:query", function(req, res)  {
 
 // REST Operation - HTTP POST to login
 app.put("/userLogin", function(req, res){
-	
+
 	console.log("POST  : Login");
 	console.log(req.body.hasOwnProperty('emailAddress'));
-	
+
 	var email = req.body.emailAddress;
 	var password = req.body.userPassword;
 	console.log(email);
-	
+
 	var target = -1;
 	for(var i =0; i < userList.length; i++) {
 		var userEmail = userList[i].emailAddress;
@@ -370,7 +370,7 @@ app.put("/userLogin", function(req, res){
 			res.send("There was an error with your e-mail/password combination.");
 		}
 	}
-	
+
 });
 
 // REST Operation - HTTP PUT to update a bid
@@ -400,7 +400,7 @@ app.put("/placedBids/item:id", function(req, res){
 			theItem += req.body.price;
 			var response = {"item": theItem};
 			res.json(response);
-		} 
+		}
 	}
 });
 
@@ -428,7 +428,7 @@ app.del("/shoppingCart/delete/:id", function(req, res){
 // REST Operation - HTTP POST to add a new user
 app.post('/register/newUser', function(req, res) {
 	console.log("POST : newUser");
-	
+
 	if(!req.body.hasOwnProperty('fname') || !req.body.hasOwnProperty('lname')
   		|| !req.body.hasOwnProperty('password')  || !req.body.hasOwnProperty('emailAddress') ){
     	res.statusCode = 400;
@@ -466,7 +466,7 @@ app.del("/removeStore/storeName/:storeName", function(req, res){
 		{
 			generate.data.stores.splice(i,1);
 			break;
-		}	
+		}
 
 	}
 	res.json(true);
