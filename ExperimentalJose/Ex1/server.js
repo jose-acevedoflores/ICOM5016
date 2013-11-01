@@ -360,10 +360,9 @@ app.put("/userLogin", function(req, res){
      	}
 
       	else {
-
         	loggedIn = true;
         	res.json(true);
-
+        	
      	 }
       	
       	client.end();
