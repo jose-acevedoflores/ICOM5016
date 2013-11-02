@@ -84,13 +84,6 @@ app.configure(function(){
 
 app.get('/', function(request, response) {
 
-	//Add length for the stores object in the JSON generate var
-//	generate.data.dataLength = generate.data.stores.length;
-
-	//Add the length for the individual categories in the JSON generate vaer
-//	for(var i = 0 ; i < generate.data.dataLength ; i++)
-//		generate.data.stores[i].categoriesLength = generate.data.stores[i].categories.length;
-
 	var viewData = {
 		"data" : {
 			"stores" : [
@@ -160,7 +153,7 @@ app.get('/home',function(req, res ) {
     		return console.error('error fetching client from pool', err);
   		}
 
-  		client.query('SELECT * FROM sale_product, (select category_id,name as category_name, parent_category_id from category )as newcat WHERE sale_product.category_id = newcat.category_id',
+  		client.query('SELECT * FROM sale_product, (SELECT category_id,name AS category_name, parent_category_id FROM category )AS newcat WHERE sale_product.category_id = newcat.category_id',
 
   			function(err, result) {
     		//call `done()` to release the client back to the pool
@@ -186,7 +179,27 @@ app.get('/stores/:store/:category' , function(req, res){
 	var category = req.params.category;
 
 	console.log("GET: store = "+store +" category: "+category);
+	//QUERY DB for products to display in the individual store pages
+	pg.connect(conString, function(err, client, done) {
+ 		if(err) {
+    		return console.error('error fetching client from pool', err);
+  		}
 
+  		client.query('SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2', [store,category],
+
+  			function(err, result) {
+    		//call `done()` to release the client back to the pool
+    		done();
+
+    		if(err) {
+				return console.error('error running query', err);
+    		}
+    		console.log(result.rows);
+
+    		var temp = {"items" : result.rows};
+			res.json(temp);
+  		});
+	});
 
 
 });
@@ -201,7 +214,7 @@ app.get('/stores/:store' , function(req, res){
     		return console.error('error fetching client from pool', err);
   		}
 
-  		client.query('SELECT * FROM sale_product, (select category_id,name as category_name, parent_category_id from category )as newcat WHERE sale_product.category_id = newcat.category_id AND parent_category_id = $1', [store],
+  		client.query('SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1', [store],
 
   			function(err, result) {
     		//call `done()` to release the client back to the pool
@@ -221,13 +234,33 @@ app.get('/stores/:store' , function(req, res){
 
 });
 
-app.get("/item/:store/:itemId", function(req,res) {
-	var store = req.params.store;
+app.get("/item/:itemId", function(req,res) {
 	var itemId = req.params.itemId;
-	console.log("GET : Load Item "+store);
-	res.json(new StoreItem("Lancer Evolution HALTECH flash ECU","empty" ,  "COMPUTER_STORE", "4000" ,
-			 "onevkbdnv, new description woot woot wooto owtoo", "97",
-			 "http://www.sonicperformance.com.au/productimages/HT051340.jpg", "90124") );
+	console.log("GET : Load Item "+itemId);
+
+	//QUERY DB for products to display in the individual item page
+	pg.connect(conString, function(err, client, done) {
+ 		if(err) {
+    		return console.error('error fetching client from pool', err);
+  		}
+
+  		client.query('SELECT product_id AS id, brand , model, description, photo_url AS picture FROM product WHERE product_id = $1', [itemId],
+
+  			function(err, result) {
+    		//call `done()` to release the client back to the pool
+    		done();
+
+    		if(err) {
+				return console.error('error running query', err);
+    		}
+    		console.log(result.rows);
+
+    		var temp = {"item" : result.rows};
+			res.json(temp);
+  		});
+	});
+
+
 });
 
 
@@ -254,22 +287,6 @@ for (var i = 0; i<userList.length; i++) {
 	userList[i].shoppingID[i]=userNextId++;
 }
 
-var shoppingCartVar =  new Array(
-
-		new StoreItem("Lancer Evolution HALTECH flash ECU","empty" ,  "COMPUTER_STORE", "4000" ,
-			 "onevkbdnv, new description woot woot wooto owtoo", "97",
-			 "http://www.sonicperformance.com.au/productimages/HT051340.jpg", "90124"),
-
-		new StoreItem("Avenged 7fold LBC", stores.ELECTRONICS.name , stores.ELECTRONICS.categories.AUDIO.name , "40" ,
-			 "Rock on with Avenged Sevenfold in Long Beach", "97",
-			 "http://userserve-ak.last.fm/serve/_/82208421/Avenged+Sevenfold+original.png", "1345246"),
-
-		new StoreItem("HTC ONE", stores.ELECTRONICS.name, stores.ELECTRONICS.categories.PHONE.name, "500" ,
-			 "BEST PHONE EVER", "97",
-			 "http://www.htc.com/managed-assets/shared/desktop/smartphones/htc-one/hero/HTC-ProductDetail-Hero-slide-04.png", "25326")
-
-
-		);
 var placedBidsVar = new Array(
 		new StoreItem("MacBookPro", stores.COMPUTERS.name, stores.COMPUTERS.categories.LAPTOPS.name, "1,200.00", "A Macbook Pro laptop", "97",
 			"http://images.apple.com/macbook-pro/images/overview_display_hero.png", "1221"),
@@ -298,8 +315,33 @@ app.get('/shoppingCart', function(req, res){
 
 	//QUERY DB
 	console.log("GET: ShoppingCart");
-	var temp = {"items" : shoppingCartVar};
-	res.json(temp);
+
+	// OJO UPDATE ER cada shopping cart tiene que tener item ids
+
+	//QUERY DB for products to display in the individual store pages
+	pg.connect(conString, function(err, client, done) {
+ 		if(err) {
+    		return console.error('error fetching client from pool', err);
+  		}
+
+  		//TODO USER IS FIXED TO 2
+  		client.query('SELECT product_id AS id, photo_url AS picture, price,seller_id AS rating, brand, model, description FROM sale_product WHERE sale_product.product_id IN (SELECT item_id FROM items_in_cart NATURAL JOIN shopping_cart WHERE shopping_cart.owner_id = $1)', [2],
+
+  			function(err, result) {
+    		//call `done()` to release the client back to the pool
+    		done();
+
+    		if(err) {
+				return console.error('error running query', err);
+    		}
+    		console.log(result.rows);
+
+    		var temp = {"items" : result.rows};
+			res.json(temp);
+  		});
+	});
+
+
 });
 
 app.get('/placedBids', function(req, res) {
@@ -345,7 +387,7 @@ app.put("/userLogin", function(req, res){
  	client.connect();
   
 
-    var query = client.query("SELECT email_address, password from web_user where (web_user.email_address = $1 AND web_user.password = $2)", [email, password]);
+    var query = client.query("SELECT email_address, password FROM web_user WHERE (web_user.email_address = $1 AND web_user.password = $2)", [email, password]);
     
     query.on("row", function (row, result) {
     	result.addRow(row);

@@ -21,7 +21,7 @@ $(document).on('pagebeforeshow', "#home", function( event, ui ) {
 				list = $("#List" + item.parent_category_id );
 
 				list.append("<li>" +
-					"<a href='#' onclick=\"findItem('"+item.parent_category_id+"'," +item.product_id + ")\">" + 
+					"<a href='#' onclick=\"findItem(" +item.product_id + ")\">" + 
 					"<img src="+ item.photo_url + ">"  + 
 					"<h2>" + item.brand + " " +item.model + "</h2>" + 
 					"<p>" + item.description + "</p>" +
@@ -134,12 +134,12 @@ function findCategory(store, category){
 	});
 };
 
-function findItem(store,item){
+function findItem(itemId){
 
 	$.mobile.loading("show");
-	console.log("item: " + item);
+	console.log("item: " + itemId);
 	$.ajax({
-		url : "http://"+host+"/item/"+store+"/"+item,
+		url : "http://"+host+"/item/"+itemId,
 		method: 'get',
 		contentType: "application/json",
 		dataType:"json",
@@ -151,7 +151,7 @@ function findItem(store,item){
 
 				var list = $("#itemsPageList");
 				list.empty();
-				var item = data;
+				var item = data.item[0];
 
 				// list.append("<div(class=\"ui-grid-a\")>" + 
 				// 	"<div(class=\"ui-block-a\")>" +
@@ -165,7 +165,7 @@ function findItem(store,item){
 				// 	"<p>" + item.description + "</p></div></div>");
 						
 				list.append("<li data-theme=\"c\">" + 
-					"<h3>" + item.itemName + "</h3></br>" +
+					"<h3>" + item.brand + " " +item.model + "</h3>" + 
 					"<h6> Product ID: " + item.id + "</h6>" +
 					"<img src="+ item.picture + ">" +
 					"<p> Rating: " + item.rating + "</p>" + 
@@ -206,13 +206,13 @@ $(document).on('pagebeforeshow', "#shoppingCart", function( event, ui ) {
 			for (var i=0; i < len; ++i){
 				item = itemList[i];
 				console.log(item.id);
-				totalAmount += parseFloat(item.price);
+				totalAmount += parseFloat(item.price.substring(1).replace(',','')); // Take the $ added by the db and also replace the commas 
 				list.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
 					"<img src="+ item.picture + ">"  + 
-					"<h2>" + item.itemName + "</h2>" + 
+					"<h2>" + item.brand + " " +item.model + "</h2>" + 
 					"<p>" + item.description + "</p>" +
 					"<p> Rating:" + item.rating + " </p>" + 
-					"<p class=\"ui-li-aside\"> Price: $" + item.price + "</p>" +
+					"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
 					"</a>"+
 					"<a onclick=\"toRemove("+item.id+")\" href=\"#removeItemFromCart\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\">remove from cart</li>");
 				list.listview("refresh");	
