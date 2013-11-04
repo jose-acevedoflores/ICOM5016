@@ -74,7 +74,7 @@ var stores = {
 
 
 app.configure(function(){
-	app.set('port', process.env.PORT || 4000);
+	app.set('port', process.env.PORT || 5000);
 	app.set('public', __dirname + '/public');
 	app.use(express.static(__dirname + '/public'));
 	app.use(express.static(__dirname + '/views'));
@@ -514,7 +514,7 @@ app.del("/removeStore/storeName/:storeName", function(req, res){
 });
 
 http.createServer(app).listen(app.get('port'), function(){
-	console.log('Express server listening on port ' + app.get('port'));
+        console.log('Express server listening on port ' + app.get('port'));
 });
 
 app.post('/newItem', function(req, res){
