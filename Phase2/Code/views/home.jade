@@ -220,13 +220,12 @@ html
 							li
 								label(for="iPic") Item Picture:
 									input(id="iPic", type="file", name="iPic", accept="image/*", capture)
-							p Selling or Actioning?
+							p Selling or Auctioning?
 							li
-								label Selling
-									input(id="iCheckSale", type="radio", name="iCheckSale") 
-							li
-								label Auctioning
-									input(id="iCheckAuction", type="radio", name="iCheckAuction") 
+								label(for="Selling Choice", class="select")
+									select(id="selling choice")
+										option(value="selling") Selling
+										option(value="auctioning") Auctioning									
 								p
 
 							lis
