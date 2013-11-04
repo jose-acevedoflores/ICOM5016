@@ -1,8 +1,8 @@
 var express = require('express');
 var http    = require('http');
 var app     = express();
-var item = require("./public/js/objects.js");
-var StoreItem = item.StoreItem;
+
+
 var user = require("./public/js/user.js");
 var User = user.User;
 
@@ -13,75 +13,23 @@ var MAX_NODES = 100;
 var pg = require('pg');
 var conString = "postgres://joseacevedo:vmpasswordp@acv2.no-ip.org:5432/fase2";
 
-app.use(express.bodyParser());
-var stores = {
-	ELECTRONICS : {
-		name : "electronics" ,
-		categories : {
-			TV : {name : "tv" },
-			AUDIO : {name : "audio"  },
-			CAMERA : {name : "camera" },
-			PHONE : {name : "phone" },
-			VIDEO : {name : "video"}
-		}
-	},
-	BOOKS : {
-		name : "books",
-		categories : {
-			FICTION : {name : "fiction"  },
-			BUSINESS : {name : "business" },
-			CHILDREN : {name : "children" },
-			TECHNOLOGY : {name : "technology" }
-		}
-	},
-	COMPUTERS : {
-		name: "computers",
-		categories : {
-			LAPTOPS : {name : "laptops"},
-			DESKTOPS : {name : "desktops"},
-			TABLETS : {name : "tablets"},
-			PRINTERS : {name : "printers"}
-		}
-	},
-	CLOTHING : {
-		name : "clothing",
-		categories : {
-			CHILDREN : { name : "children"},
-			MEN : { name : "men"},
-			WOMEN : {name : "women"}
-		}
-	},
-	SHOES : {
-		name : "shoes",
-		categories : {
-			CHILDREN : {name : "children"},
-			WOMEN : {name : "women"},
-			MEN : {name : "men"}
-
-		}
-	},
-	SPORTS : {
-		name : "sports",
-		categories : {
-			BICYCLES : {name : "bicycles"},
-			FISHING : {name : "fishing"},
-			BASEBALL : {name : "baseball"},
-			GOLF : {name : "golf"},
-			BASKETBALL : {name : "basketball"}
-		}
-	}
-};
-
 
 app.configure(function(){
 	app.set('port', process.env.PORT || 5000);
 	app.set('public', __dirname + '/public');
 	app.use(express.static(__dirname + '/public'));
 	app.use(express.static(__dirname + '/views'));
+	app.use(express.bodyParser());
 });
 
 
-
+/*************************************************************************************
+ *	This is the first route that is activated when the user goes to the webpage.   
+ *  In here the info for the rendering of the JADE file is fetched and sent to the user.  
+ *  Key Objects in this function:
+ *    viewData: this is an object (initially almost empty) that is populated by the query to the CATEGORIES table
+ * 
+ **************************************************************************************/
 app.get('/', function(request, response) {
 
 	var viewData = {
@@ -130,6 +78,7 @@ app.get('/', function(request, response) {
     		for(var i=0; i < viewData.data.stores.length ; i++)
     		{
     				//Join the empty template array created in the for above this one ("categories" : []) with the one saved in storeCatLinkedList
+    				//In here category_id represents the PARENT ID aka main store id.
     				viewData.data.stores[i].categories = viewData.data.stores[i].categories.concat(storeCatLinkedList[viewData.data.stores[i].category_id]);
     				//Add the number of categories found on this store
     				viewData.data.stores[i].categoriesLength = viewData.data.stores[i].categories.length;
@@ -230,8 +179,6 @@ app.get('/stores/:store' , function(req, res){
   		});
 	});
 
-
-
 });
 
 app.get("/item/:itemId", function(req,res) {
@@ -263,53 +210,15 @@ app.get("/item/:itemId", function(req,res) {
 
 });
 
-
-
-
-// app.get('/computerStore', function(req, res){
-// 	console.log("GET : computersStore");
-
-// 	var data =  new Array(
-
-// 		new StoreItem("MacBookPro", "LAPTOPS_CATEGORY", "$1,200.00", "A Macbook Pro laptop", "97",
-// 			"http://images.apple.com/macbook-pro/images/overview_display_hero.png")
-
-// 		);
-// 	var temp = {"items" : data};
-// 	response.json(temp);
-// });
+//TODO DELETE THIS
 var userNextId = 0;
 var userList = new Array(
 	new User("Andres", "Malines", "b", "andres.malines@upr.edu")
 );
-
 for (var i = 0; i<userList.length; i++) {
 	userList[i].shoppingID[i]=userNextId++;
 }
 
-var placedBidsVar = new Array(
-		new StoreItem("MacBookPro", stores.COMPUTERS.name, stores.COMPUTERS.categories.LAPTOPS.name, "1,200.00", "A Macbook Pro laptop", "97",
-			"http://images.apple.com/macbook-pro/images/overview_display_hero.png", "1221"),
-
-			new StoreItem("iMac", stores.COMPUTERS.name, stores.COMPUTERS.categories.DESKTOPS.name, "1,299.00", "A Macbook Pro laptop", "97",
-				"https://www.apple.com/imac/images/hero.png", "0921"),
-
-			new StoreItem("iPad", stores.COMPUTERS.name, stores.COMPUTERS.categories.TABLETS.name, "1,299.00", "A Macbook Pro laptop", "97",
-				"https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQ8uL0T_OaIHUI7rEe0U8qvwP5VBszJsJzMX5Fj73jGFHH1STcJy1OiRHjj", "9281"),
-
-			new StoreItem("Inkjet", stores.COMPUTERS.name, stores.COMPUTERS.categories.PRINTERS.name, "1,299.00", "A clumsy printer", "97",
-				"https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSLHnGBsoKgsKNoRuISGtzZL0sGQoiRjatOll5Nnwop2UX0EmsOUw", "817")
-	);
-
-var itemsSellingVar = new Array(
-
-		new StoreItem("MacBookPro", stores.COMPUTERS.name, stores.COMPUTERS.categories.LAPTOPS.name, "1,200.00", "A Macbook Pro laptop", "97",
-			"http://images.apple.com/macbook-pro/images/overview_display_hero.png", "1221"),
-
-		new StoreItem("Avenged 7fold LBC", stores.ELECTRONICS.name , stores.ELECTRONICS.categories.AUDIO.name , "40" ,
-			 "Rock on with Avenged Sevenfold in Long Beach", "97",
-			 "http://userserve-ak.last.fm/serve/_/82208421/Avenged+Sevenfold+original.png", "1345246")
-	);
 
 app.get('/shoppingCart', function(req, res){
 
@@ -347,22 +256,22 @@ app.get('/shoppingCart', function(req, res){
 app.get('/placedBids', function(req, res) {
 
 	console.log("GET : PlacedBids");
-	var temp = {'items' : placedBidsVar};
-	res.json(temp);
+	//var temp = {'items' : placedBidsVar};
+	//res.json(temp);
 });
 
 app.get('/itemsSelling', function(req, res){
 
 	console.log("GET : ItemsSelling");
-	var temp = {'items' : itemsSellingVar};
-	res.json(temp);
+	//var temp = {'items' : itemsSellingVar};
+	//res.json(temp);
 });
 
 app.get("/itemsSold", function(req, res){
 
 	console.log("GET : Load itemsSold");
 	//Should response with a list of up to 10 invoices at a time. Every time the user hits the "Load more" button
-	pseudoQueryItemsSold(res);
+	//pseudoQueryItemsSold(res);
 });
 
 
@@ -372,11 +281,14 @@ app.get("/search/:query", function(req, res)  {
 	res.json(true);
 });
 
+/***************************************************************************************************************************************************
+**************************************************  PUT METHODS ******************************************************
+****************************************************************************************************************************************************/
 
 app.put("/userLogin", function(req, res){
 
         
-    console.log("POST  : Login");
+    console.log("POST  : Login"); // ANDY ESTO ES UN POST O UN PUT ?????????
     console.log(req.body.hasOwnProperty('emailAddress'));
     var password = req.body.password;
     var email = req.body.emailAddress;
@@ -445,26 +357,16 @@ app.put("/placedBids/item:id", function(req, res){
 	}
 });
 
-// REST Operation - HTTP POST to sign Out
+// REST Operation - HTTP PUT to sign Out
 app.put("/signOut", function(req, res){
 	loggedIn = false;
 	res.json(true);
 });
 
 
-
-app.del("/shoppingCart/delete/:id", function(req, res){
-	var id = req.params.id;
-	console.log("DEL: id= " +id);
-
-	for (var i = 0 ; i < shoppingCartVar.length ; i++){
-		if(shoppingCartVar[i].id === id)
-			shoppingCartVar.splice(i, 1);
-	}
-	res.json(true);
-
-});
-
+/***************************************************************************************************************************************************
+**************************************************  POST METHODS ******************************************************
+****************************************************************************************************************************************************/
 
 // REST Operation - HTTP POST to add a new user
 app.post('/register/newUser', function(req, res) {
@@ -499,6 +401,30 @@ app.post('/addStore/storeName/:storeName', function(req, res){
 	res.json(true);
 });
 
+
+app.post('/newItem', function(req, res){
+	var newItem = new StoreItem(req.body.iName, stores.ELECTRONICS.name, stores.ELECTRONICS.categories.TV.name, req.body.iPrice, req.body.iDescript, "","", "91347");
+	data.push(newItem);
+	res.json(true);
+});
+
+
+/***************************************************************************************************************************************************
+**************************************************  DEL METHODS ******************************************************
+****************************************************************************************************************************************************/
+
+app.del("/shoppingCart/delete/:id", function(req, res){
+	var id = req.params.id;
+	console.log("DEL: id= " +id);
+
+	for (var i = 0 ; i < shoppingCartVar.length ; i++){
+		if(shoppingCartVar[i].id === id)
+			shoppingCartVar.splice(i, 1);
+	}
+	res.json(true);
+
+});
+
 app.del("/removeStore/storeName/:storeName", function(req, res){
 	var storeToRemove = req.params.storeName;
 	console.log("DELETE: "+storeToRemove);
@@ -517,8 +443,3 @@ http.createServer(app).listen(app.get('port'), function(){
         console.log('Express server listening on port ' + app.get('port'));
 });
 
-app.post('/newItem', function(req, res){
-	var newItem = new StoreItem(req.body.iName, stores.ELECTRONICS.name, stores.ELECTRONICS.categories.TV.name, req.body.iPrice, req.body.iDescript, "","", "91347");
-	data.push(newItem);
-	res.json(true);
-});
