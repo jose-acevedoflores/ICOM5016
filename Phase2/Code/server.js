@@ -2,10 +2,6 @@ var express = require('express');
 var http    = require('http');
 var app     = express();
 
-
-var user = require("./public/js/user.js");
-var User = user.User;
-
 //Variable to create the hash table for categories
 var MAX_NODES = 100;
 
@@ -20,6 +16,8 @@ app.configure(function(){
 	app.use(express.static(__dirname + '/public'));
 	app.use(express.static(__dirname + '/views'));
 	app.use(express.bodyParser());
+  app.use(express.cookieParser());
+  app.use(express.session({secret: '1234567890QWERTY'}));
 });
 
 
@@ -37,7 +35,9 @@ app.get('/', function(request, response) {
 			"stores" : [
 
 			],
-			"dataLength" : 0
+			"dataLength" : 0,
+      "loggedIn" : false,
+      "userName" : undefined
 		}
 	};
 
@@ -86,6 +86,16 @@ app.get('/', function(request, response) {
 
     		viewData.data.dataLength = viewData.data.stores.length;
 
+        console.log(" session data: "+ request.session.loggedIn);
+        console.log(" session data name: "+request.session.userName);
+        console.log("Session data: " + request.session.account_id);
+        
+        if(request.session.loggedIn){
+          console.log("Entro");
+          viewData.data.loggedIn = request.session.loggedIn;
+          viewData.data.userName = request.session.userName;
+        }
+
     		response.render('home.jade', viewData);
   		});
 	});
@@ -111,7 +121,7 @@ app.get('/home',function(req, res ) {
     		if(err) {
 				return console.error('error running query', err);
     		}
-    		console.log(result.rows);
+    		//console.log(result.rows);
 
     		var temp = {"items" : result.rows};
 			res.json(temp);
@@ -288,10 +298,10 @@ app.put("/userLogin", function(req, res){
     console.log(email);
     console.log(password);
   	var client = new pg.Client(conString);
- 	client.connect();
+ 	  client.connect();
   
 
-    var query = client.query("SELECT email_address, password FROM web_user WHERE (web_user.email_address = $1 AND web_user.password = $2)", [email, password]);
+    var query = client.query("SELECT email_address, password, f_name, l_name, account_id FROM web_user WHERE (web_user.email_address = $1 AND web_user.password = $2)", [email, password]);
     
     query.on("row", function (row, result) {
     	result.addRow(row);
@@ -306,8 +316,15 @@ app.put("/userLogin", function(req, res){
      	}
 
       	else {
-        	loggedIn = true;
-        	res.json(true);
+          console.log(result.rows);
+
+          req.session.account_id = result.rows[0].account_id;
+          req.session.userName = result.rows[0].f_name + " " + result.rows[0].l_name;
+          req.session.loggedIn = true;
+
+          console.log("WOOT LOGGED" );
+          var temp = {"items" : { "userName" : req.session.userName } };
+        	res.json(temp);
         	
      	 }
       	

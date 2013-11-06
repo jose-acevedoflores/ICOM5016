@@ -18,8 +18,8 @@ div(data-role="panel", id="leftPanel", class="main_nav", data-display="reveal" ,
 		div(class="nav_name")
 			h3 
 
-			-if (loggedIn) {
-					a(href="#profilePage")  Juan del Pueblo
+			-if (data.loggedIn) {
+					a(href="#profilePage")  #{data.userName}
 
 			-	}
 			-else {
@@ -47,7 +47,7 @@ div(data-role="panel", id="leftPanel", class="main_nav", data-display="reveal" ,
 				li 
 					a(href="#profilePage")	Account
 					
-			-if (loggedIn) {
+			-if (data.loggedIn) {
 
 					a(data-role="button", data-theme="a", data-position="fixed", onclick="signOut()") Sign Out
 			-	}
