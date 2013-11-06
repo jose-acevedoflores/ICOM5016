@@ -210,14 +210,6 @@ app.get("/item/:itemId", function(req,res) {
 
 });
 
-//TODO DELETE THIS
-var userNextId = 0;
-var userList = new Array(
-	new User("Andres", "Malines", "b", "andres.malines@upr.edu")
-);
-for (var i = 0; i<userList.length; i++) {
-	userList[i].shoppingID[i]=userNextId++;
-}
 
 
 app.get('/shoppingCart', function(req, res){
@@ -288,7 +280,7 @@ app.get("/search/:query", function(req, res)  {
 app.put("/userLogin", function(req, res){
 
         
-    console.log("POST  : Login"); // ANDY ESTO ES UN POST O UN PUT ?????????
+    console.log("PUST  : Login");
     console.log(req.body.hasOwnProperty('emailAddress'));
     var password = req.body.password;
     var email = req.body.emailAddress;
