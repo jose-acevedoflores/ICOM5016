@@ -21,6 +21,18 @@ app.configure(function(){
 });
 
 
+/***************
+
+    Important information. In this app we are using the Express sessions features. 
+    The Information stored in the Express Session object is:
+      userName: The username as found in the f_name + l_name attributes of the database
+      loggedIn: If the user is logged in. This is a control variable for the common.jade file that helps
+                us know when to display the userName.
+      account_id: The account Id of this user. This value is used in the queries to extract specific information like 
+                  the products this user is selling, the shoppingCart, etc.
+
+*****************/
+
 /*************************************************************************************
  *	This is the first route that is activated when the user goes to the webpage.   
  *  In here the info for the rendering of the JADE file is fetched and sent to the user.  
@@ -44,15 +56,15 @@ app.get('/', function(request, response) {
 	//Query the DB for all the Categories.
 	pg.connect(conString, function(err, client, done) {
  		if(err) {
-    		return console.error('error fetching client from pool', err);
-  		}
+    	return console.error('error fetching client from pool', err);
+  	}
 
-  		client.query('SELECT * FROM  category', function(err, result) {
+  	client.query('SELECT * FROM  category', function(err, result) {
     		//call `done()` to release the client back to the pool
     		done();
 
     		if(err) {
-				return console.error('error running query', err);
+				  return console.error('error running query', err);
     		}
 
     		//Variable to save the dynamic count of stores that can be available on the database
@@ -86,17 +98,18 @@ app.get('/', function(request, response) {
 
     		viewData.data.dataLength = viewData.data.stores.length;
 
-        console.log(" session data: "+ request.session.loggedIn);
-        console.log(" session data name: "+request.session.userName);
-        console.log("Session data: " + request.session.account_id);
-        
+         console.log(" session data: "+ request.session.loggedIn);
+         console.log(" session data name: "+request.session.userName);
+         console.log("Session data: " + request.session.account_id);
+
+        // If this user is logged in then save the variables in the corresponiding viewData fields.
         if(request.session.loggedIn){
-          console.log("Entro");
           viewData.data.loggedIn = request.session.loggedIn;
           viewData.data.userName = request.session.userName;
         }
 
     		response.render('home.jade', viewData);
+        console.log("LLLLLL")
   		});
 	});
 
@@ -109,22 +122,21 @@ app.get('/home',function(req, res ) {
 	//QUERY DB for products to display in the front page
 	pg.connect(conString, function(err, client, done) {
  		if(err) {
-    		return console.error('error fetching client from pool', err);
-  		}
+    	return console.error('error fetching client from pool', err);
+  	}
 
-  		client.query('SELECT * FROM sale_product, (SELECT category_id,name AS category_name, parent_category_id FROM category )AS newcat WHERE sale_product.category_id = newcat.category_id',
+  	client.query('SELECT * FROM sale_product, (SELECT category_id,name AS category_name, parent_category_id FROM category )AS newcat WHERE sale_product.category_id = newcat.category_id',
 
-  			function(err, result) {
+  		function(err, result) {
     		//call `done()` to release the client back to the pool
     		done();
 
     		if(err) {
-				return console.error('error running query', err);
+				  return console.error('error running query', err);
     		}
     		//console.log(result.rows);
-
-    		var temp = {"items" : result.rows};
-			res.json(temp);
+        var temp = {"items" : result.rows};
+        res.json(temp);
   		});
 	});
 
@@ -141,22 +153,22 @@ app.get('/stores/:store/:category' , function(req, res){
 	//QUERY DB for products to display in the individual store pages
 	pg.connect(conString, function(err, client, done) {
  		if(err) {
-    		return console.error('error fetching client from pool', err);
-  		}
+  		return console.error('error fetching client from pool', err);
+  	}
 
-  		client.query('SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2', [store,category],
+  	client.query('SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2', [store,category],
 
-  			function(err, result) {
+  		function(err, result) {
     		//call `done()` to release the client back to the pool
     		done();
 
     		if(err) {
-				return console.error('error running query', err);
+				  return console.error('error running query', err);
     		}
     		console.log(result.rows);
 
     		var temp = {"items" : result.rows};
-			res.json(temp);
+        res.json(temp);
   		});
 	});
 
@@ -170,22 +182,22 @@ app.get('/stores/:store' , function(req, res){
 	//QUERY DB for products to display in the individual store pages
 	pg.connect(conString, function(err, client, done) {
  		if(err) {
-    		return console.error('error fetching client from pool', err);
-  		}
+  		return console.error('error fetching client from pool', err);
+  	}
 
-  		client.query('SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1', [store],
+  	client.query('SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1', [store],
 
-  			function(err, result) {
+  		function(err, result) {
     		//call `done()` to release the client back to the pool
     		done();
 
     		if(err) {
-				return console.error('error running query', err);
+				  return console.error('error running query', err);
     		}
     		console.log(result.rows);
 
     		var temp = {"items" : result.rows};
-			res.json(temp);
+        res.json(temp);
   		});
 	});
 
@@ -199,21 +211,21 @@ app.get("/item/:itemId", function(req,res) {
 	pg.connect(conString, function(err, client, done) {
  		if(err) {
     		return console.error('error fetching client from pool', err);
-  		}
+  	}
 
-  		client.query('SELECT product_id AS id, brand , model, description, photo_url AS picture FROM product WHERE product_id = $1', [itemId],
+  	client.query('SELECT product_id AS id, brand , model, description, photo_url AS picture FROM product WHERE product_id = $1', [itemId],
 
-  			function(err, result) {
+  		function(err, result) {
     		//call `done()` to release the client back to the pool
     		done();
 
     		if(err) {
-				return console.error('error running query', err);
+	   			return console.error('error running query', err);
     		}
     		console.log(result.rows);
 
     		var temp = {"item" : result.rows};
-			res.json(temp);
+        res.json(temp);
   		});
 	});
 
@@ -232,24 +244,33 @@ app.get('/shoppingCart', function(req, res){
 	//QUERY DB for products to display in the individual store pages
 	pg.connect(conString, function(err, client, done) {
  		if(err) {
-    		return console.error('error fetching client from pool', err);
-  		}
+  		return console.error('error fetching client from pool', err);
+ 		}
 
   		//TODO USER IS FIXED TO 2
-  		client.query('SELECT product_id AS id, photo_url AS picture, price,seller_id AS rating, brand, model, description FROM sale_product WHERE sale_product.product_id IN (SELECT item_id FROM items_in_cart NATURAL JOIN shopping_cart WHERE shopping_cart.owner_id = $1)', [2],
+    if(req.session.loggedIn)  
+		{ 
 
-  			function(err, result) {
+      client.query('SELECT product_id AS id, photo_url AS picture, price,seller_id AS rating, brand, model, description FROM sale_product WHERE sale_product.product_id IN (SELECT item_id FROM items_in_cart NATURAL JOIN shopping_cart WHERE shopping_cart.owner_id = $1)', [req.session.account_id],
+
+  		function(err, result) {
     		//call `done()` to release the client back to the pool
     		done();
 
     		if(err) {
-				return console.error('error running query', err);
+		  		return console.error('error running query', err);
     		}
     		console.log(result.rows);
 
     		var temp = {"items" : result.rows};
-			res.json(temp);
+        res.json(temp);
   		});
+    }
+    else // User is not logged in 
+    {
+      var temp = {"items" : "empty"}
+      res.json(temp);
+    }
 	});
 
 
@@ -305,7 +326,6 @@ app.put("/userLogin", function(req, res){
     
     query.on("row", function (row, result) {
     	result.addRow(row);
-
     });
 
     query.on("end", function (result) {
@@ -315,20 +335,19 @@ app.put("/userLogin", function(req, res){
     		res.send("There was an error with your e-mail/password combination.");
      	}
 
-      	else {
-          console.log(result.rows);
+      else {
+        console.log(result.rows);
 
-          req.session.account_id = result.rows[0].account_id;
-          req.session.userName = result.rows[0].f_name + " " + result.rows[0].l_name;
-          req.session.loggedIn = true;
+        req.session.account_id = result.rows[0].account_id;
+        req.session.userName = result.rows[0].f_name + " " + result.rows[0].l_name;
+        req.session.loggedIn = true;
 
-          console.log("WOOT LOGGED" );
-          var temp = {"items" : { "userName" : req.session.userName } };
-        	res.json(temp);
+        var temp = {"items" : { "userName" : req.session.userName } };
+      	res.json(temp);
         	
-     	 }
+     	}
       	
-      	client.end();
+      client.end();
 
     });
 
