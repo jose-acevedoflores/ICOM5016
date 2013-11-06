@@ -1,4 +1,4 @@
-var host = "localhost:5000";//"192.168.1.3:4000";
+var host = "192.168.1.3:5000";//"192.168.1.3:4000";
 
 /*******************************************************************************************************************************************/
 // Home 
@@ -428,7 +428,6 @@ function loginForm(){
 		dataType:"json",
 		success : function(data, textStatus,jqXHR){
 			$.mobile.loading("hide");
-			console.log("algo");
 			$.mobile.changePage('#home', 
 				{ allowSamePageTransition : true,
 				transition              : 'none',
@@ -440,7 +439,7 @@ function loginForm(){
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus : " + textStatus);
 			$.mobile.loading("hide");
-			alert("There was an error with your e-mail/password combination.");
+			alert(data.responseText);
 		}
 	});
 
