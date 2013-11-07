@@ -49,7 +49,8 @@ app.get('/', function(request, response) {
 			],
 			"dataLength" : 0,
       "loggedIn" : false,
-      "userName" : undefined
+      "userName" : undefined,
+      "isAdmin" : false
 		}
 	};
 
