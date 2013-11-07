@@ -11,7 +11,21 @@ div(data-role="panel", id="rightPanel", data-position="right", data-display="rev
 					- for(var t = 0 ; t < data.stores[g].categoriesLength ; t++)	
 						li
 							a(onclick="findCategory(\"#{data.stores[g].category_id}\",\"#{data.stores[g].categories[t]}\")") #{data.stores[g].categories[t]}
-				
+			
+
+//- 			<div data-role="collapsible-set">
+
+//- 	<div data-role="collapsible" data-collapsed="false">
+//- 	<h3>Section 1</h3>
+//- 	<p>I'm the collapsible set content for section 1.</p>
+//- 	</div>
+	
+//- 	<div data-role="collapsible">
+//- 	<h3>Section 2</h3>
+//- 	<p>I'm the collapsible set content for section 2.</p>
+//- 	</div>
+	
+//- </div>	
 
 div(data-role="panel", id="leftPanel", class="main_nav", data-display="reveal" , data-dismissible="true" ,data-theme="b")		
 	div(class="nav_profile")			
@@ -73,7 +87,7 @@ div(data-role="panel", id="leftPanel", class="main_nav", data-display="reveal" ,
 			-	}
 
 
-header(data-role="header", data-theme="a")
+header(data-role="header", data-theme="c")
 	//- div(data-role="fieldcontain")
 	h1 BidData
 	-if (data.loggedIn) {
@@ -88,11 +102,11 @@ header(data-role="header", data-theme="a")
 	div(data-role="fieldcontain")
 	a(href="#rightPanel", data-role="button", data-inline="true", data-corners="true", data-mini="true") Stores
 	input(type="search", name="search-2" , class="mainSearch", data-theme="c" , value="")
-	
 
 
-footer(data-role="footer", data-theme="a", data-position="fixed")
-	div(data-role="fieldcontain" data-mini = "true")
+
+footer(data-role="footer", data-theme="c", data-position="fixed")
+	div(data-role="fieldcontain")
 		nav(data-role="navbar")
 			ul
 				li
@@ -100,16 +114,7 @@ footer(data-role="footer", data-theme="a", data-position="fixed")
 				li
 					a(href="#shoppingCart", data-icon="grid", data-mini="true", data-inline="true") Shopping Cart
 				li
-					-if (data.loggedIn) {
-
-						a(href="#profilePage", data-icon="gear", data-mini="true", data-inline="true") Account
-
-					-	}
-					-else {
-
-						a(href="#login", data-icon="gear", data-mini="true", data-inline="true") Account
-
-					-	}
+					a(href="#profilePage", data-icon="gear", data-mini="true", data-inline="true") Account
 
 
 
