@@ -555,6 +555,42 @@ function registerForm(){
 
 }
 
+/*******************************************************************************************************************************************/
+// Update Profile
+/*******************************************************************************************************************************************/
+
+function editProfile(){
+	$.mobile.loading("show");
+	var form = $("#editProfileForm");
+	var formData = form.serializeArray();
+	console.log("form Data: " + formData);
+	var updUsr = ConverToJSON(formData);
+	updUser.id = currentUsr.id;
+	console.log("Updated User: " + JSON.stringify(updUsr));
+	var updCarJSON = JSON.stringify(updUsr);
+	$.ajax({
+		url : "http://"+host+"/userProfile",
+		method: 'put',
+		data : updCarJSON,
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+			$.mobile.loading("hide");
+			$.mobile.navigate("#Profile");
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			$.mobile.loading("hide");
+			if (data.status == 404){
+				alert("Data could not be updated!");
+			}
+			else {
+				alert("Internal Error.");		
+			}
+		}
+	});
+}
+
 
 /*******************************************************************************************************************************************/
 // Items Selling
