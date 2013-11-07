@@ -251,7 +251,7 @@ html
 					
 				div(class="ui-grid-a")
 					div(class="ui-block-a")
-						h3 Juan del Pueblo
+						h3 #{data.userName}
 						br
 					div(class="ui-block-b")
 
@@ -270,12 +270,12 @@ html
 				hr
 				p Be sure to check out:
 
-					a(href = "#placedBids", data-role= "button", data-inline = "false") Items Juan is bidding on
-					a(href = "#itemsSelling", data-role= "button", data-inline = "false") Items sold by Juan
+					//a(href = "#placedBids", data-role= "button", data-inline = "false") Items Juan is bidding on
+					//a(href = "#itemsSelling", data-role= "button", data-inline = "false") Items sold by Juan
 				
 
-				a(href = "#placedBids", data-role= "button", data-inline = "false") Items #{data.userName} is bidding on
-				a(href = "#itemsSelling", data-role= "button", data-inline = "false") Items sold by #{data.userName}
+					a(href = "#placedBids", data-role= "button", data-inline = "false") Items #{data.userName} is bidding on
+					a(href = "#itemsSelling", data-role= "button", data-inline = "false") Items sold by #{data.userName}
 		
 		// Edit Profile
 		div(data-role="page", id = "editProfile")
