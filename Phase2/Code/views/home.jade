@@ -134,9 +134,22 @@ html
 					//- 	div(class="ui-body ui-body-b")
 					//- 		div(class="ui-block-a")
 					center
-						a(href="#", type="submit",data-rel="back", data-inline="true", data-theme="b", value="Log In", onclick="loginForm()", data-mini="true") Login
+						fieldset(class="ui-grid-a")
+							div(class="ui-block-a")
+								a(href="#home", data-icon = "delete", data-rel="back", data-inline="true", type="submit", value="Cancel", data-mini="true", data-icon-shadow="true") Cancel
+								
 							//- div(class="ui-block-b")
-						a(href="#home", data-icon = "delete", data-rel="back", data-inline="true", type="submit", value="Cancel", data-mini="true") Cancel
+							div(class="ui-block-b")
+								a(href="#", type="submit",data-rel="back", data-inline="true", data-theme="c", onclick="loginForm()", data-mini="true", data-icon="check", data-icon-shadow="true") Login
+					hr
+					center
+						p New to BidData?
+					center
+						a(href= "#register", data-role="button", data-inline="true",
+							data-icon="plus", data-theme="c", data-transition="flip", data-corners="true"
+							data-icon-shadow="true")  Register
+
+
 					
 		// Register
 		div(data-role="page", id="register")

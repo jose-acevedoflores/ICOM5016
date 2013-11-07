@@ -32,7 +32,7 @@ div(data-role="panel", id="leftPanel", class="main_nav", data-display="reveal" ,
 
 					| or
 					a(href= "#register", data-role="button", data-inline="true",
-						data-icon="plus", data-theme="a", data-transition="flip", dat-corners="true"
+						data-icon="plus", data-theme="a", data-transition="flip", data-corners="true"
 						data-icon-shadow="true", data-mini="true")  Register
 			-	}
 
@@ -66,25 +66,28 @@ div(data-role="panel", id="leftPanel", class="main_nav", data-display="reveal" ,
 					li
 						a(href="#adminManageUsers") Manage Users
 					li
+						a(href="#newAdmin") Add New Admin
+					li
 						a(href="#adminGenerateReports")	Generate Reports
 						
 			-	}
 
 
-div(data-role="header", data-theme="c")
-	div(data-role="fieldcontain")
-		-if (data.loggedIn) {
-			a(href="#leftPanel", data-role="button", data-inline="true") Menu
-		-}
+header(data-role="header", data-theme="c")
+	//- div(data-role="fieldcontain")
+	h1 BidData
+	-if (data.loggedIn) {
+		a(href="#leftPanel", data-role="button", data-inline="true") Menu
+	-}
 
-		-else {
-			a(href="#login", data-role="button", data-inline="true",
-						data-icon="check", data-theme="a", data-transition="flip", dat-corners="true"
-						data-icon-shadow="true", data-mini="true") Login 
-		-}
+	-else {
+		a(href="#login", data-role="button", data-inline="true",
+					data-icon="check", data-theme="a", data-transition="flip", data-corners="true"
+					data-icon-shadow="true", data-mini="true", data-theme="c") Login 
+	-}
 
-		a(href="#rightPanel", data-role="button", data-inline="true", dat-corners="true", data-mini="true") Store Menus
-		input(type="search", name="search-2" , class="mainSearch", data-theme="c" , value="")
+	a(href="#rightPanel", data-role="button", data-inline="true", data-corners="true", data-mini="true") Stores
+	input(type="search", name="search-2" , class="mainSearch", data-theme="c" , value="")
 
 
 footer(data-role="footer", data-theme="c", data-position="fixed")

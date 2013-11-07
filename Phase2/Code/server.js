@@ -8,7 +8,7 @@ var MAX_NODES = 100;
 //DATABASE SETUP
 var pg = require('pg');
 var conString = "postgres://joseacevedo:vmpasswordp@acv2.no-ip.org:5432/fase2";
-
+isAdmin =true;
 
 app.configure(function(){
 	app.set('port', process.env.PORT || 5000);
