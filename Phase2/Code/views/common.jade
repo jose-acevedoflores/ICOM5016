@@ -99,7 +99,16 @@ footer(data-role="footer", data-theme="a", data-position="fixed")
 				li
 					a(href="#shoppingCart", data-icon="grid", data-mini="true", data-inline="true") Shopping Cart
 				li
-					a(href="#profilePage", data-icon="gear", data-mini="true", data-inline="true") Account
+					-if (data.loggedIn) {
+
+						a(href="#profilePage", data-icon="gear", data-mini="true", data-inline="true") Account
+
+					-	}
+					-else {
+
+						a(href="#login", data-icon="gear", data-mini="true", data-inline="true") Account
+
+					-	}
 
 
 
