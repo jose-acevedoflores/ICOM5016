@@ -87,7 +87,7 @@ div(data-role="panel", id="leftPanel", class="main_nav", data-display="reveal" ,
 			-	}
 
 
-header(data-role="header", data-theme="c")
+header(data-role="header", data-theme="a")
 	//- div(data-role="fieldcontain")
 	h1 BidData
 	-if (data.loggedIn) {
@@ -105,8 +105,8 @@ header(data-role="header", data-theme="c")
 
 
 
-footer(data-role="footer", data-theme="c", data-position="fixed")
-	div(data-role="fieldcontain")
+footer(data-role="footer", data-theme="a", data-position="fixed")
+	div(data-role="fieldcontain" data-mini = "true")
 		nav(data-role="navbar")
 			ul
 				li
@@ -114,7 +114,15 @@ footer(data-role="footer", data-theme="c", data-position="fixed")
 				li
 					a(href="#shoppingCart", data-icon="grid", data-mini="true", data-inline="true") Shopping Cart
 				li
-					a(href="#profilePage", data-icon="gear", data-mini="true", data-inline="true") Account
+					-if (data.loggedIn) {
 
+						a(href="#profilePage", data-icon="gear", data-mini="true", data-inline="true") Account
+
+					-}
+					-else {
+
+						a(href="#login", data-icon="gear", data-mini="true", data-inline="true") Account
+
+					-}
 
 
