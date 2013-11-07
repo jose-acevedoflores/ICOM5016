@@ -339,11 +339,28 @@ function toIncreaseBid(itemId){
 function increaseBid(){
 	$.mobile.loading("show");
 	console.log("Increase Bid: "+ itemToIncreaseBid);
+	console.log("BID");
+	var bid = $("#increaseBid");
+	var bidData = bid.serializeArray(bidData);
+	console.log("bid data : " + bidData);
+	var jsonBid = ConvertToJSON(bidData);
+	var readyBid = JSON.stringify(jsonBid);
+	console.log(bid);
 	$.ajax({
 		url : "http://"+host+"/placedBids/item"+itemToIncreaseBid,
 		method : "put",
+		data : readyBid,
 		contentType: "application/json",
 		dataType : "json",
+		
+
+	// $.mobile.loading("show");
+	// var form = $("#loginForm");
+	// var formData = form.serializeArray();
+	// console.log("form data : "+ formData);
+	// var user = ConvertToJSON(formData);
+	// console.log("User to login : " + JSON.stringify(user));
+	// var userJSON = JSON.stringify(user);
 		success : function(data, textStatus, jqXHR){
 
 			$.mobile.loading("hide");
