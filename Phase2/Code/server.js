@@ -109,7 +109,7 @@ app.get('/', function(request, response) {
         }
 
     		response.render('home.jade', viewData);
-        console.log("LLLLLL")
+
   		});
 	});
 
