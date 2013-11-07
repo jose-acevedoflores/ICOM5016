@@ -145,7 +145,7 @@ html
 					center
 						p New to BidData?
 					center
-						a(href= "#register", data-role="button", data-inline="true",
+						a(href= "#register", data-role="button", data-inline="false",
 							data-icon="plus", data-theme="c", data-transition="flip", data-corners="true"
 							data-icon-shadow="true")  Register
 
@@ -262,7 +262,7 @@ html
 						img(src = "http://www.icm.espol.edu.ec/estudiantes/2005/200511889/images/Juan%20Pueblo.jpg", border = "true", onclick="editProfile()")
 
 						br
-						a(href="#", type="submit",data-rel="back", data-inline="true", data-theme="b", value="Log In", onclick="editProfile()", data-mini="true") Edit Profile
+						a(href="#editProfile", type="submit", data-inline="true", data-theme="b", data-mini="true") Edit Profile
 						
 					div(class="ui-block-b")
 						p 
@@ -273,7 +273,39 @@ html
 				p Be sure to check out:
 				a(href = "#placedBids", data-role= "button", data-inline = "false") Items #{data.userName} is bidding on
 				a(href = "#itemsSelling", data-role= "button", data-inline = "false") Items sold by #{data.userName}
-				
+		
+		// Edit Profile
+		div(data-role="page", id = "editProfile")
+			include common
+			div(data-role="content")
+				h1 Edit Profile:
+				form(id ="5", data-transition="pop")
+					fieldset(data-role='controlgroup')
+						ul
+							
+							li 
+								label(for="emailAddress") Email:
+									input(id="emailAddress", type="text", name="emailAddress", placeholder="john_doe@domain.com")
+							li
+								label(for="password") Password:
+									input(id="editPassword", type="password", name="password", placeholder="Password")
+							li
+								label(for="editConfirmPassword") Confirm Password:
+									input(id="confirmPassword", type="password", name="confirmPassword"
+										placeholder ="Password")
+					center
+						fieldset(class="ui-grid-a")
+							div(class="ui-block-a")
+								a(href="#home",data-role="button", data-inline="true",
+									data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+									data-icon-shadow="true", data-mini="true") Cancel
+								
+							div(class="ui-block-b")	
+								a(data-role="button", data-inline="true",
+									data-icon="check", data-theme="a", data-transition="flip", dat-corners="true"
+									data-icon-shadow="true", data-mini="true", onclick="editProfile()") Save
+		
+		
 		// ADMIN SECTION
  
 		div(data-role="page", id="adminManageStore")	

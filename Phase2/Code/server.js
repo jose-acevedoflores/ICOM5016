@@ -350,6 +350,25 @@ app.get('/itemsSelling', function(req, res){
 
 });
 
+app.get("/userProfile", function(req, res){
+  console.log("Get : Load userProfile");
+  var client = new pg.Client(conString);
+  client.connect();
+
+  var query = client.query("SELECT account_id, password, email_address from web_user as user where use.account_id = $1 ", [req.session.account_id]);
+  
+  query.on("row", function (row, result) {
+      result.addRow(row);
+  });
+
+  query.on("end", function (result) {
+     var response = {"user" : result.rows[0]};
+     client.end();
+     res.json(response);
+
+  });
+});
+
 app.get("/itemsSold", function(req, res){
 
 	console.log("GET : Load itemsSold");
