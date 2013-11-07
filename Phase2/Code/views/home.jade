@@ -176,13 +176,16 @@ html
 									input(id="confirmPassword", type="password", name="confirmPassword"
 										placeholder ="Password")
 					center
-						a(data-role="button", data-inline="true",
-						data-icon="check", data-theme="a", data-transition="flip", dat-corners="true"
-						data-icon-shadow="true", data-mini="true", onclick="registerForm()") Register
-							
-						a(href="#home",data-role="button", data-inline="true",
-						data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
-						data-icon-shadow="true", data-mini="true") Cancel
+						fieldset(class="ui-grid-a")
+							div(class="ui-block-a")
+								a(href="#home",data-role="button", data-inline="true",
+									data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+									data-icon-shadow="true", data-mini="true") Cancel
+								
+							div(class="ui-block-b")	
+								a(data-role="button", data-inline="true",
+									data-icon="check", data-theme="a", data-transition="flip", dat-corners="true"
+									data-icon-shadow="true", data-mini="true", onclick="registerForm()") Register
 		
 		// Items Selling
 		div(data-role="page", id = "itemsSelling" )		
