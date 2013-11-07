@@ -306,13 +306,13 @@ $(document).on('pagebeforeshow', "#placedBids", function( event, ui ) {
 				var totalAmount =0;
 				item = itemList[i];
 				console.log(item.id);
-				totalAmount += parseFloat(item.price) ;
+
 				list.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
 					"<img src="+ item.picture + ">"  + 
 					"<h2>" + item.itemName + "</h2>" + 
 					"<p>" + item.description + "</p>" +
 					"<p> Rating:" + item.rating + " </p>" + 
-					"<p class=\"ui-li-aside\"> Price: $" + item.price + "</p>" +
+					"<p class=\"ui-li-aside\"> Starting Price: " + item.price + "</p>" +
 					"</a>"+
 					"<a onclick=\"toIncreaseBid("+item.id+")\" href=\"#increaseBid\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\">increase bid</li>");
 
@@ -567,27 +567,43 @@ $(document).on('pagebeforeshow', "#itemsSelling", function( event, ui ) {
 		url : "http://"+host+"/itemsSelling",
 		contentType: "application/json",
 		success : function(data, textStatus, jqXHR){
+
+
+			listSales = $("#itemsSellingList");
+			listAuctions = $("#itemsAuctioningList");
+
 			var itemList = data.items;
 			var len = itemList.length;
-			var list = $("#itemsSellingList");
-			list.empty();
+			listSales.empty();
+			listAuctions.empty();
 			var item;
-			var totalAmount = 0 ;
-			list.append("<li data-role=\"list-divider\", data-theme=\"a\"> Selling ");
+
+			listSales.append("<li data-role=\"list-divider\", data-theme=\"a\">  Selling " );
+			listAuctions.append("<li data-role=\"list-divider\", data-theme=\"a\">  Auctioning ");
 			for (var i=0; i < len; ++i){
 				item = itemList[i];
-				console.log(item.id);
-				totalAmount += parseFloat(item.price);
+				if(item.product_type === 'sale'){
+					listSales.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
+						"<img src="+ item.picture + ">"  + 
+						"<h2>" + item.brand + " " +item.model + "</h2>" + 
+						"<p>" + item.description + "</p>" +
+						"<p> Rating:" + item.rating + " </p>" + 
+						"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
+						"</a>");
 
-				list.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
-					"<img src="+ item.picture + ">"  + 
-					"<h2>" + item.itemName + "</h2>" + 
-					"<p>" + item.description + "</p>" +
-					"<p> Rating:" + item.rating + " </p>" + 
-					"<p class=\"ui-li-aside\"> Price: $" + item.price + "</p>" +
-					"</a>");
+					listSales.listview("refresh");
+				}
+				else if(item.product_type === 'auction'){
+					listAuctions.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
+						"<img src="+ item.picture + ">"  + 
+						"<h2>" + item.brand + " " +item.model + "</h2>" + 
+						"<p>" + item.description + "</p>" +
+						"<p> Rating:" + item.rating + " </p>" + 
+						"<p class=\"ui-li-aside\"> Starting Price: " + item.price + "</p>" +
+						"</a>");
 
-				list.listview("refresh");	
+					listAuctions.listview("refresh");
+				}	
 			}
 
 			// var totalAmountField = $("#shoppingCartAmount");

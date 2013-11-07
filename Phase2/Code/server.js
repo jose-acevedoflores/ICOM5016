@@ -241,13 +241,12 @@ app.get('/shoppingCart', function(req, res){
 
 	// OJO UPDATE ER cada shopping cart tiene que tener item ids
 
-	//QUERY DB for products to display in the individual store pages
+	//QUERY DB for products to display in the shopping cart of this user
 	pg.connect(conString, function(err, client, done) {
  		if(err) {
   		return console.error('error fetching client from pool', err);
  		}
 
-  		//TODO USER IS FIXED TO 2
     if(req.session.loggedIn)  
 		{ 
 
@@ -279,22 +278,82 @@ app.get('/shoppingCart', function(req, res){
 app.get('/placedBids', function(req, res) {
 
 	console.log("GET : PlacedBids");
-	//var temp = {'items' : placedBidsVar};
-	//res.json(temp);
+
+  //QUERY DB for products to display that this user has placed a bid on
+  pg.connect(conString, function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
+
+    if(req.session.loggedIn)  
+    { 
+
+      client.query('SELECT product_id AS id, photo_url AS picture, starting_price AS price, brand, model, description FROM auction_product WHERE auction_product.product_id IN (SELECT product_id FROM bid NATURAL JOIN auction_product WHERE bid.buyer_account_id = $1)', [req.session.account_id],
+
+      function(err, result) {
+        //call `done()` to release the client back to the pool
+        done();
+
+        if(err) {
+          return console.error('error running query', err);
+        }
+        console.log(result.rows);
+
+        var temp = {"items" : result.rows};
+        res.json(temp);
+      });
+    }
+    else // User is not logged in 
+    {
+      var temp = {"items" : "empty"}
+      res.json(temp);
+    }
+  });
+
 });
 
 app.get('/itemsSelling', function(req, res){
 
 	console.log("GET : ItemsSelling");
-	//var temp = {'items' : itemsSellingVar};
-	//res.json(temp);
+  //QUERY DB for products to display that this user is currently selling either by auction or sale
+  pg.connect(conString, function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
+
+    if(req.session.loggedIn)  
+    { 
+
+      client.query('SELECT product_id AS id, photo_url AS picture,  brand, model, description, price , \'sale\' AS product_type FROM sale_product  WHERE seller_id = $1 UNION SELECT product_id AS id, photo_url AS picture,  brand, model, description, starting_price AS price, \'auction\' AS product_type FROM auction_product WHERE seller_id = $1', [req.session.account_id],
+
+      function(err, result) {
+        //call `done()` to release the client back to the pool
+        done();
+
+        if(err) {
+          return console.error('error running query', err);
+        }
+        console.log(result.rows);
+
+        var temp = {"items" :  result.rows };
+        res.json(temp);
+      });
+    }
+    else // User is not logged in 
+    {
+      var temp = {"items" : "empty"}
+      res.json(temp);
+    }
+  });
+
+
 });
 
 app.get("/itemsSold", function(req, res){
 
 	console.log("GET : Load itemsSold");
 	//Should response with a list of up to 10 invoices at a time. Every time the user hits the "Load more" button
-	//pseudoQueryItemsSold(res);
+
 });
 
 
