@@ -13,19 +13,6 @@ div(data-role="panel", id="rightPanel", data-position="right", data-display="rev
 							a(onclick="findCategory(\"#{data.stores[g].category_id}\",\"#{data.stores[g].categories[t]}\")") #{data.stores[g].categories[t]}
 			
 
-//- 			<div data-role="collapsible-set">
-
-//- 	<div data-role="collapsible" data-collapsed="false">
-//- 	<h3>Section 1</h3>
-//- 	<p>I'm the collapsible set content for section 1.</p>
-//- 	</div>
-	
-//- 	<div data-role="collapsible">
-//- 	<h3>Section 2</h3>
-//- 	<p>I'm the collapsible set content for section 2.</p>
-//- 	</div>
-	
-//- </div>	
 
 div(data-role="panel", id="leftPanel", class="main_nav", data-display="reveal" , data-dismissible="true" ,data-theme="b")		
 	div(class="nav_profile")			
@@ -106,7 +93,7 @@ header(data-role="header", data-theme="a")
 
 
 footer(data-role="footer", data-theme="a", data-position="fixed")
-	div(data-role="fieldcontain" data-mini = "true")
+	div(data-role="fieldcontain", data-mini = "true")
 		nav(data-role="navbar")
 			ul
 				li
