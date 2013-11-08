@@ -5,7 +5,7 @@ var host = "localhost:5000";//"192.168.1.3:4000";
 /*******************************************************************************************************************************************/
 
 $(document).on('pagebeforeshow', "#home", function( event, ui ) {
-
+	console.log("#home on pagebeforeshow listener");
 	$.ajax({
 		url : "http://"+host+"/home",
 		contentType: "application/json",
@@ -47,17 +47,18 @@ function test(storeName){
 /*******************************************************************************************************************************************/
 
 function findStore(store){
-
 		
 		$.mobile.loading("show");	
 
+		console.log("findStore function with store = " + store);
 		$.ajax({
 			url : "http://"+host+"/stores/"+store,
 			contentType: "application/json",
 			success : function(data, textStatus, jqXHR){
 
 				$(document).on('pagebeforeshow', "#Store"+store, function( event, ui ) {
-					console.log("Store: "+ store);
+					console.log("#Store"+store+" on pagebeforeshow listener");
+
 					var itemList = data.items;
 					var len = itemList.length;
 					var list;
@@ -86,6 +87,7 @@ function findStore(store){
 		
 			},
 			error: function(data, textStatus, jqXHR){
+				$.mobile.loading("hide");
 				console.log("textStatus: " + textStatus);
 				alert("Data not found!");
 			}
@@ -96,15 +98,17 @@ function findStore(store){
 function findCategory(store, category){
 
 	$.mobile.loading("show");
-	console.log("cat: " + category);
+	console.log("findCategory function with categoryId = " + category +" and Store = " + store);
 	$.ajax({
 		url : "http://"+host+"/stores/"+store+"/"+category,
 		method: 'get',
 		contentType: "application/json",
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
+
 			$(document).on('pagebeforeshow', "#"+category+"CategorySTORE"+store, function( event, ui ) {
-	
+
+				console.log("#"+category+"CategorySTORE"+store+" on pagebeforeshow listener");
 				var itemList = data.items;
 				var len = itemList.length;
 				var list = $("#"+category+"CategoryItemListSTORE"+store);
@@ -144,8 +148,8 @@ function findCategory(store, category){
 			}
 		},
 		error: function(data, textStatus, jqXHR){
-			console.log("textStatus: " + textStatus);
 			$.mobile.loading("hide");
+			console.log("textStatus: " + textStatus);
 			alert("NOOOO");
 		}
 	});
@@ -154,7 +158,7 @@ function findCategory(store, category){
 function findItem(itemId){
 
 	$.mobile.loading("show");
-	console.log("item: " + itemId);
+	console.log("findItem function with itemId = " + itemId);
 	$.ajax({
 		url : "http://"+host+"/item/"+itemId,
 		method: 'get',
@@ -162,9 +166,8 @@ function findItem(itemId){
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
 
-			console.log(data);
 			$(document).on('pagebeforeshow', "#itemsPage", function( event, ui ) {
-	
+				console.log("itemsPage on pagebeforeshow listener");
 
 				var list = $("#itemsPageList");
 				list.empty();
@@ -196,8 +199,8 @@ function findItem(itemId){
 			$.mobile.navigate("#itemsPage");
 		},
 		error: function(data, textStatus, jqXHR){
-			console.log("textStatus: " + textStatus);
 			$.mobile.loading("hide");
+			console.log("textStatus: " + textStatus);
 			alert("D:");
 		}
 	});
@@ -208,43 +211,56 @@ function findItem(itemId){
 // Shopping cart
 /*******************************************************************************************************************************************/
 
-$(document).on('pagebeforeshow', "#shoppingCart", function( event, ui ) {
-	console.log("wooooooooot");
+function shoppingCart(){
+
+	console.log("Shopping cart function");
+	$.mobile.loading("show");
 	$.ajax({
 		url : "http://"+host+"/shoppingCart",
 		contentType: "application/json",
 		success : function(data, textStatus, jqXHR){
-			var itemList = data.items;
-			var len = itemList.length;
-			var list = $("#cartItemList");
-			list.empty();
-			var item;
-			var totalAmount = 0 ;
-			for (var i=0; i < len; ++i){
-				item = itemList[i];
-				console.log(item.id);
-				totalAmount += parseFloat(item.price.substring(1).replace(',','')); // Take the $ added by the db and also replace the commas 
-				list.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
-					"<img src="+ item.picture + ">"  + 
-					"<h2>" + item.brand + " " +item.model + "</h2>" + 
-					"<p>" + item.description + "</p>" +
-					"<p> Rating:" + item.rating + " </p>" + 
-					"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
-					"</a>"+
-					"<a onclick=\"toRemove("+item.id+")\" href=\"#removeItemFromCart\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\">remove from cart</li>");
-				list.listview("refresh");	
-			}
 
-			var totalAmountField = $("#shoppingCartAmount");
-			totalAmountField.empty();
-			totalAmountField.append("$"+totalAmount);
+			$(document).on('pagebeforeshow', "#shoppingCart", function( event, ui ) {
+				console.log("shoppingCart on pagebeforeshow listener");
+				var itemList = data.items;
+				var len = itemList.length;
+				var list = $("#cartItemList");
+				list.empty();
+				var item;
+				var totalAmount = 0 ;
+				for (var i=0; i < len; ++i){
+					item = itemList[i];
+					console.log(item.id);
+					totalAmount += parseFloat(item.price.substring(1).replace(',','')); // Take the $ added by the db and also replace the commas 
+					list.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
+						"<img src="+ item.picture + ">"  + 
+						"<h2>" + item.brand + " " +item.model + "</h2>" + 
+						"<p>" + item.description + "</p>" +
+						"<p> Rating:" + item.rating + " </p>" + 
+						"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
+						"</a>"+
+						"<a onclick=\"toRemove("+item.id+")\" href=\"#removeItemFromCart\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\">remove from cart</li>");
+					list.listview("refresh");	
+				}
+
+				var totalAmountField = $("#shoppingCartAmount");
+				totalAmountField.empty();
+				totalAmountField.append("$"+totalAmount);
+
+				$.mobile.loading("hide");
+				
+			});
+			$.mobile.navigate("#shoppingCart");
 		},
 		error: function(data, textStatus, jqXHR){
+			$.mobile.loading("hide");
 			console.log("textStatus: " + textStatus);
-			alert("Data not found!");
+			alert("Data in Shopping Cart not found!");
+			
 		}
 	});
-});
+}
+
 //Global Variable to know which item the user wants to remove
 var itemToRemove;
 function toRemove(itemId){
@@ -289,47 +305,55 @@ function removeItemFromCart(){
 /*******************************************************************************************************************************************/
 // Placed Bids
 /*******************************************************************************************************************************************/
-$(document).on('pagebeforeshow', "#placedBids", function( event, ui ) {
-	console.log("Placed");
+
+function placedBids(){
+
+	console.log("Placed Bids function");
+	$.mobile.loading("show");
 	$.ajax({
 		url : "http://"+host+"/placedBids",
 		contentType: "application/json",
 		success : function(data, textStatus, jqXHR){
-			var itemList = data.items;
-			var len = itemList.length;
-			var list = $("#bidItemList");
-			list.empty();
-			var item;
-			
-			list.append("<li data-role=\"list-divider\", data-theme=\"a\"> Bidding On:");
-			for (var i=0; i < len; ++i){
-				var totalAmount =0;
-				item = itemList[i];
-				console.log(item.id);
+			$(document).on('pagebeforeshow', "#placedBids", function( event, ui ) {
+				console.log("placedBids on pagebeforeshow listener");
+				var itemList = data.items;
+				var len = itemList.length;
+				var list = $("#bidItemList");
+				list.empty();
+				var item;
+				
+				list.append("<li data-role=\"list-divider\", data-theme=\"a\"> Bidding On:");
+				for (var i=0; i < len; ++i){
+					var totalAmount =0;
+					item = itemList[i];
+					console.log(item.id);
 
-				list.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
-					"<img src="+ item.picture + ">"  + 
-					"<h2>" + item.itemName + "</h2>" + 
-					"<p>" + item.description + "</p>" +
-					"<p> Rating:" + item.rating + " </p>" + 
-					"<p class=\"ui-li-aside\"> Starting Price: " + item.price + "</p>" +
-					"</a>"+
-					"<a onclick=\"toIncreaseBid("+item.id+")\" href=\"#increaseBid\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\">increase bid</li>");
+					list.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
+						"<img src="+ item.picture + ">"  + 
+						"<h2>" + item.itemName + "</h2>" + 
+						"<p>" + item.description + "</p>" +
+						"<p> Rating:" + item.rating + " </p>" + 
+						"<p class=\"ui-li-aside\"> Starting Price: " + item.price + "</p>" +
+						"</a>"+
+						"<a onclick=\"toIncreaseBid("+item.id+")\" href=\"#increaseBid\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\">increase bid</li>");
 
-				list.listview("refresh");	
-				var totalAmountField = $("#nextAcceptableBid");
-				totalAmountField.empty();
-				totalAmountField.append("$"+totalAmount);
-			}
-			
-			
+					list.listview("refresh");	
+					var totalAmountField = $("#nextAcceptableBid");
+					totalAmountField.empty();
+					totalAmountField.append("$"+totalAmount);
+				}
+				$.mobile.loading("hide");
+			});		
+			$.mobile.navigate("#placedBids");
 		},
 		error: function(data, textStatus, jqXHR){
+			$.mobile.loading("hide");
 			console.log("textStatus: " + textStatus);
 			alert("Data not found!");
 		}
 	});
-});
+
+}
 
 var itemToIncreaseBid;
 function toIncreaseBid(itemId){
@@ -596,62 +620,67 @@ function editProfile(){
 // Items Selling
 /*******************************************************************************************************************************************/
 
-
-$(document).on('pagebeforeshow', "#itemsSelling", function( event, ui ) {
-	console.log("Placed");
+function itemsSelling(){
+	console.log("Items Selling function");
+	$.mobile.loading("show");
 	$.ajax({
 		url : "http://"+host+"/itemsSelling",
 		contentType: "application/json",
 		success : function(data, textStatus, jqXHR){
 
+			$(document).on('pagebeforeshow', "#itemsSelling", function( event, ui ) {
+				console.log("itemsSelling on pagebeforeshow listener");
+				listSales = $("#itemsSellingList");
+				listAuctions = $("#itemsAuctioningList");
 
-			listSales = $("#itemsSellingList");
-			listAuctions = $("#itemsAuctioningList");
+				var itemList = data.items;
+				var len = itemList.length;
+				listSales.empty();
+				listAuctions.empty();
+				var item;
 
-			var itemList = data.items;
-			var len = itemList.length;
-			listSales.empty();
-			listAuctions.empty();
-			var item;
+				listSales.append("<li data-role=\"list-divider\", data-theme=\"a\">  Selling " );
+				listAuctions.append("<li data-role=\"list-divider\", data-theme=\"a\">  Auctioning ");
+				for (var i=0; i < len; ++i){
+					item = itemList[i];
+					if(item.product_type === 'sale'){
+						listSales.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
+							"<img src="+ item.picture + ">"  + 
+							"<h2>" + item.brand + " " +item.model + "</h2>" + 
+							"<p>" + item.description + "</p>" +
+							"<p> Rating:" + item.rating + " </p>" + 
+							"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
+							"</a>");
 
-			listSales.append("<li data-role=\"list-divider\", data-theme=\"a\">  Selling " );
-			listAuctions.append("<li data-role=\"list-divider\", data-theme=\"a\">  Auctioning ");
-			for (var i=0; i < len; ++i){
-				item = itemList[i];
-				if(item.product_type === 'sale'){
-					listSales.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
-						"<img src="+ item.picture + ">"  + 
-						"<h2>" + item.brand + " " +item.model + "</h2>" + 
-						"<p>" + item.description + "</p>" +
-						"<p> Rating:" + item.rating + " </p>" + 
-						"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
-						"</a>");
+						listSales.listview("refresh");
+					}
+					else if(item.product_type === 'auction'){
+						listAuctions.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
+							"<img src="+ item.picture + ">"  + 
+							"<h2>" + item.brand + " " +item.model + "</h2>" + 
+							"<p>" + item.description + "</p>" +
+							"<p> Rating:" + item.rating + " </p>" + 
+							"<p class=\"ui-li-aside\"> Starting Price: " + item.price + "</p>" +
+							"</a>");
 
-					listSales.listview("refresh");
+						listAuctions.listview("refresh");
+					}	
 				}
-				else if(item.product_type === 'auction'){
-					listAuctions.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
-						"<img src="+ item.picture + ">"  + 
-						"<h2>" + item.brand + " " +item.model + "</h2>" + 
-						"<p>" + item.description + "</p>" +
-						"<p> Rating:" + item.rating + " </p>" + 
-						"<p class=\"ui-li-aside\"> Starting Price: " + item.price + "</p>" +
-						"</a>");
 
-					listAuctions.listview("refresh");
-				}	
-			}
-
+				$.mobile.loading("hide");
+			});
+			$.mobile.navigate("#itemsSelling");
 			// var totalAmountField = $("#shoppingCartAmount");
 			// totalAmountField.empty();
 			// totalAmountField.append("$"+totalAmount);
 		},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
+			$.mobile.loading("hide");
 			alert("Data not found!");
 		}
 	});
-});
+}
 
 /*******************************************************************************************************************************************/
 // Admin Section

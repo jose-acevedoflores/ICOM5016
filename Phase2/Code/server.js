@@ -107,6 +107,7 @@ app.get('/', function(request, response) {
         if(request.session.loggedIn){
           viewData.data.loggedIn = request.session.loggedIn;
           viewData.data.userName = request.session.userName;
+          viewData.data.isAdmin = request.session.isAdmin;
         }
 
     		response.render('home.jade', viewData);
@@ -401,7 +402,7 @@ app.put("/userLogin", function(req, res){
  	  client.connect();
   
 
-    var query = client.query("SELECT email_address, password, f_name, l_name, account_id FROM web_user WHERE (web_user.email_address = $1 AND web_user.password = $2)", [email, password]);
+    var query = client.query("SELECT email_address, password, f_name, l_name, account_id, admin_flag FROM web_user WHERE (web_user.email_address = $1 AND web_user.password = $2)", [email, password]);
     
     query.on("row", function (row, result) {
     	result.addRow(row);
@@ -420,6 +421,7 @@ app.put("/userLogin", function(req, res){
         req.session.account_id = result.rows[0].account_id;
         req.session.userName = result.rows[0].f_name + " " + result.rows[0].l_name;
         req.session.loggedIn = true;
+        req.session.isAdmin = result.rows[0].admin_flag;
 
         var temp = {"items" : { "userName" : req.session.userName } };
       	res.json(temp);

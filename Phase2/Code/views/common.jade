@@ -40,11 +40,11 @@ div(data-role="panel", id="leftPanel", class="main_nav", data-display="reveal" ,
 
 			ul(data-role="listview", data-inset="true" )	
 				li
-					a(href="#shoppingCart") Cart
+					a(onclick="shoppingCart()") Cart
 				li 
-					a(href="#placedBids") Placed Bids
+					a(onclick="placedBids()") Placed Bids
 				li
-					a(href="#itemsSelling") Items Selling
+					a(onclick="itemsSelling()") Items Selling
 				li
 					a(href="#itemsSold")	Items Sold
 				li 
@@ -99,7 +99,7 @@ footer(data-role="footer", data-theme="a", data-position="fixed")
 				li
 					a(href="#home", data-icon="home", data-mini="true", data-inline="true") Home
 				li
-					a(href="#shoppingCart", data-icon="grid", data-mini="true", data-inline="true") Shopping Cart
+					a(onclick="shoppingCart()", data-icon="grid", data-mini="true", data-inline="true") Shopping Cart
 				li
 					-if (data.loggedIn) {
 
