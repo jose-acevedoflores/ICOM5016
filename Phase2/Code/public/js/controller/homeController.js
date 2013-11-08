@@ -333,9 +333,11 @@ function placedBids(){
 						"<h2>" + item.itemName + "</h2>" + 
 						"<p>" + item.description + "</p>" +
 						"<p> Rating:" + item.rating + " </p>" + 
-						"<p class=\"ui-li-aside\"> Starting Price: " + item.price + "</p>" +
-						"</a>"+
-						"<a onclick=\"toIncreaseBid("+item.id+")\" href=\"#increaseBid\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\">increase bid</li>");
+						"<h2 class=\"ui-li-aside\"> Increase Bid:" +
+						"<input class=\"ui-li-aside\" id=\"nextBid\" class=\"ui-input-text ui-body-a ui-corner-all ui-shadow-inset\" value="+item.price+">" +
+						"<button type=\"button\" class=\"ui-li-aside\"> Bid"+
+						"</h2></a></li>"); //+
+						//"<a onclick=\"toIncreaseBid("+item.id+")\" href=\"#increaseBid\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\">increase bid</li>");
 
 					list.listview("refresh");	
 					var totalAmountField = $("#nextAcceptableBid");
