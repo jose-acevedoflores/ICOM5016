@@ -383,6 +383,36 @@ app.get("/itemsSold", function(req, res){
 
 	console.log("GET : Load itemsSold");
 	//Should response with a list of up to 10 invoices at a time. Every time the user hits the "Load more" button
+  //QUERY DB for products to display that this user has sold either by auction or sale
+  pg.connect(conString, function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
+
+    if(req.session.loggedIn)  
+    { 
+
+      client.query('SELECT product_id AS id, photo_url AS picture,  brand, model, description, invoice_id FROM has_invoice NATURAL JOIN product  WHERE seller_id = $1 ', [req.session.account_id],
+
+      function(err, result) {
+        //call `done()` to release the client back to the pool
+        done();
+
+        if(err) {
+          return console.error('error running query', err);
+        }
+        console.log(result.rows);
+
+        var temp = {"items" :  result.rows };
+        res.json(temp);
+      });
+    }
+    else // User is not logged in 
+    {
+      var temp = {"items" : "empty"}
+      res.json(temp);
+    }
+  });
 
 });
 
