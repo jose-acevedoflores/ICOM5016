@@ -579,9 +579,37 @@ function registerForm(){
 
 }
 
+
 /*******************************************************************************************************************************************/
 // Update Profile
 /*******************************************************************************************************************************************/
+var currentUsr = {};
+
+function getUserProfile(){
+	$.mobile.loading("show");
+	$.ajax({
+		url : "http://"+host+"/userProfile",
+		method: 'get',
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+			currentUsr = data.user;
+			
+			$.mobile.loading("hide");
+			$.mobile.navigate("#editProfile");
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			$.mobile.loading("hide");
+			if (data.status == 404){
+				alert("User not found.");
+			}
+			else {
+				alter("Internal Server Error.");
+			}
+		}
+	});
+}
 
 function editProfile(){
 	$.mobile.loading("show");
@@ -589,18 +617,18 @@ function editProfile(){
 	var formData = form.serializeArray();
 	console.log("form Data: " + formData);
 	var updUsr = ConverToJSON(formData);
-	updUser.id = currentUsr.id;
-	console.log("Updated User: " + JSON.stringify(updUsr));
-	var updCarJSON = JSON.stringify(updUsr);
+	
+	console.log("Updated Car: " + JSON.stringify(updUsr));
+	var updUsrJSON = JSON.stringify(updUsr);
 	$.ajax({
-		url : "http://"+host+"/userProfile",
+		url : "http://"+host+"/userProfile" ,
 		method: 'put',
-		data : updCarJSON,
+		data : updUsrJSON,
 		contentType: "application/json",
 		dataType:"json",
 		success : function(data, textStatus, jqXHR){
 			$.mobile.loading("hide");
-			$.mobile.navigate("#Profile");
+			$.mobile.navigate("#profilePage");
 		},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);

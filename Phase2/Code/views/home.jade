@@ -260,7 +260,7 @@ html
 						img(src = "http://www.icm.espol.edu.ec/estudiantes/2005/200511889/images/Juan%20Pueblo.jpg", border = "true", onclick="editProfile()")
 
 						br
-						a(href="#editProfile", type="submit", data-inline="true", data-theme="b", data-mini="true") Edit Profile
+						a(onclick= "getUserProfile()", type="submit", data-inline="true", data-theme="b", data-mini="true") Edit Profile
 						
 					div(class="ui-block-b")
 						p 
@@ -282,19 +282,19 @@ html
 			include common
 			div(data-role="content")
 				h1 Edit Profile:
-				form(id ="5", data-transition="pop")
+				form(id ="editProfileForm", data-transition="pop")
 					fieldset(data-role='controlgroup')
 						ul
 							
 							li 
-								label(for="emailAddress") Email:
-									input(id="emailAddress", type="text", name="emailAddress", placeholder="john_doe@domain.com")
+								label(for="updEmailAddress") Email:
+									input(id="updEmailAddress", type="text", name="emailAddress", placeholder="john_doe@domain.com")
 							li
 								label(for="password") Password:
-									input(id="editPassword", type="password", name="password", placeholder="Password")
+									input(id="updPassword", type="password", name="password", placeholder="Password")
 							li
-								label(for="editConfirmPassword") Confirm Password:
-									input(id="confirmPassword", type="password", name="confirmPassword"
+								label(for="updConfirmPassword") Confirm Password:
+									input(id="updConfirmPassword", type="password", name="confirmPassword"
 										placeholder ="Password")
 					center
 						fieldset(class="ui-grid-a")
