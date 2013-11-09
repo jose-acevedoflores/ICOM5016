@@ -30,6 +30,8 @@ app.configure(function(){
                 us know when to display the userName.
       account_id: The account Id of this user. This value is used in the queries to extract specific information like 
                   the products this user is selling, the shoppingCart, etc.
+      userDescription: Contains the description of the user to be displayed in the profile page.
+      rank: Contains the rank of the user to be displayed in the profile page.
 
 *****************/
 
@@ -50,7 +52,9 @@ app.get('/', function(request, response) {
 			"dataLength" : 0,
       "loggedIn" : false,
       "userName" : undefined,
-      "isAdmin" : false
+      "isAdmin" : false,
+      "userDescription" : undefined,
+      "rank" : 0
 		}
 	};
 
@@ -108,6 +112,8 @@ app.get('/', function(request, response) {
           viewData.data.loggedIn = request.session.loggedIn;
           viewData.data.userName = request.session.userName;
           viewData.data.isAdmin = request.session.isAdmin;
+          viewData.data.userDescription = request.session.userDescription;
+          viewData.data.rank = request.session.rank;
         }
 
     		response.render('home.jade', viewData);
@@ -441,7 +447,7 @@ app.put("/userLogin", function(req, res){
  	  client.connect();
   
 
-    var query = client.query("SELECT email_address, password, f_name, l_name, account_id, admin_flag FROM web_user WHERE (web_user.email_address = $1 AND web_user.password = $2)", [email, password]);
+    var query = client.query("SELECT email_address, password, f_name, l_name, account_id, admin_flag, user_description, rank FROM web_user WHERE (web_user.email_address = $1 AND web_user.password = $2)", [email, password]);
     
     query.on("row", function (row, result) {
     	result.addRow(row);
@@ -461,6 +467,8 @@ app.put("/userLogin", function(req, res){
         req.session.userName = result.rows[0].f_name + " " + result.rows[0].l_name;
         req.session.loggedIn = true;
         req.session.isAdmin = result.rows[0].admin_flag;
+        req.session.userDescription = result.rows[0].user_description;
+        req.session.rank = result.rows[0].rank;
 
         var temp = {"items" : { "userName" : req.session.userName } };
       	res.json(temp);
