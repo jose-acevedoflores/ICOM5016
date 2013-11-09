@@ -275,7 +275,7 @@ app.get('/shoppingCart', function(req, res){
     }
     else // User is not logged in 
     {
-      var temp = {"items" : "empty"}
+      var temp = {"items" : "empty"};
       res.json(temp);
     }
 	});
@@ -313,7 +313,7 @@ app.get('/placedBids', function(req, res) {
     }
     else // User is not logged in 
     {
-      var temp = {"items" : "empty"}
+      var temp = {"items" : "empty"};
       res.json(temp);
     }
   });
@@ -349,7 +349,7 @@ app.get('/itemsSelling', function(req, res){
     }
     else // User is not logged in 
     {
-      var temp = {"items" : "empty"}
+      var temp = {"items" : "empty"};
       res.json(temp);
     }
   });
@@ -415,7 +415,7 @@ app.get("/itemsSold", function(req, res){
     }
     else // User is not logged in 
     {
-      var temp = {"items" : "empty"}
+      var temp = {"items" : "empty"};
       res.json(temp);
     }
   });
