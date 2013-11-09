@@ -328,15 +328,17 @@ function placedBids(){
 					item = itemList[i];
 					console.log(item.id);
 
-					list.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
+					list.append("<li data-icon=\"false\" id=itemID"+item.id+"><a href=\"#\">" + 
 						"<img src="+ item.picture + ">"  + 
 						"<h2>" + item.itemName + "</h2>" + 
 						"<p>" + item.description + "</p>" +
 						"<p> Rating:" + item.rating + " </p>" + 
-						"<h2 class=\"ui-li-aside\"> Increase Bid:" +
-						"<input class=\"ui-li-aside\" id=\"nextBid\" class=\"ui-input-text ui-body-a ui-corner-all ui-shadow-inset\" value="+item.price+">" +
-						"<button type=\"button\" class=\"ui-li-aside\"> Bid"+
-						"</h2></a></li>"); //+
+						"<div data-role=\"fielcontain\" class=\"ui-li-aside\">" +
+						//"<h2 class=\"ui-li-aside\"> Increase Bid:" +
+						"<label for=\"nextBid\"> Increase Bid" +
+						"<input id=\"nextBid\" class=\"ui-input-text ui-body-a ui-corner-all ui-shadow-inset\" data-inline=\"true\" value="+item.price+">" +
+						"<input  onclick=\"increaseBid()\" type=\"submit\" data-role=\"button\" data-inline=\"true\" value=\"Bid\">"+
+						"</div></a></li>"); //+
 						//"<a onclick=\"toIncreaseBid("+item.id+")\" href=\"#increaseBid\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\">increase bid</li>");
 
 					list.listview("refresh");	
