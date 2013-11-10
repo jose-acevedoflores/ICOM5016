@@ -274,8 +274,8 @@ html
 					//a(href = "#itemsSelling", data-role= "button", data-inline = "false") Items sold by Juan
 				
 
-					a(href = "#placedBids", data-role= "button", data-inline = "false") Items #{data.userName} is bidding on
-					a(href = "#itemsSelling", data-role= "button", data-inline = "false") Items sold by #{data.userName}
+					a(onclick = "placedBids()", data-role= "button", data-inline = "false") Items #{data.userName} is bidding on
+					a(onclick= "itemsSelling()", data-role= "button", data-inline = "false") Items sold by #{data.userName}
 		
 		// Edit Profile
 		div(data-role="page", id = "editProfile")
