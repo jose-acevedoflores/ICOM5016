@@ -257,7 +257,7 @@ html
 
 				div(class="ui-grid-a")
 					div(class="ui-block-a")
-						img(src = "http://www.icm.espol.edu.ec/estudiantes/2005/200511889/images/Juan%20Pueblo.jpg", border = "true", onclick="editProfile()")
+						img(src ="#{data.userPicture}", border = "true", onclick="editProfile()")
 
 						br
 						a(onclick= "getUserProfile()", type="submit", data-inline="true", data-theme="b", data-mini="true") Edit Profile
@@ -296,9 +296,13 @@ html
 								label(for="updConfirmPassword") Confirm Password:
 									input(id="updConfirmPassword", type="password", name="confirmPassword"
 										placeholder ="Password")
+							lis
+								label(for="updMailAddress") Mailing Address:
+									textarea(id="updMailAddress", name="updMailAddress")
 							li
-								Label(for="updDescription") Description:
+								label(for="updDescription") Description:
 									textarea(id="updDescription", name="updDescription")
+
 					center
 						fieldset(class="ui-grid-a")
 							div(class="ui-block-a")

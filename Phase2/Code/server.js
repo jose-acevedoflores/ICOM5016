@@ -54,6 +54,7 @@ app.get('/', function(request, response) {
       "userName" : undefined,
       "isAdmin" : false,
       "userDescription" : undefined,
+      "userPicture" : undefined,
       "rank" : 0
 		}
 	};
@@ -106,6 +107,7 @@ app.get('/', function(request, response) {
          console.log(" session data: "+ request.session.loggedIn);
          console.log(" session data name: "+request.session.userName);
          console.log("Session data: " + request.session.account_id);
+         console.log("picture: " + request.session.userPicture);
 
         // If this user is logged in then save the variables in the corresponiding viewData fields.
         if(request.session.loggedIn){
@@ -113,6 +115,7 @@ app.get('/', function(request, response) {
           viewData.data.userName = request.session.userName;
           viewData.data.isAdmin = request.session.isAdmin;
           viewData.data.userDescription = request.session.userDescription;
+          viewData.data.userPicture = request.userPicture;
           viewData.data.rank = request.session.rank;
         }
 
@@ -275,7 +278,7 @@ app.get('/shoppingCart', function(req, res){
     }
     else // User is not logged in 
     {
-      var temp = {"items" : "empty"};
+      var temp = {"items" : []};
       res.json(temp);
     }
 	});
@@ -363,7 +366,7 @@ app.get("/userProfile", function(req, res){
   var client = new pg.Client(conString);
   client.connect();
 
-  var query = client.query("SELECT  password as updPassword, email_address as updEmailAddress from web_user where (web_user.account_id = $1)", [req.session.account_id]);
+  var query = client.query("SELECT email_address as updEmailAddress, password as updPassword, m_address_id as updMailAddress, user_description as updDescription from web_user where (web_user.account_id = $1)", [req.session.account_id]);
   
   query.on("row", function (row, result) {
      
@@ -447,7 +450,7 @@ app.put("/userLogin", function(req, res){
  	  client.connect();
   
 
-    var query = client.query("SELECT email_address, password, f_name, l_name, account_id, admin_flag, user_description, rank FROM web_user WHERE (web_user.email_address = $1 AND web_user.password = $2)", [email, password]);
+    var query = client.query("SELECT email_address, password, f_name, l_name, account_id, admin_flag, user_description, rank, user_pic FROM web_user WHERE (web_user.email_address = $1 AND web_user.password = $2)", [email, password]);
     
     query.on("row", function (row, result) {
     	result.addRow(row);
@@ -462,12 +465,14 @@ app.put("/userLogin", function(req, res){
 
       else {
         console.log(result.rows);
+         
 
         req.session.account_id = result.rows[0].account_id;
         req.session.userName = result.rows[0].f_name + " " + result.rows[0].l_name;
         req.session.loggedIn = true;
         req.session.isAdmin = result.rows[0].admin_flag;
         req.session.userDescription = result.rows[0].user_description;
+        req.session.userPicture = result.rows[0].user_pic;
         req.session.rank = result.rows[0].rank;
 
         var temp = {"items" : { "userName" : req.session.userName } };
