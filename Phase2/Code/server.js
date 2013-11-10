@@ -115,7 +115,7 @@ app.get('/', function(request, response) {
           viewData.data.userName = request.session.userName;
           viewData.data.isAdmin = request.session.isAdmin;
           viewData.data.userDescription = request.session.userDescription;
-          viewData.data.userPicture = request.userPicture;
+          viewData.data.userPicture = request.session.userPicture;
           viewData.data.rank = request.session.rank;
         }
 
