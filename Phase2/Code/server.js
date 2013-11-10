@@ -551,7 +551,13 @@ app.put("/placedBids/item:id", function(req, res){
 
 // REST Operation - HTTP PUT to sign Out
 app.put("/signOut", function(req, res){
-	loggedIn = false;
+  loggedIn = false;
+  userName = undefined;
+  isAdmin = undefined;
+  userDescription = undefined;
+  userPicture = undefined;
+  rank = 0;
+  req.session.destroy();
 	res.json(true);
 });
 

@@ -530,12 +530,13 @@ function signOut(){
 				showLoadMsg             : false,
 				reloadPage              : true});
 			//$.mobile.navigate('#home');
+
 			alert("Good Bye");
 		},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus : " + textStatus);
 			$.mobile.loading("hide");
-			alert("There was an error with your e-mail/password combination.");
+			alert("Log out failed.");
 		}
 	});
 
