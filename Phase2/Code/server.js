@@ -426,6 +426,42 @@ app.get("/itemsSold", function(req, res){
 
 });
 
+app.get("/manageUser", function(req, res){
+  console.log("Get : Load manageUser");
+
+  pg.connect(conString, function(err, client, done) {
+    if(err){
+      return console.error('error fetching client form pool', err);
+    }
+    if(req.session.loggedIn) {
+      client.query('SELECT account_id AS id, f_name ||\' \'|| l_name AS name, email_address, user_description AS description, rank, user_pic As picture FROM web_user WHERE web_user.admin_flag = FALSE', 
+        function(err, result) {
+          done();
+          if(err) {
+            return console.error('error running query', err);
+          }
+          console.log(result.rows); 
+          for (var i = 0; i< result.rows.length; ++i){
+            if (result.rows[i].picture== null) {
+              result.rows[i].picture = "http://www.icm.espol.edu.ec/estudiantes/2005/200511889/images/Juan%20Pueblo.jpg";
+            }
+
+            if (result.rows[i].description == null) {
+              result.rows[i].description = "Description not available";
+            }
+         }
+          var temp = {"usersList" : result.rows};
+          res.json(temp);
+        });
+
+    }
+    else {
+      var temp = {"usersList": "empty"};
+      res.json(temp);
+    }
+  });
+});
+
 
 app.get("/search/:query", function(req, res)  {
 	var query = req.params.query;
@@ -473,7 +509,13 @@ app.put("/userLogin", function(req, res){
         req.session.loggedIn = true;
         req.session.isAdmin = result.rows[0].admin_flag;
         req.session.userDescription = result.rows[0].user_description;
-        req.session.userPicture = result.rows[0].user_pic;
+        if (result.rows[0].user_pic== null) {
+          req.session.userPicture = "http://www.icm.espol.edu.ec/estudiantes/2005/200511889/images/Juan%20Pueblo.jpg";
+        }
+
+        else {
+          req.session.userPicture = result.rows[0].user_pic;
+        }
         req.session.rank = result.rows[0].rank;
 
         var temp = {"items" : { "userName" : req.session.userName } };

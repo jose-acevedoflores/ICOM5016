@@ -257,7 +257,7 @@ html
 
 				div(class="ui-grid-a")
 					div(class="ui-block-a")
-						img(src ="#{data.userPicture}", border = "true", onclick="editProfile()")
+						img(src ="#{data.userPicture}", width="120" height="120", border = "true", onclick="getUserProfile()")
 
 						br
 						a(onclick= "getUserProfile()", type="submit", data-inline="true", data-theme="b", data-mini="true") Edit Profile
@@ -356,6 +356,15 @@ html
 					h3 Store Name
 					a(onclick="addCategory()", data-role="button", data-rel="back", data-theme="b", data-icon="check", data-inline="true", data-mini="true") Add 
 					a(href="#", data-role="button", data-rel="back", data-inline="true", data-mini="true") Cancel
+
+		div(data-role="page", id="adminManageUser")
+			include common
+			div(data-role="content")
+				center
+					h1 Manage User:
+					ul(data-role="listview", data-inset="true", id="usersList")
+
+
 
 			div(data-role="page", id="cChildren")
 

@@ -812,6 +812,45 @@ function removeStore(){
 	storeToRemove = undefined;
 }
 
+
+function getUsersToManage() {
+	console.log("Admin manageUser");
+	$.mobile.loading("show");
+	$.ajax({
+		url : "http://"+host+"/manageUser",
+		method : "get",
+		contentType: "application/json",
+		success : function(data, textStatus, jqXHR){
+			$(document).on('pagebeforeshow', "#adminManageUser", function( event, ui) {
+				console.log("adminManageUser on pagebeforeshow listener");
+				var userList =data.usersList;
+				var len  = userList.length;
+				var list = $("#usersList");
+				list.empty();
+				var user;
+				list.append("<li data-role=\"list-divider\", data-theme=\"a\">  Users " );
+				for (var i = 0; i < len; ++i) {
+					user = userList[i];
+					console.log(user.id);
+					list.append("<li id ="+ user.id+" data-icon=\"false\"><a href=\"#\">" +
+						"<img src ="+user.picture+" > "+
+						"<h1>" +user.name+"</h1>"+
+						"<p>" +user.description+ "</p>" +
+						"<p> Rating : " + user.rank + " </p>" + 
+						"</a></li>");
+					list.listview("refresh");
+				}
+				$.mobile.loading("hide");
+			});
+			$.mobile.navigate("#adminManageUser");
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Users data not found!");
+		}
+	});
+}
+
 function addCategory(){
 	console.log("add category");
 }
