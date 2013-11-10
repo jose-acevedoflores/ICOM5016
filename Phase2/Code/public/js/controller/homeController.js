@@ -237,7 +237,7 @@ function shoppingCart(){
 						"<h2>" + item.brand + " " +item.model + "</h2>" + 
 						"<p>" + item.description + "</p>" +
 						"<p> Rating:" + item.rating + " </p>" + 
-						"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
+						"<p class=\"ui-li-aside\">Quantity: "+ item.quantity+ "    Price: " + item.price + "</p>" +
 						"</a>"+
 						"<a onclick=\"toRemove("+item.id+")\" href=\"#removeItemFromCart\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\">remove from cart</li>");
 					list.listview("refresh");	
@@ -420,15 +420,29 @@ function itemsSold(){
 
 			$(document).on('pagebeforeshow', "#itemsSold", function( event, ui ) {
 				console.log("itemsSold on pagebeforeshow listener");
+				var currentInvoiceId=undefined;
 				var itemList = data.items;
 				var len = itemList.length;
 				var list = $("#itemsSoldList");
 				list.empty();
 				var item;
 				var totalAmount = 0 ;
+				if(len > 0 )
+				{	
+					currentInvoiceId = itemList[0].invoice_id;
+					list.append("<li data-role=\"list-divider\", data-theme=\"a\"> Invoice Date (#) "+currentInvoiceId+"   <p class=\"ui-li-aside\"> Total Amount Paid: $3</p> </li>");
+				}
+
 				for (var i=0; i < len; ++i){
 					item = itemList[i];
-					list.append("<li data-role=\"list-divider\", data-theme=\"a\"> Invoice Date  <p class=\"ui-li-aside\"> Total Amount Paid: $3</p> </li>");
+					if(currentInvoiceId != item.invoice_id)
+					{	
+						currentInvoiceId = item.invoice_id;
+						list.append("<li data-role=\"list-divider\", data-theme=\"a\"> Invoice Date (#)  "+currentInvoiceId+" <p class=\"ui-li-aside\"> Total Amount Paid: $3</p> </li>");
+
+					}
+
+					currentInvoiceId = item.invoice_id;
 					list.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
 						"<img src="+ item.picture + ">"  + 
 						"<h2>" + item.itemName + "</h2>" + 
@@ -437,8 +451,10 @@ function itemsSold(){
 						"<p class=\"ui-li-aside\"> Purchased Price: $" + item.price + "</p>" +
 						"</a>");
 					list.listview("refresh");	
-					$.mobile.loading("hide");
+
+					
 				}
+				$.mobile.loading("hide");
 			});	
 			$.mobile.navigate("#itemsSold");
 		},

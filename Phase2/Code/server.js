@@ -261,7 +261,8 @@ app.get('/shoppingCart', function(req, res){
     if(req.session.loggedIn)  
 		{ 
 
-      client.query('SELECT product_id AS id, photo_url AS picture, price,seller_id AS rating, brand, model, description FROM sale_product WHERE sale_product.product_id IN (SELECT item_id FROM items_in_cart NATURAL JOIN shopping_cart WHERE shopping_cart.owner_id = $1)', [req.session.account_id],
+      client.query('SELECT  product_id AS id, photo_url AS picture, price,seller_id AS rating, brand, model, description, quantity FROM sale_product NATURAL JOIN (SELECT *, item_id AS product_id FROM shopping_cart NATURAL JOIN items_in_cart WHERE owner_id = $1 ) AS TempName', [req.session.account_id],
+
 
   		function(err, result) {
     		//call `done()` to release the client back to the pool
@@ -401,7 +402,7 @@ app.get("/itemsSold", function(req, res){
     if(req.session.loggedIn)  
     { 
 
-      client.query('SELECT product_id AS id, photo_url AS picture,  brand, model, description, invoice_id FROM has_invoice NATURAL JOIN product  WHERE seller_id = $1 ', [req.session.account_id],
+      client.query('SELECT product_id AS id, photo_url AS picture,  brand, model, description, invoice_id FROM has_invoice NATURAL JOIN product  WHERE seller_id = $1 ORDER BY invoice_id DESC  ', [req.session.account_id],
 
       function(err, result) {
         //call `done()` to release the client back to the pool
