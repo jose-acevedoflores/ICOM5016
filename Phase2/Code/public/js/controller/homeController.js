@@ -330,7 +330,7 @@ function placedBids(){
 
 					list.append("<li data-icon=\"false\" id=itemID"+item.id+"><a href=\"#\">" + 
 						"<img src="+ item.picture + ">"  + 
-						"<h2>" + item.itemName + "</h2>" + 
+						"<h2>" + item.model + "</h2>" + 
 						"<p>" + item.description + "</p>" +
 						"<p> Rating:" + item.rating + " </p>" + 
 						"<div data-role=\"fielcontain\" class=\"ui-li-aside\">" +
@@ -668,6 +668,8 @@ function getUser(id) {
 		}
 	});
 }
+
+
 
 function getUserProfileInfo(){
 	$.mobile.loading("show");

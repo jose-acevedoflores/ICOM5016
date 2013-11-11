@@ -174,8 +174,21 @@ html
 									input(id="password", type="password", name="password", placeholder="Password")
 							li
 								label(for="confirmPassword") Confirm Password:
-									input(id="confirmPassword", type="password", name="confirmPassword"
-										placeholder ="Password")
+									input(id="confirmPassword", type="password", name="confirmPassword", placeholder ="Password")
+							li
+								label(for="description") Description:
+									textarea(id="description", value="", name="description")
+							li
+								label(for="mailAddress") Mailing Address:
+									textarea(id="mailAddress", name="mailAddress")
+							li
+								label(for="billMailAddress") Billing Address:
+									textarea(id="billMailAddress", name="billMailAddress")
+							li
+								label(for="c_card") Credit Card Number:
+									input(id="c_card", name="c_card", placeholder="902902")
+							
+
 					center
 						a(data-role="button", data-inline="true",
 						data-icon="check", data-theme="a", data-transition="flip", dat-corners="true"
@@ -218,6 +231,8 @@ html
 							li
 								label(for="iPic") Item Picture:
 									input(id="iPic", type="file", name="iPic", accept="image/*", capture)
+							
+
 							p Selling or Auctioning?
 							li
 								label(for="Selling Choice", class="select")
@@ -290,25 +305,29 @@ html
 				h1 Edit Profile:
 				form(id ="editProfileForm", data-transition="pop")
 					fieldset(data-role='controlgroup')
-						ul
+						ul(id="editForm")
 							
 							li 
 								label(for="updEmailAddress") Email:
-									input(id="updEmailAddress", type="text", name="emailAddress", placeholder="john_doe@domain.com")
+									input(id="updEmailAddress", value="#{data.email}", type="text", name="emailAddress", placeholder="john_doe@domain.com")
 							li
 								label(for="updPassword") Password:
-									input(id="updPassword", type="password", name="password", placeholder="Password")
+									input(id="updPassword", value="#{data.password}", type="password", name="password", placeholder="Password")
 							li
 								label(for="updConfirmPassword") Confirm Password:
-									input(id="updConfirmPassword", type="password", name="confirmPassword"
-										placeholder ="Password")
-							lis
+									input(id="updConfirmPassword", value="#{data.password}", type="password", name="confirmPassword", placeholder ="Password")
+							li
+								label(for="description") Description:
+									textarea(id="description", value="", name="description")
+							li
 								label(for="updMailAddress") Mailing Address:
 									textarea(id="updMailAddress", name="updMailAddress")
 							li
-								label(for="updDescription") Description:
-									textarea(id="updDescription", name="updDescription")
-
+								label(for="updBillMailAddress") Billing Address:
+									textarea(id="updBillMailAddress", name="updBillMailAddress")
+							li
+								label(for="updC_card") Credit Card Number:
+									input(id="updC_card", name="updC_card", placeholder="902902")
 					center
 						fieldset(class="ui-grid-a")
 							div(class="ui-block-a")

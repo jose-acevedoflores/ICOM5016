@@ -55,9 +55,13 @@ app.get('/', function(request, response) {
       "isAdmin" : false,
       "userDescription" : undefined,
       "userPicture" : undefined,
-      "rank" : 0
+      "rank" : 0,
+      "email" : "",
+      "password" : ""
 		}
 	};
+
+   
 
 	//Query the DB for all the Categories.
 	pg.connect(conString, function(err, client, done) {
@@ -117,6 +121,9 @@ app.get('/', function(request, response) {
           viewData.data.userDescription = request.session.userDescription;
           viewData.data.userPicture = request.session.userPicture;
           viewData.data.rank = request.session.rank;
+          viewData.data.email = request.session.email;
+          viewData.data.email = request.session.password;
+
         }
 
     		response.render('home.jade', viewData);
@@ -372,6 +379,7 @@ app.get("/userProfile", function(req, res){
   query.on("row", function (row, result) {
      
       result.addRow(row);
+
   });
 
   query.on("end", function (result) {
@@ -381,7 +389,15 @@ app.get("/userProfile", function(req, res){
       res.send("User not found.");
     }
     else {  
-      var response = {"user" : result.rows[0]};
+      for (var i = 0; i < result.rows.length; i++) {
+        if (result.rows[i].updDescription==null) {
+          result.rows[i].updDescription = "";
+        }
+
+       
+      }
+      var response = {"user" : result.rows};
+
       client.end();
       
       res.json(response);
@@ -610,7 +626,8 @@ app.put("/userLogin", function(req, res){
       else {
         console.log(result.rows);
          
-
+        req.session.email = result.rows[0].email_address;
+        req.session.password = result.rows[0].password;
         req.session.account_id = result.rows[0].account_id;
         req.session.userName = result.rows[0].f_name + " " + result.rows[0].l_name;
         req.session.loggedIn = true;
@@ -706,6 +723,8 @@ app.put("/signOut", function(req, res){
   userDescription = undefined;
   userPicture = undefined;
   rank = 0;
+  email = undefined;
+  password = undefined;
   req.session.destroy();
 	res.json(true);
 });
