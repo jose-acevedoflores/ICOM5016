@@ -1,4 +1,4 @@
-var host = "localhost:5000";//"192.168.1.3:4000";
+var host = "192.168.1.3:5000";//"192.168.1.3:4000";
 
 /*******************************************************************************************************************************************/
 // Home 
@@ -524,14 +524,8 @@ function signOut(){
 		success : function(data, textStatus,jqXHR){
 			$.mobile.loading("hide");
 			console.log("algo");
-			$.mobile.changePage('#home', 
-				{ allowSamePageTransition : true,
-				transition              : 'none',
-				showLoadMsg             : false,
-				reloadPage              : true});
-			//$.mobile.navigate('#home');
-
 			alert("Good Bye");
+			document.location.href = "http://"+host;
 		},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus : " + textStatus);
