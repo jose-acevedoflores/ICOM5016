@@ -122,7 +122,7 @@ app.get('/', function(request, response) {
           viewData.data.userPicture = request.session.userPicture;
           viewData.data.rank = request.session.rank;
           viewData.data.email = request.session.email;
-          viewData.data.email = request.session.password;
+          viewData.data.password = request.session.password;
 
         }
 
