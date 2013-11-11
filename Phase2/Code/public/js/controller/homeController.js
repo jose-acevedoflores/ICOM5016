@@ -619,33 +619,40 @@ function getUser(id) {
 	console.log("Admin manageUser");
 	$.mobile.loading("show");
 	$.ajax({
-		url : "http://"+host+"/manageUser",
+		url : "http://"+host+"/userProfile"+id,
 		method : "get",
 		contentType: "application/json",
 		success : function(data, textStatus, jqXHR){
-			$(document).on('pagebeforeshow', "#adminManageUser", function( event, ui) {
-				console.log("adminManageUser on pagebeforeshow listener");
-				var userList =data.usersList;
-				var len  = userList.length;
-				var list = $("#usersList");
-				list.empty();
-				var user;
-				list.append("<li data-role=\"list-divider\", data-theme=\"a\">  Users " );
-				for (var i = 0; i < len; ++i) {
-					user = userList[i];
-					console.log(user.id);
-					list.append("<li id ="+ user.id+" data-icon=\"false\">"+
-						"<a href=\"#\" onclick=\"getUser("+user.id+")\">" +
-						"<img src ="+user.picture+" > "+
-						"<h1>" +user.name+"</h1>"+
-						"<p>" +user.description+ "</p>" +
-						"<p> Rating : " + user.rank + " </p>" + 
-						"</a></li>");
-					list.listview("refresh");
-				}
+			$(document).on('pagebeforeshow', "#xProfilePage", function( event, ui) {
+				console.log("xProfilePage on pagebeforeshow listener");
+				var xUser =data.user;
+
+				var html = '<div class = \'ui-grid-a\'>'+
+					'<h3>'+xUser[0].name+'</h3>'+
+					'<br></br>'+
+					'</div>' +
+					'<div class =\'ui-grid-b\'></div>' +
+					'</div>' +
+					'<div class =\'ui-grid-a\'>' +
+					'<div class=\'ui-block-a\'>' +
+					'<img src='+xUser[0].picture+' width=\'120\' height=\'120\' border=\'true\'></img>'+
+					'<br></br>'+
+					'</div>'+
+					'<div class =\'ui-block-a\'>'+
+					'<p>'+
+					'<b> Current Seller Rank: '+xUser[0].rank+'</b>'+
+					'</p>'+
+					'<p> <em>'+xUser[0].description+'</em></p></div>';
+			
+				var profileField = $('#xUserProfile');
+				profileField.empty();
+				profileField.append(html);
 				$.mobile.loading("hide");
 			});
-			$.mobile.navigate("#adminManageUser");
+			$.mobile.navigate("#xProfilePage");
+			// var profilefield = $("#xUserProfile");
+			// profilefield .empty();
+			// profilefield .append("$"+html);
 		},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
@@ -852,44 +859,6 @@ function removeStore(){
 }
 
 
-function getUser(id) {
-	console.log("Admin manageUser");
-	$.mobile.loading("show");
-	$.ajax({
-		url : "http://"+host+"/manageUser",
-		method : "get",
-		contentType: "application/json",
-		success : function(data, textStatus, jqXHR){
-			$(document).on('pagebeforeshow', "#adminManageUser", function( event, ui) {
-				console.log("adminManageUser on pagebeforeshow listener");
-				var userList =data.usersList;
-				var len  = userList.length;
-				var list = $("#usersList");
-				list.empty();
-				var user;
-				list.append("<li data-role=\"list-divider\", data-theme=\"a\">  Users " );
-				for (var i = 0; i < len; ++i) {
-					user = userList[i];
-					console.log(user.id);
-					list.append("<li id ="+ user.id+" data-icon=\"false\">"+
-						"<a href=\"#\" onclick=\"getUser("+user.id+")\">" +
-						"<img src ="+user.picture+" > "+
-						"<h1>" +user.name+"</h1>"+
-						"<p>" +user.description+ "</p>" +
-						"<p> Rating : " + user.rank + " </p>" + 
-						"</a></li>");
-					list.listview("refresh");
-				}
-				$.mobile.loading("hide");
-			});
-			$.mobile.navigate("#adminManageUser");
-		},
-		error: function(data, textStatus, jqXHR){
-			console.log("textStatus: " + textStatus);
-			alert("Users data not found!");
-		}
-	});
-}
 
 function getUsersToManage() {
 	console.log("Admin manageUser");

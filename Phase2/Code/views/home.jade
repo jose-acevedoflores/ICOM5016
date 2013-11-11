@@ -273,6 +273,13 @@ html
 					a(onclick = "placedBids()", data-role= "button", data-inline = "false") Items #{data.userName} is bidding on
 					a(onclick= "itemsSelling()", data-role= "button", data-inline = "false") Items sold by #{data.userName}
 		
+		// Profile for other to see
+		div(data-role="page", id = "xProfilePage", data-theme = "d")
+			include common
+			div(data-role= "content", data-theme="d", data-content-theme="b", id="xUserProfile")
+					
+				
+
 		// Edit Profile
 		div(data-role="page", id = "editProfile")
 			include common
