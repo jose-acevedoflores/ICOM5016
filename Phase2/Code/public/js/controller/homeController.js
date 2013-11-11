@@ -616,7 +616,7 @@ function registerForm(){
 var currentUsr = {};
 
 function getUser(id) {
-	console.log("Admin manageUser");
+	console.log("Admin manages");
 	$.mobile.loading("show");
 	$.ajax({
 		url : "http://"+host+"/userProfile"+id,
@@ -635,13 +635,24 @@ function getUser(id) {
 					'</div>' +
 					'<div class =\'ui-grid-a\'>' +
 					'<div class=\'ui-block-a\'>' +
-					'<img src='+xUser[0].picture+' width=\'120\' height=\'120\' border=\'true\'></img>'+
-					'<br></br>'+
+						'<img src='+xUser[0].picture+' width=\'120\' height=\'120\' border=\'true\'></img>'+
+						'<br></br>'+
 					'</div>'+
-					'<div class =\'ui-block-a\'>'+
-					'<p>'+
-					'<b> Current Seller Rank: '+xUser[0].rank+'</b>'+
-					'</p>'+
+					'<div class =\'ui-block-b\'>'+
+						'<p>'+
+							'<b> Current Seller Rank: '+xUser[0].rank+'</b>'+
+							'<br></br>'+
+								'<label for="ranking"> Rank   '+
+								'<select name=\'ranking\' id=\'ranking\'>'+
+									'<option value=\'5\'>5</option>'+
+									'<option value=\'4\'>4</option>'+
+									'<option value=\'3\'>3</option>'+
+									'<option value=\'2\'>2</option>'+
+									'<option value=\'1\'>1</option>'+
+									'<option value=\'0\'>0</option>'+
+								'</select></label>'+
+								'<button href=\'#\' data-role=\'button\' value=\'Rank\'>Rank  </button>'+
+						'</p>'+
 					'<p> <em>'+xUser[0].description+'</em></p></div>';
 			
 				var profileField = $('#xUserProfile');
@@ -650,9 +661,6 @@ function getUser(id) {
 				$.mobile.loading("hide");
 			});
 			$.mobile.navigate("#xProfilePage");
-			// var profilefield = $("#xUserProfile");
-			// profilefield .empty();
-			// profilefield .append("$"+html);
 		},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
@@ -899,7 +907,97 @@ function getUsersToManage() {
 	});
 }
 
+function getAdminsToManage() {
+	console.log("Admin manageAdmin");
+	$.mobile.loading("show");
+	$.ajax({
+		url : "http://"+host+"/manageAdmins",
+		method : "get",
+		contentType: "application/json",
+		success : function(data, textStatus, jqXHR){
+			$(document).on('pagebeforeshow', "#adminManageAdmins", function( event, ui) {
+				console.log("adminManageUser on pagebeforeshow listener");
+				var adminsList =data.adminsList;
+				var len  = adminsList.length;
+				var list = $("#adminsList");
+				list.empty();
+				var admin;
+				list.append("<li data-role=\"list-divider\", data-theme=\"a\">  Admins " );
+				for (var i = 0; i < len; ++i) {
+					admin = adminsList[i];
+					console.log(admin.id);
+					list.append("<li id ="+ admin.id+" data-icon=\"false\">"+
+						"<a href=\"#\" onclick=\"getAdmin("+admin.id+")\">" +
+						"<img src ="+admin.picture+" > "+
+						"<h1>" +admin.name+"</h1>"+
+						"<p>" +admin.description+ "</p>" +
+						"<p> Rating : " + admin.rank + " </p>" + 
+						"</a></li>");
+					list.listview("refresh");
+				}
+				$.mobile.loading("hide");
+			});
+			$.mobile.navigate("#adminManageAdmins");
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Admins data not found!");
+		}
+	});
+}
+function getAdmin(id) {
+	console.log("Admin manages");
+	$.mobile.loading("show");
+	$.ajax({
+		url : "http://"+host+"/adminProfile"+id,
+		method : "get",
+		contentType: "application/json",
+		success : function(data, textStatus, jqXHR){
+			$(document).on('pagebeforeshow', "#xAdminPage", function( event, ui) {
+				console.log("xAdminPage on pagebeforeshow listener");
+				var xAdmin =data.user;
 
+				var html = '<div class = \'ui-grid-a\'>'+
+					'<h3>'+xAdmin[0].name+'</h3>'+
+					'<br></br>'+
+					'</div>' +
+					'<div class =\'ui-grid-b\'></div>' +
+					'</div>' +
+					'<div class =\'ui-grid-a\'>' +
+					'<div class=\'ui-block-a\'>' +
+						'<img src='+xAdmin[0].picture+' width=\'120\' height=\'120\' border=\'true\'></img>'+
+						'<br></br>'+
+					'</div>'+
+					'<div class =\'ui-block-b\'>'+
+						'<p>'+
+							'<b> Current Seller Rank: '+xAdmin[0].rank+'</b>'+
+							'<br></br>'+
+								'<label for="ranking"> Rank   '+
+								'<select name=\'ranking\' id=\'ranking\'>'+
+									'<option value=\'5\'>5</option>'+
+									'<option value=\'4\'>4</option>'+
+									'<option value=\'3\'>3</option>'+
+									'<option value=\'2\'>2</option>'+
+									'<option value=\'1\'>1</option>'+
+									'<option value=\'0\'>0</option>'+
+								'</select></label>'+
+								'<button href=\'#\' data-role=\'button\' value=\'Rank\'>Rank  </button>'+
+						'</p>'+
+					'<p> <em>'+xAdmin[0].description+'</em></p></div>';
+			
+				var profileField = $('#xAdminProfile');
+				profileField.empty();
+				profileField.append(html);
+				$.mobile.loading("hide");
+			});
+			$.mobile.navigate("#xAdminPage");
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Admin data not found!");
+		}
+	});
+}
 
 function addCategory(){
 	console.log("add category");

@@ -273,11 +273,14 @@ html
 					a(onclick = "placedBids()", data-role= "button", data-inline = "false") Items #{data.userName} is bidding on
 					a(onclick= "itemsSelling()", data-role= "button", data-inline = "false") Items sold by #{data.userName}
 		
-		// Profile for other to see
+		// Profile for admin to see
 		div(data-role="page", id = "xProfilePage", data-theme = "d")
 			include common
-			div(data-role= "content", data-theme="d", data-content-theme="b", id="xUserProfile")
-					
+			div(data-role= "content", data-theme="d", data-content-theme="b")
+				div(id="xUserProfile")
+				a(href="#", data-role="button", data-rel="back",
+									data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+									data-icon-shadow="true", data-mini="true") Delete User
 				
 
 		// Edit Profile
@@ -371,7 +374,23 @@ html
 					h1 Manage User:
 					ul(data-role="listview", data-inset="true", id="usersList")
 
+		div(data-role="page", id="adminManageAdmins")
+			include common
+			div(data-role="content")
+				center
+					h1 Manage Admins:
+					a(href="#register", data-role="button",
+									data-icon="plus", data-theme="a", data-transition="flip", dat-corners="true"
+									data-icon-shadow="true", data-mini="true") Add Admin
+					ul(data-role="listview", data-inset="true", id="adminsList")
 
+		div(data-role="page", id = "xAdminPage", data-theme = "d")
+			include common
+			div(data-role= "content", data-theme="d", data-content-theme="b")
+				div(id="xAdminProfile")
+				a(href="#", data-role="button", data-rel="back",
+									data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+									data-icon-shadow="true", data-mini="true") Delete Admin
 
 			div(data-role="page", id="cChildren")
 

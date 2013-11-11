@@ -414,8 +414,6 @@ app.get("/userProfile:id", function(req, res){
           }
          
           var temp = {"user" : result.rows};
-          console.log("--------------------");
-          console.log(temp);
           res.json(temp);
         });
 
@@ -427,6 +425,41 @@ app.get("/userProfile:id", function(req, res){
   });
 });
 
+app.get("/adminProfile:id", function(req, res){
+  var id = req.params.id;
+  console.log("Get xUserProfile : " + id);
+  pg.connect(conString, function(err, client, done) {
+    if(err){
+      return console.error('error fetching client form pool', err);
+    }
+    if(req.session.loggedIn) {
+      client.query('SELECT f_name ||\' \'|| l_name AS name, user_description AS description, rank, user_pic As picture FROM web_user WHERE (web_user.admin_flag = TRUE AND web_user.account_id = $1)',[id], 
+        function(err, result) {
+          done();
+          if(err) {
+            return console.error('error running query', err);
+          }
+          console.log(result.rows); 
+          
+          if (result.rows[0].picture== null) {
+             result.rows[0].picture = "http://www.icm.espol.edu.ec/estudiantes/2005/200511889/images/Juan%20Pueblo.jpg";
+           }
+
+          if (result.rows[0].description == null) {
+            result.rows[0].description = "Description not available";
+          }
+         
+          var temp = {"user" : result.rows};
+          res.json(temp);
+        });
+
+    }
+    else {
+      var temp = {"user": "[]"};
+      res.json(temp);
+    }
+  });
+});
 
 app.get("/itemsSold", function(req, res){
 
@@ -501,6 +534,41 @@ app.get("/manageUser", function(req, res){
   });
 });
 
+app.get("/manageAdmins", function(req, res){
+  console.log("Get : Load manageUser");
+
+  pg.connect(conString, function(err, client, done) {
+    if(err){
+      return console.error('error fetching client form pool', err);
+    }
+    if(req.session.loggedIn) {
+      client.query('SELECT account_id AS id, f_name ||\' \'|| l_name AS name, email_address, user_description AS description, rank, user_pic As picture FROM web_user WHERE web_user.admin_flag = TRUE', 
+        function(err, result) {
+          done();
+          if(err) {
+            return console.error('error running query', err);
+          }
+          console.log(result.rows); 
+          for (var i = 0; i< result.rows.length; ++i){
+            if (result.rows[i].picture== null) {
+              result.rows[i].picture = "http://www.icm.espol.edu.ec/estudiantes/2005/200511889/images/Juan%20Pueblo.jpg";
+            }
+
+            if (result.rows[i].description == null) {
+              result.rows[i].description = "Description not available";
+            }
+         }
+          var temp = {"adminsList" : result.rows};
+          res.json(temp);
+        });
+
+    }
+    else {
+      var temp = {"adminsList": "empty"};
+      res.json(temp);
+    }
+  });
+});
 
 app.get("/search/:query", function(req, res)  {
 	var query = req.params.query;
