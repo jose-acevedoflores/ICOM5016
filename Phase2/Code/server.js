@@ -159,7 +159,7 @@ app.get('/home',function(req, res ) {
 	});
 
 
-} );
+});
 
 
 app.get('/stores/:store/:category' , function(req, res){
@@ -633,14 +633,41 @@ app.put("/userLogin", function(req, res){
         req.session.loggedIn = true;
         req.session.isAdmin = result.rows[0].admin_flag;
         req.session.userDescription = result.rows[0].user_description;
+        req.session.rank = result.rows[0].rank;
+
         if (result.rows[0].user_pic== null) {
           req.session.userPicture = "http://www.icm.espol.edu.ec/estudiantes/2005/200511889/images/Juan%20Pueblo.jpg";
         }
-
         else {
           req.session.userPicture = result.rows[0].user_pic;
         }
-        req.session.rank = result.rows[0].rank;
+
+        //Check if the user who just logged in has an existing shopping cart
+        pg.connect(conString, function(err, client, done) {
+          if(err) {
+            return console.error('error fetching client from pool', err);
+          }
+
+          client.query("SELECT shopping_cart_id FROM shopping_cart WHERE owner_id = $1", [req.session.account_id],
+
+            function(err, result) {
+              //call `done()` to release the client back to the pool
+             
+
+              if(err) {
+                
+                done();
+                return console.error('error running query', err);
+              }
+              //If this user has no shopping cart, create it
+              if(result.rows.length == 0)
+              {
+                client.query("INSERT INTO shopping_cart(total_items , owner_id) VALUES(0, $1) ", [req.session.account_id]);
+              }
+
+              done();
+            });
+        });
 
         var temp = {"items" : { "userName" : req.session.userName } };
       	res.json(temp);
@@ -715,6 +742,44 @@ app.put("/placedBids/item:id", function(req, res){
 	// }
 });
 
+app.put("/addItemToCart/:itemId", function(req, res){
+  console.log("PUT : add Item to cart");
+
+  pg.connect(conString, function(err, client, done) {
+    if(err){
+      return console.error('error fetching client form pool', err);
+    }
+    if(req.session.loggedIn) {
+      client.query('INSERT INTO items_in_cart(shopping_cart_id, item_id, quantity) VALUES((SELECT shopping_cart_id FROM shopping_cart WHERE owner_id = $1), $2, 1) ', [req.session.account_id, req.params.itemId],
+        function(err, result) {
+          done();
+          if(err) {
+            return console.error('error running query', err);
+          }
+          console.log(result.rows); 
+
+          res.json(true);
+        });
+
+      client.query('UPDATE shopping_cart SET total_items = total_items + 1 WHERE owner_id = $1', [req.session.account_id],
+        function(err, result) {
+          done();
+          if(err) {
+            return console.error('error running query', err);
+          }
+          console.log(result.rows); 
+
+          res.json(true);
+        });
+
+    }
+    else {
+
+      res.json(false);
+    }
+  });
+});
+
 // REST Operation - HTTP PUT to sign Out
 app.put("/signOut", function(req, res){
   loggedIn = false;
@@ -780,14 +845,30 @@ app.post('/newItem', function(req, res){
 ****************************************************************************************************************************************************/
 
 app.del("/shoppingCart/delete/:id", function(req, res){
-	var id = req.params.id;
-	console.log("DEL: id= " +id);
+	var itemId = req.params.id;
+	console.log("DEL: id= " +itemId);
 
-	for (var i = 0 ; i < shoppingCartVar.length ; i++){
-		if(shoppingCartVar[i].id === id)
-			shoppingCartVar.splice(i, 1);
-	}
-	res.json(true);
+  //QUERY DB to update the total_items count of this user and the items_in_cart entries.
+  pg.connect(conString, function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
+
+    client.query('DELETE FROM items_in_cart WHERE item_id = $1 AND shopping_cart_id IN (SELECT shopping_cart_id FROM shopping_cart WHERE owner_id = $2)', [itemId, req.session.account_id],
+
+      function(err, result) {
+        //call `done()` to release the client back to the pool
+       
+
+        if(err) {
+          done();
+          return console.error('error running query', err);
+        }
+        client.query("UPDATE shopping_cart SET total_items = total_items-1 WHERE owner_id = $1", [req.session.account_id]);
+        done();
+        res.json(true);
+      });
+  });	
 
 });
 

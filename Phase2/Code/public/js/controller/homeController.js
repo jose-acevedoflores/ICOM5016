@@ -1,5 +1,9 @@
 var host = "192.168.1.3:5000";//"192.168.1.3:4000";
 
+
+// This global variable is used to keep track of the item the user is viewing in the itemsPage. 
+//This variable gets set with the findItem(itemId) function 
+var currentItemToAdd = undefined;
 /*******************************************************************************************************************************************/
 // Home 
 /*******************************************************************************************************************************************/
@@ -68,7 +72,8 @@ function findStore(store){
 						item = itemList[i];
 						list = $("#"+item.category_name+"STORE"+item.parent_category_id+"List")
 						
-						list.append("<li><a href=\"#\">" + 
+						list.append("<li>"+
+							"<a href='#' onclick=\"findItem(" +item.product_id + ")\">" + 
 							"<img src="+ item.photo_url + ">"  + 
 							"<h2>" + item.brand + " "+item.model + "</h2>" + 
 							"<p>" + item.description + "</p>" +
@@ -117,7 +122,8 @@ function findCategory(store, category){
 				for (var i=0; i < len; ++i){
 					item = itemList[i];
 
-					list.append("<li><a href=\"#\">" + 
+					list.append("<li>" + 
+						"<a href='#' onclick=\"findItem(" +item.product_id + ")\">" + 
 						"<img src="+ item.photo_url + ">"  + 
 						"<h2>" + item.brand + " "+item.model + "</h2>" + 
 						"<p>" + item.description + "</p>" +
@@ -156,6 +162,8 @@ function findCategory(store, category){
 };
 
 function findItem(itemId){
+
+	currentItemToAdd = itemId;
 
 	$.mobile.loading("show");
 	console.log("findItem function with itemId = " + itemId);
@@ -1007,6 +1015,32 @@ function toAddCategoryToStore(currentStore){
 function cancelAddStore(){
 	storeToAdd = undefined;
 }
+
+
+function addItemToCart(){
+	itemId = currentItemToAdd;
+	$.mobile.loading("show");
+	console.log("addItemToCart function with itemId = " + itemId);
+	$.ajax({
+		url : "http://"+host+"/addItemToCart/"+itemId,
+		method: 'put',
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+				alert("Added item to Cart");
+						
+				$.mobile.loading("hide");			
+			
+
+		},
+		error: function(data, textStatus, jqXHR){
+			$.mobile.loading("hide");
+			console.log("textStatus: " + textStatus);
+			alert("error in add to cart");
+		}
+	});
+}
+
 
 //This enables the search bar to send queries to the server
 $(document).ready(function() {
