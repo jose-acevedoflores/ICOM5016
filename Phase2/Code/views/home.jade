@@ -230,14 +230,14 @@ html
 									input(id="iPrice", type="text", name="iPrice", placeholder="$1.99")
 							li
 								label(for="iPic") Item Picture:
-									input(id="iPic", type="file", name="iPic", accept="image/*", capture)
+									input(id="iPic", type="text", name="iPic", accept="image/*", capture)
 							
 
 							p Selling or Auctioning?
 							li
-								label(for="Selling Choice", class="select")
-									select(id="selling choice")
-										option(value="selling") Selling
+								label(for="selling Choice", class="select")
+									select(id="sellChoice", name="sellChoice")
+										option(value="selling", selected="selected") Selling
 										option(value="auctioning") Auctioning									
 								p
 

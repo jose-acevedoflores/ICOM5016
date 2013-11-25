@@ -834,9 +834,37 @@ app.post('/addStore/storeName/:storeName', function(req, res){
 
 
 app.post('/newItem', function(req, res){
-	var newItem = new StoreItem(req.body.iName, stores.ELECTRONICS.name, stores.ELECTRONICS.categories.TV.name, req.body.iPrice, req.body.iDescript, "","", "91347");
-	data.push(newItem);
-	res.json(true);
+
+
+  //QUERY DB to add an item for this seller
+  pg.connect(conString, function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
+    var q;
+    console.log("afjadf" + req.body.sellChoice);
+    if(req.body.sellChoice === "selling"){
+      q =  "INSERT INTO sale_product(seller_id, description, photo_url, category_id, price) VALUES( $1, '"+req.body.iDescript+"', '"+ req.body.iPic +"', 9, '"+ req.body.iPrice +"' )";
+    }
+    else if(req.body.sellChoice === "auctioning"){
+      q = "INSERT INTO auction_product(seller_id, description, photo_url, category_id, starting_price) VALUES( $1, "+req.body.iDescript+", "+ req.body.iPic +", 9, "+ req.body.iPrice +" )";
+    }
+    client.query(q, [req.session.account_id],
+
+      function(err, result) {
+        //call `done()` to release the client back to the pool
+       
+
+        if(err) {
+          done();
+          return console.error('error running query', err);
+        }
+        client.query("UPDATE shopping_cart SET total_items = total_items-1 WHERE owner_id = $1", [req.session.account_id]);
+        done();
+        res.json(true);
+      });
+  }); 
+
 });
 
 
