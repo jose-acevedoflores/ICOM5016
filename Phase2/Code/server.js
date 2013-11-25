@@ -268,7 +268,7 @@ app.get('/shoppingCart', function(req, res){
     if(req.session.loggedIn)  
 		{ 
 
-      client.query('SELECT  product_id AS id, photo_url AS picture, price,seller_id AS rating, brand, model, description, quantity FROM sale_product NATURAL JOIN (SELECT *, item_id AS product_id FROM shopping_cart NATURAL JOIN items_in_cart WHERE owner_id = $1 ) AS TempName', [req.session.account_id],
+      client.query('SELECT  product_id AS id, photo_url AS picture, price,seller_id AS rating, brand, model, description, quantity, total_amount FROM sale_product NATURAL JOIN (SELECT *, item_id AS product_id FROM shopping_cart NATURAL JOIN items_in_cart WHERE owner_id = $1 ) AS TempName', [req.session.account_id],
 
 
   		function(err, result) {
@@ -662,7 +662,7 @@ app.put("/userLogin", function(req, res){
               //If this user has no shopping cart, create it
               if(result.rows.length == 0)
               {
-                client.query("INSERT INTO shopping_cart(total_items , owner_id) VALUES(0, $1) ", [req.session.account_id]);
+                client.query("INSERT INTO shopping_cart(total_items , total_amount , owner_id) VALUES(0, 0, $1) ", [req.session.account_id]);
               }
 
               done();
@@ -760,18 +760,13 @@ app.put("/addItemToCart/:itemId", function(req, res){
 
           res.json(true);
         });
-
-      client.query('UPDATE shopping_cart SET total_items = total_items + 1 WHERE owner_id = $1', [req.session.account_id],
-        function(err, result) {
-          done();
-          if(err) {
-            return console.error('error running query', err);
-          }
-          console.log(result.rows); 
-
-          res.json(true);
-        });
-
+      //Rule to update quantity in shopping_cart 
+      /* CREATE RULE update_item_count AS ON INSERT TO items_in_cart 
+      DO UPDATE shopping_cart SET total_items = total_items + 1 
+      WHERE owner_id IN 
+      (SELECT owner_id from shopping_cart 
+      where shopping_cart_id = NEW.shopping_cart_id)*/
+    
     }
     else {
 
@@ -841,8 +836,8 @@ app.post('/newItem', function(req, res){
     if(err) {
       return console.error('error fetching client from pool', err);
     }
+
     var q;
-    console.log("afjadf" + req.body.sellChoice);
     if(req.body.sellChoice === "selling"){
       q =  "INSERT INTO sale_product(seller_id, description, photo_url, category_id, price) VALUES( $1, '"+req.body.iDescript+"', '"+ req.body.iPic +"', 9, '"+ req.body.iPrice +"' )";
     }
@@ -853,14 +848,10 @@ app.post('/newItem', function(req, res){
 
       function(err, result) {
         //call `done()` to release the client back to the pool
-       
-
+        done();
         if(err) {
-          done();
           return console.error('error running query', err);
         }
-        client.query("UPDATE shopping_cart SET total_items = total_items-1 WHERE owner_id = $1", [req.session.account_id]);
-        done();
         res.json(true);
       });
   }); 
@@ -886,14 +877,10 @@ app.del("/shoppingCart/delete/:id", function(req, res){
 
       function(err, result) {
         //call `done()` to release the client back to the pool
-       
-
+        done();
         if(err) {
-          done();
           return console.error('error running query', err);
         }
-        client.query("UPDATE shopping_cart SET total_items = total_items-1 WHERE owner_id = $1", [req.session.account_id]);
-        done();
         res.json(true);
       });
   });	

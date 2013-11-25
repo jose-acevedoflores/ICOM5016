@@ -1,4 +1,4 @@
-var host = "192.168.1.3:5000";//"192.168.1.3:4000";
+var host = "localhost:5000";//"192.168.1.3:4000";
 
 
 // This global variable is used to keep track of the item the user is viewing in the itemsPage. 
@@ -235,11 +235,9 @@ function shoppingCart(){
 				var list = $("#cartItemList");
 				list.empty();
 				var item;
-				var totalAmount = 0 ;
 				for (var i=0; i < len; ++i){
 					item = itemList[i];
 					console.log(item.id);
-					totalAmount += parseFloat(item.price.substring(1).replace(',','')); // Take the $ added by the db and also replace the commas 
 					list.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
 						"<img src="+ item.picture + ">"  + 
 						"<h2>" + item.brand + " " +item.model + "</h2>" + 
@@ -253,7 +251,7 @@ function shoppingCart(){
 
 				var totalAmountField = $("#shoppingCartAmount");
 				totalAmountField.empty();
-				totalAmountField.append("$"+totalAmount);
+				totalAmountField.append("$"+item.total_amount);
 
 				$.mobile.loading("hide");
 				
