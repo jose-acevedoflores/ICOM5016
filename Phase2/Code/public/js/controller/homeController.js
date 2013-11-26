@@ -732,6 +732,71 @@ function editProfile(){
 	});
 }
 
+function editProfileMail(){
+	$.mobile.loading("show");
+	var form = $("#editProfileMailAddressForm");
+	var formData = form.serializeArray();
+	console.log("form Data: " + formData);
+	var updUsr = ConvertToJSON(formData);
+	
+	console.log("Updated Car: " + JSON.stringify(updUsr));
+	var updUsrJSON = JSON.stringify(updUsr);
+	$.ajax({
+		url : "http://"+host+"/userProfile/update/mailingAddress" ,
+		method: 'put',
+		data : updUsrJSON,
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+			$.mobile.loading("hide");
+			$.mobile.navigate("#profilePage");
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			$.mobile.loading("hide");
+			if (data.status == 404){
+				alert("Data could not be updated!");
+			}
+			else {
+				alert("Internal Error.");		
+			}
+		}
+	});
+
+}
+
+function editProfileInfo(){
+	$.mobile.loading("show");
+	var form = $("#editProfileInfoForm");
+	var formData = form.serializeArray();
+	console.log("form Data: " + formData);
+	var updUsr = ConvertToJSON(formData);
+	
+	console.log("Updated Car: " + JSON.stringify(updUsr));
+	var updUsrJSON = JSON.stringify(updUsr);
+	$.ajax({
+		url : "http://"+host+"/userProfile/update/profileInfo" ,
+		method: 'put',
+		data : updUsrJSON,
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+			$.mobile.loading("hide");
+			$.mobile.navigate("#profilePage");
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			$.mobile.loading("hide");
+			if (data.status == 404){
+				alert("Data could not be updated!");
+			}
+			else {
+				alert("Internal Error.");		
+			}
+		}
+	});
+}
+
 
 /*******************************************************************************************************************************************/
 // Items Selling

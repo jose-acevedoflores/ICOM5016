@@ -825,7 +825,7 @@ app.put("/userProfile/update/profileInfo" , function(req, res){
         if(err) {
           return console.error('error running query', err);
         }
-
+        res.json(true);
       });
   }); 
 

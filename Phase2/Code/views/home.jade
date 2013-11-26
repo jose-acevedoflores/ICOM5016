@@ -303,7 +303,7 @@ html
 			include common
 			div(data-role="content")
 				h1 Edit Profile:
-				form(id ="editProfileForm", data-transition="pop")
+				form(id ="editProfileInfoForm", data-transition="pop")
 					fieldset(data-role='controlgroup')
 						ul(id="editForm")
 							
@@ -319,9 +319,7 @@ html
 							li
 								label(for="description") Description:
 									textarea(id="description", value="", name="description")
-							li
-								label(for="updMailAddress") Mailing Address:
-									textarea(id="updMailAddress", name="updMailAddress")
+										
 							li
 								label(for="updBillMailAddress") Billing Address:
 									textarea(id="updBillMailAddress", name="updBillMailAddress")
@@ -338,7 +336,27 @@ html
 							div(class="ui-block-b")	
 								a(data-role="button", data-inline="true",
 									data-icon="check", data-theme="a", data-transition="flip", dat-corners="true"
-									data-icon-shadow="true", data-mini="true", onclick="editProfile()") Save
+									data-icon-shadow="true", data-mini="true", onclick="editProfileInfo()") Save
+
+					form(id ="editProfileMailAddressForm", data-transition="pop")
+						fieldset(data-role='controlgroup')
+							ul(id="editMailForm")
+							
+								li
+									label(for="updMailAddress") Mailing Address:
+										textarea(id="updMailAddress", name="updMailAddress")
+								
+						center
+							fieldset(class="ui-grid-a")
+								div(class="ui-block-a")
+									a(href="#home",data-role="button", data-inline="true",
+										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon-shadow="true", data-mini="true") Cancel
+									
+								div(class="ui-block-b")	
+									a(data-role="button", data-inline="true",
+										data-icon="check", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon-shadow="true", data-mini="true", onclick="editProfileMail()") Save									
 		
 		
 
