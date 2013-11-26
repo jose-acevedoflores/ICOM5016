@@ -374,7 +374,7 @@ app.get("/userProfile", function(req, res){
   var client = new pg.Client(conString);
   client.connect();
 
-  var query = client.query("SELECT email_address as updEmailAddress, password as updPassword, m_address_id as updMailAddress, user_description as updDescription from web_user where (web_user.account_id = $1)", [req.session.account_id]);
+  var query = client.query("SELECT email_address as updEmailAddress, password as updPassword, (SELECT first_line FROM address WHERE owner_id = $1) as updMailAddress, user_description as updDescription from web_user where (web_user.account_id = $1)", [req.session.account_id]);
   
   query.on("row", function (row, result) {
      
@@ -740,6 +740,95 @@ app.put("/placedBids/item:id", function(req, res){
 	// 		res.json(response);
 	// 	}
 	// }
+});
+
+app.put("/userProfile/update/billingAddress", function(req, res) {
+
+ pg.connect(conString, function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
+
+    client.query("INSERT INTO address(first_line, owner_id, billing_flag) VALUES('"+req.body.updBillMailAddress+"' , $1, true)", [req.session.account_id],
+
+      function(err, result) {
+        //call `done()` to release the client back to the pool
+        done();
+        if(err) {
+          return console.error('error running query', err);
+        }
+
+      });
+  }); 
+
+});
+
+app.put("/userProfile/update/mailingAddress", function(req, res) {
+
+ pg.connect(conString, function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
+
+    client.query("INSERT INTO address(first_line, owner_id, billing_flag) VALUES( '"+ req.body.updMailAddress +"', $1, false)",[req.session.account_id],
+
+      function(err, result) {
+        //call `done()` to release the client back to the pool
+        done();
+        if(err) {
+          return console.error('error running query', err);
+        }
+
+      });
+  }); 
+
+});
+
+app.put("/userProfile/update/creditCard" , function(req,res){
+
+   pg.connect(conString, function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
+
+    client.query("INSERT INTO credit_card(security_code, owner_id) VALUES('"+req.body.updC_card+"' , $1)", [req.session.account_id],
+
+      function(err, result) {
+        //call `done()` to release the client back to the pool
+        done();
+        if(err) {
+          return console.error('error running query', err);
+        }
+        res.json(true);
+      });
+  }); 
+});
+
+app.put("/userProfile/update/profileInfo" , function(req, res){
+
+  console.log("PUT : user profile");
+  //QUERY DB to modify the mailing address, billing address, password etc.
+  pg.connect(conString, function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
+
+    console.log(req.body.updMailAddress + " bad "+ req.body.updBillMailAddress +" desc " + req.body.description + " email " + req.body.emailAddress 
+    +" pass " + req.body.password +" confirm pass : " + req.body.confirmPassword + " cc :  " + req.body.updC_card )
+
+
+    client.query("UPDATE web_user SET user_description = '"+ req.body.description +"', email_address = '"+req.body.emailAddress +"' WHERE account_id = $1 ", [req.session.account_id],
+
+      function(err, result) {
+        //call `done()` to release the client back to the pool
+        done();
+        if(err) {
+          return console.error('error running query', err);
+        }
+
+      });
+  }); 
+
 });
 
 app.put("/addItemToCart/:itemId", function(req, res){

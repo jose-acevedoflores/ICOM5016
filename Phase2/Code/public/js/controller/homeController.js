@@ -248,10 +248,13 @@ function shoppingCart(){
 						"<a onclick=\"toRemove("+item.id+")\" href=\"#removeItemFromCart\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\">remove from cart</li>");
 					list.listview("refresh");	
 				}
+				if(len!=0) // Case to protect when the user doesn't have any items in cart
+				{
+					var totalAmountField = $("#shoppingCartAmount");
+					totalAmountField.empty();
 
-				var totalAmountField = $("#shoppingCartAmount");
-				totalAmountField.empty();
-				totalAmountField.append("$"+item.total_amount);
+					totalAmountField.append("$"+item.total_amount);
+				}
 
 				$.mobile.loading("hide");
 				
@@ -691,7 +694,7 @@ function getUserProfileInfo(){
 				alert("User not found.");
 			}
 			else {
-				alter("Internal Server Error.");
+				alert("Internal Server Error.");
 			}
 		}
 	});
@@ -702,12 +705,12 @@ function editProfile(){
 	var form = $("#editProfileForm");
 	var formData = form.serializeArray();
 	console.log("form Data: " + formData);
-	var updUsr = ConverToJSON(formData);
+	var updUsr = ConvertToJSON(formData);
 	
 	console.log("Updated Car: " + JSON.stringify(updUsr));
 	var updUsrJSON = JSON.stringify(updUsr);
 	$.ajax({
-		url : "http://"+host+"/userProfile" ,
+		url : "http://"+host+"/userProfile/update" ,
 		method: 'put',
 		data : updUsrJSON,
 		contentType: "application/json",
