@@ -303,29 +303,75 @@ html
 			include common
 			div(data-role="content")
 				h1 Edit Profile:
-				form(id ="editProfileInfoForm", data-transition="pop")
-					fieldset(data-role='controlgroup')
-						ul(id="editForm")
-							
-							li 
+				form
+					div(data-role="collapsible-set")
+						div(data-role="collapsible", data-theme="a", data-content-theme="d", data-iconpos="right", data-inset="false", data-collapsed-icon="arrow-d"
+						, data-expanded-icon="arrow-u")
+							legend Email Update
+							ul
 								label(for="updEmailAddress") Email:
 									input(id="updEmailAddress", value="#{data.email}", type="text", name="emailAddress", placeholder="john_doe@domain.com")
-							li
+								
+								
+								a(href="#home",data-role="button", data-inline="true",
+										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon-shadow="true", data-mini="true") Cancel
+								
+								// TODO implement editEmailInfo()
+								a(href="#home",data-role="button", data-inline="true",
+										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon-shadow="true", data-mini="true", onclick="editEmailInfo()") Save
+
+								div(data-role="collapsible-set")
+
+						div(data-role="collapsible", data-theme="a", data-content-theme="d", data-iconpos="right", data-inset="false", data-collapsed-icon="arrow-d"
+						, data-expanded-icon="arrow-u")
+							legend Password Update
+							ul
+								label(for="crntPasswor") Current Password:
+									input(id="crntPasswor",type="password", name="password", placeholder="Password")
 								label(for="updPassword") Password:
-									input(id="updPassword", value="#{data.password}", type="password", name="password", placeholder="Password")
-							li
-								label(for="updConfirmPassword") Confirm Password:
-									input(id="updConfirmPassword", value="#{data.password}", type="password", name="confirmPassword", placeholder ="Password")
-							li
-								label(for="description") Description:
-									textarea(id="description", value="", name="description")
+									input(id="updPassword", type="password", name="password", placeholder="Password")
+								label(for="updConfirmPassword") Confirm New Pasword:
+									input(id="updConfirmPassword", type="password", name="password", placeholder="Password")
+								
+								
+								a(href="#home",data-role="button", data-inline="true",
+										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon-shadow="true", data-mini="true") Cancel
+								
+								// TODO implement editEmailInfo()
+								a(href="#home",data-role="button", data-inline="true",
+										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon-shadow="true", data-mini="true", onclick="editPswrdInfo()") Save
+								
+						div(data-role="collapsible", data-theme="a", data-content-theme="d", data-iconpos="right", data-inset="false", data-collapsed-icon="arrow-d"
+						, data-expanded-icon="arrow-u")
+							legend	BABA
+
+				//- form(id ="editProfileInfoForm", data-transition="pop")
+				//- 	fieldset(data-role='collapsible')
+				//- 		ul(id="editForm")
+							
+				//- 			li 
+				//- 				label(for="updEmailAddress") Email:
+				//- 					input(id="updEmailAddress", value="#{data.email}", type="text", name="emailAddress", placeholder="john_doe@domain.com")
+				//- 			li
+				//- 				label(for="updPassword") Password:
+				//- 					input(id="updPassword", value="#{data.password}", type="password", name="password", placeholder="Password")
+				//- 			li
+				//- 				label(for="updConfirmPassword") Confirm Password:
+				//- 					input(id="updConfirmPassword", value="#{data.password}", type="password", name="confirmPassword", placeholder ="Password")
+				//- 			li
+				//- 				label(for="description") Description:
+				//- 					textarea(id="description", value="", name="description")
 										
-							li
-								label(for="updBillMailAddress") Billing Address:
-									textarea(id="updBillMailAddress", name="updBillMailAddress")
-							li
-								label(for="updC_card") Credit Card Number:
-									input(id="updC_card", name="updC_card", placeholder="902902")
+				//- 			li
+				//- 				label(for="updBillMailAddress") Billing Address:
+				//- 					textarea(id="updBillMailAddress", name="updBillMailAddress")
+				//- 			li
+				//- 				label(for="updC_card") Credit Card Number:
+				//- 					input(id="updC_card", name="updC_card", placeholder="902902")
 					center
 						fieldset(class="ui-grid-a")
 							div(class="ui-block-a")
