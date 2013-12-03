@@ -330,7 +330,7 @@ html
 							ul
 								label(for="crntPasswor") Current Password:
 									input(id="crntPasswor",type="password", name="password", placeholder="Password")
-								label(for="updPassword") Password:
+								label(for="updPassword") New Password:
 									input(id="updPassword", type="password", name="password", placeholder="Password")
 								label(for="updConfirmPassword") Confirm New Pasword:
 									input(id="updConfirmPassword", type="password", name="password", placeholder="Password")
@@ -347,7 +347,67 @@ html
 								
 						div(data-role="collapsible", data-theme="a", data-content-theme="d", data-iconpos="right", data-inset="false", data-collapsed-icon="arrow-d"
 						, data-expanded-icon="arrow-u")
-							legend	BABA
+							legend	Edit Description
+							ul
+								label(for="description") Description:
+									textarea(id="description", value="", name="description")
+
+								a(href="#home",data-role="button", data-inline="true",
+										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon-shadow="true", data-mini="true") Cancel
+								
+								// TODO implement ditDesc()
+								a(href="#home",data-role="button", data-inline="true",
+										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon-shadow="true", data-mini="true", onclick="editDesc()") Save
+
+						div(data-role="collapsible", data-theme="a", data-content-theme="d", data-iconpos="right", data-inset="false", data-collapsed-icon="arrow-d"
+						, data-expanded-icon="arrow-u")
+							legend	Update Billing Address
+							ul
+								label(for="updBillMailAddress") Billing Address:
+									textarea(id="updBillMailAddress", name="updBillMailAddress")
+
+								a(href="#home",data-role="button", data-inline="true",
+										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon-shadow="true", data-mini="true") Cancel
+								
+								// TODO implement ditDesc()
+								a(href="#home",data-role="button", data-inline="true",
+										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon-shadow="true", data-mini="true", onclick="editBillAdd()") Save
+
+						div(data-role="collapsible", data-theme="a", data-content-theme="d", data-iconpos="right", data-inset="false", data-collapsed-icon="arrow-d"
+						, data-expanded-icon="arrow-u")
+							legend	Update Mailing Address
+							ul
+								label(for="updBillMailAddress") Mailing Address:
+									textarea(id="updBillMailAddress", name="updBillMailAddress")
+
+								a(href="#home",data-role="button", data-inline="true",
+										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon-shadow="true", data-mini="true") Cancel
+								
+								// TODO implement ditDesc()
+								a(href="#home",data-role="button", data-inline="true",
+										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon-shadow="true", data-mini="true", onclick="editMailAdd()") Save
+
+						div(data-role="collapsible", data-theme="a", data-content-theme="d", data-iconpos="right", data-inset="false", data-collapsed-icon="arrow-d"
+						, data-expanded-icon="arrow-u")
+							legend Update Credit
+							ul
+								label(for="uc_card") Current Password:
+									input(id="uc_card", name="uc_card")
+								a(href="#home",data-role="button", data-inline="true",
+										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon-shadow="true", data-mini="true") Cancel
+								
+								// TODO implement ditDesc()
+								a(href="#home",data-role="button", data-inline="true",
+										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon-shadow="true", data-mini="true", onclick="editCCard()") Save
+										
 
 				//- form(id ="editProfileInfoForm", data-transition="pop")
 				//- 	fieldset(data-role='collapsible')
