@@ -303,7 +303,7 @@ html
 			include common
 			div(data-role="content")
 				h1 Edit Profile:
-				form
+				form(id ="editProfileInfoForm")
 					div(data-role="collapsible-set")
 						div(data-role="collapsible", data-theme="a", data-content-theme="d", data-iconpos="right", data-inset="false", data-collapsed-icon="arrow-d"
 						, data-expanded-icon="arrow-u")
@@ -365,9 +365,20 @@ html
 						, data-expanded-icon="arrow-u")
 							legend	Update Billing Address
 							ul
-								label(for="updBillMailAddress") Billing Address:
-									textarea(id="updBillMailAddress", name="updBillMailAddress")
+								label(for="first_line_b") First Line:
+									textarea(id="first_line_b", name="first_line_b")
 
+								label(for="second_line_b") Second Line:
+									textarea(id="second_line_b", name="second_line_b")	
+
+								label(for="country_b") Country:
+									textarea(id="country_b", name="country_b")	
+
+								label(for="city_b") City:
+									textarea(id="city_b", name="city_b")	
+
+								label(for="zip_code_b") Zip Code:
+									textarea(id="zip_code_b", name="zip_code_b")	
 								a(href="#home",data-role="button", data-inline="true",
 										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
 										data-icon-shadow="true", data-mini="true") Cancel
@@ -375,14 +386,26 @@ html
 								// TODO implement ditDesc()
 								a(href="#home",data-role="button", data-inline="true",
 										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
-										data-icon-shadow="true", data-mini="true", onclick="editBillAdd()") Save
+										data-icon-shadow="true", data-mini="true", onclick="editBillAddress()") Save
 
 						div(data-role="collapsible", data-theme="a", data-content-theme="d", data-iconpos="right", data-inset="false", data-collapsed-icon="arrow-d"
 						, data-expanded-icon="arrow-u")
 							legend	Update Mailing Address
 							ul
-								label(for="updBillMailAddress") Mailing Address:
-									textarea(id="updBillMailAddress", name="updBillMailAddress")
+								label(for="first_line") First Line:
+									textarea(id="first_line", name="first_line")
+
+								label(for="second_line") Second Line:
+									textarea(id="second_line", name="second_line")	
+
+								label(for="country") Country:
+									textarea(id="country", name="country")	
+
+								label(for="city") City:
+									textarea(id="city", name="city")	
+
+								label(for="zip_code") Zip Code:
+									textarea(id="zip_code", name="zip_code")	
 
 								a(href="#home",data-role="button", data-inline="true",
 										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
@@ -391,14 +414,25 @@ html
 								// TODO implement ditDesc()
 								a(href="#home",data-role="button", data-inline="true",
 										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
-										data-icon-shadow="true", data-mini="true", onclick="editMailAdd()") Save
+										data-icon-shadow="true", data-mini="true", onclick="editMailAddress()") Save
 
 						div(data-role="collapsible", data-theme="a", data-content-theme="d", data-iconpos="right", data-inset="false", data-collapsed-icon="arrow-d"
 						, data-expanded-icon="arrow-u")
 							legend Update Credit
 							ul
-								label(for="uc_card") Current Password:
-									input(id="uc_card", name="uc_card")
+
+								label(for="exp_card") Expiration Date
+									input(id="exp_card", name="exp_card")
+
+								label(for="sc_card") Security Code 
+									input(id="sc_card", name="sc_card")
+
+								label(for="nc_card") Name on Card
+									input(id="nc_card", name="nc_card")
+
+								label(for="tc_card") Type (Visa, MS)
+									input(id="tc_card", name="tc_card")
+
 								a(href="#home",data-role="button", data-inline="true",
 										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
 										data-icon-shadow="true", data-mini="true") Cancel

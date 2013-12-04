@@ -684,6 +684,29 @@ function getUserProfileInfo(){
 		success : function(data, textStatus, jqXHR){
 			currentUsr = data.user;
 			
+			document.getElementById("exp_card").value = data.user[0].expiration_date_month +"/"+data.user[0].expiration_date_year;
+			document.getElementById("sc_card").value = data.user[0].sc_card;
+			document.getElementById("nc_card").value = data.user[0].nc_card;
+			document.getElementById("tc_card").value = data.user[0].tc_card;
+
+			for(var i=0; i< data.user.length ; i++){
+				// Normal Mail address section
+				if(!data.user[i].billing_flag){
+					document.getElementById("first_line").value = data.user[i].first_line;
+					document.getElementById("second_line").value = data.user[i].second_line;
+					document.getElementById("zip_code").value = data.user[i].zip_code;
+					document.getElementById("country").value = data.user[i].country;
+					document.getElementById("city").value = data.user[i].city;
+				}
+				else if(data.user[i].billing_flag){
+					document.getElementById("first_line_b").value = data.user[i].first_line;
+					document.getElementById("second_line_b").value = data.user[i].second_line;
+					document.getElementById("zip_code_b").value = data.user[i].zip_code;
+					document.getElementById("country_b").value = data.user[i].country;
+					document.getElementById("city_b").value = data.user[i].city;
+				}
+			}
+
 			$.mobile.loading("hide");
 			$.mobile.navigate("#editProfile");
 		},
@@ -700,9 +723,41 @@ function getUserProfileInfo(){
 	});
 }
 
-function editProfile(){
+// function editProfile(){
+// 	$.mobile.loading("show");
+// 	var form = $("#editProfileForm");
+// 	var formData = form.serializeArray();
+// 	console.log("form Data: " + formData);
+// 	var updUsr = ConvertToJSON(formData);
+	
+// 	console.log("Updated Car: " + JSON.stringify(updUsr));
+// 	var updUsrJSON = JSON.stringify(updUsr);
+// 	$.ajax({
+// 		url : "http://"+host+"/userProfile/update" ,
+// 		method: 'put',
+// 		data : updUsrJSON,
+// 		contentType: "application/json",
+// 		dataType:"json",
+// 		success : function(data, textStatus, jqXHR){
+// 			$.mobile.loading("hide");
+// 			$.mobile.navigate("#profilePage");
+// 		},
+// 		error: function(data, textStatus, jqXHR){
+// 			console.log("textStatus: " + textStatus);
+// 			$.mobile.loading("hide");
+// 			if (data.status == 404){
+// 				alert("Data could not be updated!");
+// 			}
+// 			else {
+// 				alert("Internal Error.");		
+// 			}
+// 		}
+// 	});
+// }
+
+function editMailAddress(){
 	$.mobile.loading("show");
-	var form = $("#editProfileForm");
+	var form = $("#editProfileInfoForm");
 	var formData = form.serializeArray();
 	console.log("form Data: " + formData);
 	var updUsr = ConvertToJSON(formData);
@@ -710,7 +765,7 @@ function editProfile(){
 	console.log("Updated Car: " + JSON.stringify(updUsr));
 	var updUsrJSON = JSON.stringify(updUsr);
 	$.ajax({
-		url : "http://"+host+"/userProfile/update" ,
+		url : "http://"+host+"/userProfile/update/mailingAddress" ,
 		method: 'put',
 		data : updUsrJSON,
 		contentType: "application/json",
@@ -730,11 +785,12 @@ function editProfile(){
 			}
 		}
 	});
+
 }
 
-function editProfileMail(){
+function editBillAddress(){
 	$.mobile.loading("show");
-	var form = $("#editProfileMailAddressForm");
+	var form = $("#editProfileInfoForm");
 	var formData = form.serializeArray();
 	console.log("form Data: " + formData);
 	var updUsr = ConvertToJSON(formData);
@@ -742,7 +798,7 @@ function editProfileMail(){
 	console.log("Updated Car: " + JSON.stringify(updUsr));
 	var updUsrJSON = JSON.stringify(updUsr);
 	$.ajax({
-		url : "http://"+host+"/userProfile/update/mailingAddress" ,
+		url : "http://"+host+"/userProfile/update/billingAddress" ,
 		method: 'put',
 		data : updUsrJSON,
 		contentType: "application/json",
@@ -797,7 +853,39 @@ function editProfileInfo(){
 	});
 }
 
+function editCCard(){
 
+	$.mobile.loading("show");
+	var form = $("#editProfileInfoForm");
+	var formData = form.serializeArray();
+	console.log("form Data: " + formData);
+	var updUsr = ConvertToJSON(formData);
+	
+	console.log("Updated Credit Card: " + JSON.stringify(updUsr));
+	var updUsrJSON = JSON.stringify(updUsr);
+	$.ajax({
+		url : "http://"+host+"/userProfile/update/creditCardInfo" ,
+		method: 'put',
+		data : updUsrJSON,
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+			$.mobile.loading("hide");
+			$.mobile.navigate("#profilePage");
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			$.mobile.loading("hide");
+			if (data.status == 404){
+				alert("Data could not be updated!");
+			}
+			else {
+				alert("Internal Error.");		
+			}
+		}
+	});
+
+}
 /*******************************************************************************************************************************************/
 // Items Selling
 /*******************************************************************************************************************************************/

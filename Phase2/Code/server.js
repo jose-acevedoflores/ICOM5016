@@ -371,37 +371,50 @@ app.get('/itemsSelling', function(req, res){
 app.get("/userProfile", function(req, res){
 
   console.log("Get userProfile : " + req.session.account_id);
-  var client = new pg.Client(conString);
-  client.connect();
 
-  var query = client.query("SELECT email_address as updEmailAddress, password as updPassword, (SELECT first_line FROM address WHERE owner_id = $1) as updMailAddress, user_description as updDescription from web_user where (web_user.account_id = $1)", [req.session.account_id]);
-  
-  query.on("row", function (row, result) {
-     
-      result.addRow(row);
 
-  });
-
-  query.on("end", function (result) {
-    var len = result.rows.length;
-    if (len == 0){
-      res.statusCode = 404;
-      res.send("User not found.");
+ pg.connect(conString, function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
     }
-    else {  
-      for (var i = 0; i < result.rows.length; i++) {
-        if (result.rows[i].updDescription==null) {
-          result.rows[i].updDescription = "";
+
+    if(req.session.loggedIn)  
+    { 
+
+      client.query("SELECT email_address AS updEmailAddress, password AS updPassword, user_description AS updDescription, security_code AS sc_card, name_on_card AS nc_card, type AS tc_card, expiration_date_month, expiration_date_year, first_line, second_line, city,country, zip_code, billing_flag FROM (SELECT *, account_id AS owner_id FROM web_user) AS webu NATURAL LEFT JOIN credit_card NATURAL LEFT JOIN address WHERE account_id = $1", [req.session.account_id],
+
+      function(err, result) {
+        //call `done()` to release the client back to the pool
+        done();
+
+        if(err) {
+          return console.error('error running query', err);
         }
+        var len = result.rows.length;
+        if (len == 0){
+          res.statusCode = 404;
+          res.send("User not found.");
+        }
+        else {  
+          for (var i = 0; i < result.rows.length; i++) {
+            if (result.rows[i].updDescription==null) {
+                result.rows[i].updDescription = "";
+            }
 
-       
-      }
-      var response = {"user" : result.rows};
-
-      client.end();
+          }
+          var response = {"user" : result.rows};
       
-      res.json(response);
-      }
+          res.json(response);
+      
+        }
+      });  
+    }
+    else // User is not logged in 
+    {
+      var temp = {"items" : "empty"};
+      res.json(temp);
+    }
+  
   });
 });
 
@@ -749,7 +762,7 @@ app.put("/userProfile/update/billingAddress", function(req, res) {
       return console.error('error fetching client from pool', err);
     }
 
-    client.query("INSERT INTO address(first_line, owner_id, billing_flag) VALUES('"+req.body.updBillMailAddress+"' , $1, true)", [req.session.account_id],
+    client.query("INSERT INTO address(first_line, second_line, city, country, zip_code, owner_id, billing_flag) VALUES('"+ req.body.first_line_b +"','"+ req.body.second_line_b +"', '"+ req.body.city_b +"', '"+ req.body.country_b +"', '"+ req.body.zip_code_b +"', $1, true)", [req.session.account_id],
 
       function(err, result) {
         //call `done()` to release the client back to the pool
@@ -770,7 +783,7 @@ app.put("/userProfile/update/mailingAddress", function(req, res) {
       return console.error('error fetching client from pool', err);
     }
 
-    client.query("INSERT INTO address(first_line, owner_id, billing_flag) VALUES( '"+ req.body.updMailAddress +"', $1, false)",[req.session.account_id],
+    client.query("INSERT INTO address(first_line, second_line, city, country, zip_code, owner_id, billing_flag) VALUES( '"+ req.body.first_line +"','"+ req.body.second_line +"', '"+ req.body.city +"', '"+ req.body.country +"', '"+ req.body.zip_code +"', $1, false)",[req.session.account_id],
 
       function(err, result) {
         //call `done()` to release the client back to the pool
@@ -784,14 +797,14 @@ app.put("/userProfile/update/mailingAddress", function(req, res) {
 
 });
 
-app.put("/userProfile/update/creditCard" , function(req,res){
+app.put("/userProfile/update/creditCardInfo" , function(req,res){
 
    pg.connect(conString, function(err, client, done) {
     if(err) {
       return console.error('error fetching client from pool', err);
     }
 
-    client.query("INSERT INTO credit_card(security_code, owner_id) VALUES('"+req.body.updC_card+"' , $1)", [req.session.account_id],
+    client.query("INSERT INTO credit_card(security_code, type , name_on_card, expiration_date_month, expiration_date_year , owner_id) VALUES('"+req.body.sc_card+"', '"+req.body.tc_card+"', '"+req.body.nc_card+"' , '" + req.body.exp_card.split("/")[0] +"' , '"+req.body.exp_card.split("/")[1]+"' , $1)", [req.session.account_id],
 
       function(err, result) {
         //call `done()` to release the client back to the pool
@@ -806,7 +819,7 @@ app.put("/userProfile/update/creditCard" , function(req,res){
 
 app.put("/userProfile/update/profileInfo" , function(req, res){
 
-  console.log("PUT : user profile");
+  console.log("PUT : user profile ");
   //QUERY DB to modify the mailing address, billing address, password etc.
   pg.connect(conString, function(err, client, done) {
     if(err) {
