@@ -174,7 +174,7 @@ app.get('/stores/:store/:category' , function(req, res){
   		return console.error('error fetching client from pool', err);
   	}
 
-  	client.query('SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2', [store,category],
+  	client.query('SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2 ORDER BY price DESC', [store,category],
 
   		function(err, result) {
     		//call `done()` to release the client back to the pool
@@ -189,8 +189,49 @@ app.get('/stores/:store/:category' , function(req, res){
         res.json(temp);
   		});
 	});
+});
 
+app.get('/stores/:store/:category/:sortOrder' , function(req, res){
 
+  var store = req.params.store;
+  var category = req.params.category;
+  var sortOrder = req.params.sortOrder;
+
+  console.log("GET: ORDER store = "+store +" category: "+category);
+  //QUERY DB for products to display in the individual store pages
+  pg.connect(conString, function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
+
+    var q ;
+    if(sortOrder === "lowToHigh"){
+      q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2 ORDER BY price ';
+    }
+    else if(sortOrder === "highToLow"){
+      q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2 ORDER BY price DESC';
+    }
+    else if(sortOrder === "alphabetical"){
+      q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2 ORDER BY brand ';
+    }
+    else if(sortOrder === "revAlphabetical"){
+       q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2 ORDER BY brand DESC';
+    }
+    client.query(q, [store,category],
+
+      function(err, result) {
+        //call `done()` to release the client back to the pool
+        done();
+
+        if(err) {
+          return console.error('error running query', err);
+        }
+        console.log(result.rows);
+
+        var temp = {"items" : result.rows};
+        res.json(temp);
+      });
+  });
 });
 
 app.get('/stores/:store' , function(req, res){
