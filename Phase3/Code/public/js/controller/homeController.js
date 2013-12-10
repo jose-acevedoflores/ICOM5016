@@ -27,7 +27,7 @@ $(document).on('pagebeforeshow', "#home", function( event, ui ) {
 				list.append("<li>" +
 					"<a href='#' onclick=\"findItem(" +item.product_id + ")\">" + 
 					"<img src="+ item.photo_url + ">"  + 
-					"<h2>" + item.brand + " " +item.model + "</h2>" + 
+					"<h2>" + item.product_name + "</h2>" + 
 					"<p>" + item.description + "</p>" +
 					"<p> Rating:" + item.seller_id + " temp" + " </p>" + 
 					"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
@@ -75,7 +75,7 @@ function findStore(store){
 						list.append("<li>"+
 							"<a href='#' onclick=\"findItem(" +item.product_id + ")\">" + 
 							"<img src="+ item.photo_url + ">"  + 
-							"<h2>" + item.brand + " "+item.model + "</h2>" + 
+							"<h2>" + item.pname + "</h2>" + 
 							"<p>" + item.description + "</p>" +
 							"<p> Rating:" + item.seller_id +" temp" + " </p>" + 
 							"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
@@ -125,7 +125,7 @@ function findCategory(store, category){
 					list.append("<li>" + 
 						"<a href='#' onclick=\"findItem(" +item.product_id + ")\">" + 
 						"<img src="+ item.photo_url + ">"  + 
-						"<h2>" + item.brand + " "+item.model + "</h2>" + 
+						"<h2>" + item.pname + "</h2>" + 
 						"<p>" + item.description + "</p>" +
 						"<p> Rating:" + item.seller_id +" temp" + " </p>" + 
 						"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
@@ -193,7 +193,7 @@ function findItem(itemId){
 				// 	"<p>" + item.description + "</p></div></div>");
 						
 				list.append("<li data-theme=\"c\">" + 
-					"<h3>" + item.brand + " " +item.model + "</h3>" + 
+					"<h3>" + item.pname + "</h3>" + 
 					"<h6> Product ID: " + item.id + "</h6>" +
 					"<img src="+ item.picture + ">" +
 					"<p> Rating: " + item.rating + "</p>" + 
@@ -240,7 +240,7 @@ function shoppingCart(){
 					console.log(item.id);
 					list.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
 						"<img src="+ item.picture + ">"  + 
-						"<h2>" + item.brand + " " +item.model + "</h2>" + 
+						"<h2>" + item.pname + "</h2>" + 
 						"<p>" + item.description + "</p>" +
 						"<p> Rating:" + item.rating + " </p>" + 
 						"<p class=\"ui-li-aside\">Quantity: "+ item.quantity+ "    Price: " + item.price + "</p>" +
@@ -339,7 +339,7 @@ function placedBids(){
 
 					list.append("<li data-icon=\"false\" id=itemID"+item.id+"><a href=\"#\">" + 
 						"<img src="+ item.picture + ">"  + 
-						"<h2>" + item.model + "</h2>" + 
+						"<h2>" + item.pname + "</h2>" + 
 						"<p>" + item.description + "</p>" +
 						"<p> Rating:" + item.rating + " </p>" + 
 						"<div data-role=\"fielcontain\" class=\"ui-li-aside\">" +
@@ -454,7 +454,7 @@ function itemsSold(){
 					currentInvoiceId = item.invoice_id;
 					list.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
 						"<img src="+ item.picture + ">"  + 
-						"<h2>" + item.itemName + "</h2>" + 
+						"<h2>" +  item.pname + "</h2>" + 
 						"<p>" + item.description + "</p>" +
 						"<p> Rating:" + item.rating + " </p>" + 
 						"<p class=\"ui-li-aside\"> Purchased Price: $" + item.price + "</p>" +
@@ -916,7 +916,7 @@ function itemsSelling(){
 					if(item.product_type === 'sale'){
 						listSales.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
 							"<img src="+ item.picture + ">"  + 
-							"<h2>" + item.brand + " " +item.model + "</h2>" + 
+							"<h2>" +item.pname+ "</h2>" + 
 							"<p>" + item.description + "</p>" +
 							"<p> Rating:" + item.rating + " </p>" + 
 							"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +

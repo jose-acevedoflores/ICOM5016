@@ -223,6 +223,7 @@ app.get('/stores/:store' , function(req, res){
 
 app.get("/item/:itemId", function(req,res) {
 	var itemId = req.params.itemId;
+
 	console.log("GET : Load Item "+itemId);
 
 	//QUERY DB for products to display in the individual item page
@@ -231,7 +232,7 @@ app.get("/item/:itemId", function(req,res) {
     		return console.error('error fetching client from pool', err);
   	}
 
-  	client.query('SELECT product_id AS id, brand , model, description, photo_url AS picture FROM product WHERE product_id = $1', [itemId],
+  	client.query('SELECT product_id AS id, brand , model, product_name AS pname, description, photo_url AS picture FROM product WHERE product_id = $1', [itemId],
 
   		function(err, result) {
     		//call `done()` to release the client back to the pool
@@ -268,7 +269,7 @@ app.get('/shoppingCart', function(req, res){
     if(req.session.loggedIn)  
 		{ 
 
-      client.query('SELECT  product_id AS id, photo_url AS picture, price,seller_id AS rating, brand, model, description, quantity, total_amount FROM sale_product NATURAL JOIN (SELECT *, item_id AS product_id FROM shopping_cart NATURAL JOIN items_in_cart WHERE owner_id = $1 ) AS TempName', [req.session.account_id],
+      client.query('SELECT  product_id AS id, photo_url AS picture, price,seller_id AS rating, brand, model, product_name AS pname, description, quantity, total_amount FROM sale_product NATURAL JOIN (SELECT *, item_id AS product_id FROM shopping_cart NATURAL JOIN items_in_cart WHERE owner_id = $1 ) AS TempName', [req.session.account_id],
 
 
   		function(err, result) {
@@ -307,7 +308,7 @@ app.get('/placedBids', function(req, res) {
     if(req.session.loggedIn)  
     { 
 
-      client.query('SELECT product_id AS id, photo_url AS picture, starting_price AS price, brand, model, description FROM auction_product WHERE auction_product.product_id IN (SELECT product_id FROM bid NATURAL JOIN auction_product WHERE bid.buyer_account_id = $1)', [req.session.account_id],
+      client.query('SELECT product_id AS id, photo_url AS picture, starting_price AS price, brand, model, product_name AS pname, description FROM auction_product WHERE auction_product.product_id IN (SELECT product_id FROM bid NATURAL JOIN auction_product WHERE bid.buyer_account_id = $1)', [req.session.account_id],
 
       function(err, result) {
         //call `done()` to release the client back to the pool
@@ -343,7 +344,7 @@ app.get('/itemsSelling', function(req, res){
     if(req.session.loggedIn)  
     { 
 
-      client.query('SELECT product_id AS id, photo_url AS picture,  brand, model, description, price , \'sale\' AS product_type FROM sale_product  WHERE seller_id = $1 UNION SELECT product_id AS id, photo_url AS picture,  brand, model, description, starting_price AS price, \'auction\' AS product_type FROM auction_product WHERE seller_id = $1', [req.session.account_id],
+      client.query('SELECT product_id AS id, photo_url AS picture, product_name AS pname, description, price , \'sale\' AS product_type FROM sale_product  WHERE seller_id = $1 UNION SELECT product_id AS id, photo_url AS picture, product_name AS pname, description, starting_price AS price, \'auction\' AS product_type FROM auction_product WHERE seller_id = $1', [req.session.account_id],
 
       function(err, result) {
         //call `done()` to release the client back to the pool
@@ -503,7 +504,7 @@ app.get("/itemsSold", function(req, res){
     if(req.session.loggedIn)  
     { 
 
-      client.query('SELECT product_id AS id, photo_url AS picture,  brand, model, description, invoice_id FROM has_invoice NATURAL JOIN product  WHERE seller_id = $1 ORDER BY invoice_id DESC  ', [req.session.account_id],
+      client.query('SELECT product_id AS id, photo_url AS picture, product_name AS pname, description, invoice_id FROM has_invoice NATURAL JOIN product  WHERE seller_id = $1 ORDER BY invoice_id DESC  ', [req.session.account_id],
 
       function(err, result) {
         //call `done()` to release the client back to the pool
