@@ -242,9 +242,11 @@ function shoppingCart(){
 						"<img src="+ item.picture + ">"  + 
 						"<h2>" + item.pname + "</h2>" + 
 						"<p>" + item.description + "</p>" +
-						"<p> Rating:" + item.rating + " </p>" + 
-						"<p class=\"ui-li-aside\">Quantity: "+ item.quantity+ "    Price: " + item.price + "</p>" +
-						"</a>"+
+						"<p> Price:" + item.price + " </p>" + 
+						"<div data-role=\"fieldcontain\" class=\"ui-li-aside\">" +
+						"<h2 style='padding-right:10px'> Quantity <h2/>" +
+						"<input style=\"width:30px\" id=\"nextBid"+ item.id +"\" class=\"ui-input-text ui-body-a ui-corner-all ui-shadow-inset ui-li-aside\" data-inline=\"true\" onchange='updateQuantity("+item.id+")' value="+item.quantity+">" +
+						"</div></a>"+
 						"<a onclick=\"toRemove("+item.id+")\" href=\"#removeItemFromCart\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\">remove from cart</li>");
 					list.listview("refresh");	
 				}
@@ -270,6 +272,39 @@ function shoppingCart(){
 	});
 }
 
+function updateQuantity(itemId){
+
+	var newQuant =	document.getElementById("nextBid" +itemId).value ;
+
+	$.mobile.loading("show");
+	console.log("remove item: "+ itemToRemove);
+	$.ajax({
+		url : "http://"+host+"/itemInCart/update_quantity/"+itemId+"/"+newQuant,
+		method : "put",
+		contentType: "application/json",
+		dataType : "json",
+		success : function(data, textStatus, jqXHR){
+
+			$.mobile.loading("hide");
+
+			$.mobile.changePage(
+		    $("#shoppingCart") ,
+		    {
+				allowSamePageTransition : true,
+				transition              : 'none',
+				showLoadMsg             : false,
+				reloadPage              : true
+		    }
+			);
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			$.mobile.loading("hide");
+			alert("Could not update quantity");
+		}
+	});
+
+}
 //Global Variable to know which item the user wants to remove
 var itemToRemove;
 function toRemove(itemId){
@@ -342,7 +377,7 @@ function placedBids(){
 						"<h2>" + item.pname + "</h2>" + 
 						"<p>" + item.description + "</p>" +
 						"<p> Rating:" + item.rating + " </p>" + 
-						"<div data-role=\"fielcontain\" class=\"ui-li-aside\">" +
+						"<div data-role=\"fieldcontain\" class=\"ui-li-aside\">" +
 						//"<h2 class=\"ui-li-aside\"> Increase Bid:" +
 						"<label for=\"nextBid\"> Increase Bid" +
 						"<input id=\"nextBid\" class=\"ui-input-text ui-body-a ui-corner-all ui-shadow-inset\" data-inline=\"true\" value="+item.price+">" +
@@ -439,7 +474,7 @@ function itemsSold(){
 				if(len > 0 )
 				{	
 					currentInvoiceId = itemList[0].invoice_id;
-					list.append("<li data-role=\"list-divider\", data-theme=\"a\"> Invoice Date (#) "+currentInvoiceId+"   <p class=\"ui-li-aside\"> Total Amount Paid: $3</p> </li>");
+					list.append("<li data-role=\"list-divider\", data-theme=\"a\"> Date: "+itemList[0].date.substring(0, itemList[0].date.indexOf("T")) );
 				}
 
 				for (var i=0; i < len; ++i){
@@ -447,16 +482,19 @@ function itemsSold(){
 					if(currentInvoiceId != item.invoice_id)
 					{	
 						currentInvoiceId = item.invoice_id;
-						list.append("<li data-role=\"list-divider\", data-theme=\"a\"> Invoice Date (#)  "+currentInvoiceId+" <p class=\"ui-li-aside\"> Total Amount Paid: $3</p> </li>");
+						list.append("<li data-role=\"list-divider\", data-theme=\"a\"> Date: "+item.date.substring(0, item.date.indexOf("T") ) ) ;
 
 					}
 
 					currentInvoiceId = item.invoice_id;
 					list.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
 						"<img src="+ item.picture + ">"  + 
+
 						"<h2>" +  item.pname + "</h2>" + 
 						"<p>" + item.description + "</p>" +
 						"<p> Rating:" + item.rating + " </p>" + 
+
+						
 						"<p class=\"ui-li-aside\"> Purchased Price: $" + item.price + "</p>" +
 						"</a>");
 					list.listview("refresh");	

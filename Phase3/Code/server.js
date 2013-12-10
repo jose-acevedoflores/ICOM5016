@@ -504,7 +504,9 @@ app.get("/itemsSold", function(req, res){
     if(req.session.loggedIn)  
     { 
 
-      client.query('SELECT product_id AS id, photo_url AS picture, product_name AS pname, description, invoice_id FROM has_invoice NATURAL JOIN product  WHERE seller_id = $1 ORDER BY invoice_id DESC  ', [req.session.account_id],
+
+      client.query('SELECT product_id AS id, photo_url AS picture, product_name AS pname, date, description, price ,invoice_id FROM has_invoice NATURAL JOIN sale_product NATURAL JOIN invoice WHERE seller_id = $1 ORDER BY date DESC  ', [req.session.account_id],
+
 
       function(err, result) {
         //call `done()` to release the client back to the pool
@@ -616,7 +618,8 @@ app.put("/userLogin", function(req, res){
     console.log("PUT  : Login");
     console.log(req.body.hasOwnProperty('emailAddress'));
     var password = req.body.password;
-    var email = req.body.emailAddress;
+    var email = req.body.emailAddress.toString();
+    var email = email.toLowerCase();
         
     console.log(email);
     console.log(password);
@@ -700,60 +703,23 @@ app.put("/placedBids/item:id", function(req, res){
 	var id = req.params.id;
   var bid_amount = req.body;
 	console.log("PUT ITEM: " +id);
-  var client = new pg.Client(conString);
-  client.connect();
+ 
+  pg.connect(conString, function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
 
-  var query = client.query("SELECT bid.amount, bid.id FROM bid WHERE (bid.amount > $1 AND bid.id = $2)", [email, id]);
-    
-    query.on("row", function (row, result) {
-      result.addRow(row);
-    });
+    client.query("INSERT INTO bid(buyer_account_id, product_id, amount) VALUES( $1,'"+ id+"', '"+ bid_amount +"' )", [req.session.account_id],
 
-    query.on("end", function (result) {
-      var len = result.rows.length;
-      if (len==0) {
-        res.statusCode = 401;
-        res.send("There was an error with your e-mail/password combination.");
-      }
+      function(err, result) {
+        //call `done()` to release the client back to the pool
+        done();
+        if(err) {
+          return console.error('error running query', err);
+        }
 
-      else {
-        console.log(result.rows);
-
-
-
-        //var temp = {"items" : { "userName" : req.session.userName } };
-        res.json(true);
-          
-      }
-        
-      client.end();
-
-    });
-	// if((id < 0)){
-	// 	res.statusCode = 404;
-	// 	res.send("Item not found");
-	// }
-
-	// else {
-	// 	var target = -1;
-	// 	for (var i=0; i<placedBidsVar.length; ++i) {
-	// 		if(placedBidsVar[i].id === id) {
-	// 			target = i;
-	// 			break;
-	// 		}
-	// 	}
-	// 	if (target ==-1) {
-	// 		res.statusCode = 404;
-	// 		res.send("Item not foud");
-	// 	}
-
-	// 	else {
-	// 		var theItem = placedBidsVar[target];
-	// 		theItem += req.body.price;
-	// 		var response = {"item": theItem};
-	// 		res.json(response);
-	// 	}
-	// }
+      });
+  }); 
 });
 
 app.put("/userProfile/update/billingAddress", function(req, res) {
@@ -877,6 +843,40 @@ app.put("/addItemToCart/:itemId", function(req, res){
     }
   });
 });
+
+app.put("/itemInCart/update_quantity/:itemId/:quantity", function(req, res){
+  console.log("PUT : add Item to cart");
+
+  pg.connect(conString, function(err, client, done) {
+    if(err){
+      return console.error('error fetching client form pool', err);
+    }
+    if(req.session.loggedIn) {
+      client.query('UPDATE items_in_cart SET quantity = $3 WHERE shopping_cart_id = (SELECT shopping_cart_id FROM shopping_cart WHERE owner_id = $1) AND item_id = $2  ', [req.session.account_id, req.params.itemId, req.params.quantity],
+        function(err, result) {
+          done();
+          if(err) {
+            return console.error('error running query', err);
+          }
+          console.log(result.rows); 
+
+          res.json(true);
+        });
+      //Rule to update quantity in shopping_cart 
+      /* CREATE RULE update_item_count AS ON INSERT TO items_in_cart 
+      DO UPDATE shopping_cart SET total_items = total_items + 1 
+      WHERE owner_id IN 
+      (SELECT owner_id from shopping_cart 
+      where shopping_cart_id = NEW.shopping_cart_id)*/
+    
+    }
+    else {
+
+      res.json(false);
+    }
+  });
+});
+
 
 // REST Operation - HTTP PUT to sign Out
 app.put("/signOut", function(req, res){
