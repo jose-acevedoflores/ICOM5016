@@ -432,20 +432,33 @@ function placedBids(){
 					var totalAmount =0;
 					item = itemList[i];
 					console.log(item.id);
-
-					list.append("<li data-icon=\"false\" id=itemID"+item.id+"><a href=\"#\">" + 
-						"<img src="+ item.picture + ">"  + 
-						"<h2>" + item.pname + "</h2>" + 
-						"<p>" + item.description + "</p>" +
-						"<p> Rating:" + item.rating + " </p>" + 
-						"<div data-role=\"fieldcontain\" class=\"ui-li-aside\">" +
-						//"<h2 class=\"ui-li-aside\"> Increase Bid:" +
-						"<label for=\"incBid" +item.id+"\"> Increase Bid" +
-						"<input id=\"incBid" +item.id+"\" class=\"ui-input-text ui-body-a ui-corner-all ui-shadow-inset\" data-inline=\"true\" value="+item.price+">" +
-						"<input  onclick=\"increaseBid("+item.id+")\" type=\"submit\" data-role=\"button\" data-inline=\"true\" value=\"Bid\">"+
-						"</div></a></li>"); //+
-						//"<a onclick=\"toIncreaseBid("+item.id+")\" href=\"#increaseBid\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\">increase bid</li>");
-
+					if(item.whoiswin === "winning"){
+						list.append("<li data-icon=\"false\" id=itemID"+item.id+"><a href=\"#\">" + 
+							"<img src="+ item.picture + ">"  + 
+							"<h2>" + item.pname + "</h2>" + 
+							"<p>" + item.description + "</p>" +
+							"<p> Rating:" + item.rating + " </p>" + 
+							"<div data-role=\"fieldcontain\" class=\"ui-li-aside\">" +
+							//"<h2 class=\"ui-li-aside\"> Increase Bid:" +
+							"<label for=\"incBid" +item.id+"\"> Winning with" +
+							"<input id=\"incBid" +item.id+"\" class=\"ui-input-text ui-body-a ui-corner-all ui-shadow-inset\" data-inline=\"true\" value="+item.bid_amount+">" +
+							"<input  onclick=\"increaseBid("+item.id+")\" type=\"submit\" data-role=\"button\" data-inline=\"true\" value=\"Bid\">"+
+							"</div></a></li>"); 
+					}
+					else {
+						list.append("<li data-icon=\"false\" id=itemID"+item.id+"><a href=\"#\">" + 
+							"<img src="+ item.picture + ">"  + 
+							"<h2>" + item.pname + "</h2>" + 
+							"<p>" + item.description + "</p>" +
+							"<p> Rating:" + item.rating + " </p>" + 
+							"<div data-role=\"fieldcontain\" class=\"ui-li-aside\">" +
+							//"<h2 class=\"ui-li-aside\"> Increase Bid:" +
+							"<label for=\"incBid" +item.id+"\"> Increase Bid" +
+							"<input id=\"incBid" +item.id+"\" class=\"ui-input-text ui-body-a ui-corner-all ui-shadow-inset\" data-inline=\"true\" value="+item.bid_amount+">" +
+							"<input  onclick=\"increaseBid("+item.id+")\" type=\"submit\" data-role=\"button\" data-inline=\"true\" value=\"Bid\">"+
+							"</div></a></li>"); 
+					}
+	
 					list.listview("refresh");	
 					var totalAmountField = $("#nextAcceptableBid");
 					totalAmountField.empty();

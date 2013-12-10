@@ -349,7 +349,7 @@ app.get('/placedBids', function(req, res) {
     if(req.session.loggedIn)  
     { 
 
-      client.query('SELECT product_id AS id, photo_url AS picture, starting_price AS price, brand, model, product_name AS pname, description FROM auction_product WHERE auction_product.product_id IN (SELECT product_id FROM bid NATURAL JOIN auction_product WHERE bid.buyer_account_id = $1)', [req.session.account_id],
+      client.query('SELECT product_id AS id, photo_url AS picture, starting_price AS price, brand, model, product_name AS pname, description, bid_amount, highest_bidder_id, \'winning\' AS whoiswin FROM auction_product NATURAL JOIN (SELECT bid_id AS highest_bid, amount AS bid_amount, buyer_account_id AS highest_bidder_id FROM bid ) AS temp WHERE auction_product.product_id IN (SELECT product_id FROM bid NATURAL JOIN auction_product WHERE bid.buyer_account_id = $1)', [req.session.account_id],
 
       function(err, result) {
         //call `done()` to release the client back to the pool
@@ -358,8 +358,12 @@ app.get('/placedBids', function(req, res) {
         if(err) {
           return console.error('error running query', err);
         }
-        console.log(result.rows);
-
+        
+        for (var i = 0 ; i < result.rows.length; i++) {
+          if(result.rows[i].highest_bidder_id != req.session.account_id )
+            result.rows[i].whoiswin = "losing";
+        };
+        console.log("GET : PlacedBids RESULT: "+  result.rows);
         var temp = {"items" : result.rows};
         res.json(temp);
       });
