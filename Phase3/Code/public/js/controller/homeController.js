@@ -621,6 +621,8 @@ function loginForm(){
 
 }
 
+
+
 /*******************************************************************************************************************************************/
 // Sign Out
 /*******************************************************************************************************************************************/
@@ -688,6 +690,8 @@ function registerForm(){
 	$.mobile.loading("show");
 	var form = $("#registerForm");
 	var formData = form.serializeArray();
+	var email;
+	var password;
 	console.log("form Data: " + formData);
 	var newUser = ConvertToJSON(formData);
 	console.log("New User: " + JSON.stringify(newUser));
@@ -701,6 +705,40 @@ function registerForm(){
 		success : function(data, textStatus, jqXHR){
 			$.mobile.loading("hide");
 			$.mobile.navigate("#home");
+			loginForm(email, password);
+			console.log("To home");
+
+		},
+		error : function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			$.mobile.loading("hide");
+			alert("Data could not be added!");
+		}
+	});
+
+}
+
+function addAdminForm(){
+	console.log("Add Admin");
+	$.mobile.loading("show");
+	var form = $("#aRegisterForm");
+	var formData = form.serializeArray();
+	var email;
+	var password;
+	console.log("form Data: " + formData);
+	var newUser = ConvertToJSON(formData);
+	console.log("New Admin: " + JSON.stringify(newUser));
+	var newUserJSON = JSON.stringify(newUser);
+	$.ajax({
+		url : "http://"+host+"/add_new_admin",
+		method: 'post',
+		data : newUserJSON,
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+			$.mobile.loading("hide");
+			$.mobile.navigate("#home");
+			loginForm(email, password);
 			console.log("To home");
 
 		},

@@ -959,12 +959,57 @@ app.post('/register/newUser', function(req, res) {
   		res.statusCode = 400;
   		return res.send("Error: Password doesn't match");
 	}
-  	var newUser = new User( req.body.fname, req.body.lname, req.body.password, req.body.emailAddress);
-  	console.log("New User: " + JSON.stringify(newUser));
-  	newUser.id = userNextId++;
-  	userList.push(newUser);
-  	res.json(true);
+
+  pg.connect(conString, function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
+
+      client.query("INSERT INTO web_user(f_name, l_name, password, email_address, admin_flag, user_description, rank, user_pic) VALUES( $1, $2, $3, $4, $5, $6, $7, $8)", [req.body.fname, req.body.lname, req.body.password, req.body.emailAddress, false, req.body.description,
+      0.0, "http://www.icm.espol.edu.ec/estudiantes/2005/200511889/images/Juan%20Pueblo.jpg"],
+
+      function(err, result) {
+        //call `done()` to release the client back to the pool
+        done();
+        if(err) {
+          return console.error('error running query', err);
+        }
+        
+        res.json(true);
+      });
+  }); 
+  	
+  
 });
+
+app.post('/add_new_admin', function(req, res){
+  console.log("POST : New Admin");
+
+  if(!req.body.hasOwnProperty('aFname') || !req.body.hasOwnProperty('aLname')
+      || !req.body.hasOwnProperty('aEmailAddress') ){
+      res.statusCode = 400;
+      return res.send('Error: Missing fields for user registration.');
+    }
+
+  pg.connect(conString, function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
+
+      client.query("INSERT INTO web_user(f_name, l_name, password, email_address, admin_flag, user_description, rank, user_pic) VALUES( $1, $2, $3, $4, $5, $6, $7, $8)", [req.body.aFname, req.body.aLname, 'admin', req.body.emailAddress, true, '',
+      0.0, 'http://www.icm.espol.edu.ec/estudiantes/2005/200511889/images/Juan%20Pueblo.jpg'],
+
+      function(err, result) {
+        //call `done()` to release the client back to the pool
+        done();
+        if(err) {
+          return console.error('error running query', err);
+        }
+        
+        res.json(true);
+      });
+  }); 
+})
 
 app.post('/addStore/storeName/:storeName', function(req, res){
 	var storeToAdd = req.params.storeName;
