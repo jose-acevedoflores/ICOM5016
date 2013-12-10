@@ -273,7 +273,7 @@ app.get("/item/:itemId", function(req,res) {
     		return console.error('error fetching client from pool', err);
   	}
 
-  	client.query('SELECT product_id AS id, brand , model, product_name AS pname, description, photo_url AS picture FROM product WHERE product_id = $1', [itemId],
+  	client.query('SELECT product_id AS id, product_name AS pname, description, photo_url AS picture FROM product WHERE product_id = $1', [itemId],
 
   		function(err, result) {
     		//call `done()` to release the client back to the pool
