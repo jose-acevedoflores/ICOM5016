@@ -468,7 +468,7 @@ var itemToIncreaseBid;
 function toIncreaseBid(itemId){
 	itemToIncreaseBid = itemId;
 }
-
+//TODO
 function increaseBid(itemId){
 	
 	var incBid = document.getElementById("incBid" +itemId).value ;
