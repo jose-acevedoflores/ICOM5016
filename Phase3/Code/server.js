@@ -503,7 +503,7 @@ app.get("/itemsSold", function(req, res){
     if(req.session.loggedIn)  
     { 
 
-      client.query('SELECT product_id AS id, photo_url AS picture,  brand, model, description, invoice_id FROM has_invoice NATURAL JOIN product  WHERE seller_id = $1 ORDER BY invoice_id DESC  ', [req.session.account_id],
+      client.query('SELECT product_id AS id, photo_url AS picture, brand, model, product_name, date, description, price ,invoice_id FROM has_invoice NATURAL JOIN sale_product NATURAL JOIN invoice WHERE seller_id = $1 ORDER BY date DESC  ', [req.session.account_id],
 
       function(err, result) {
         //call `done()` to release the client back to the pool
@@ -876,6 +876,40 @@ app.put("/addItemToCart/:itemId", function(req, res){
     }
   });
 });
+
+app.put("/itemInCart/update_quantity/:itemId/:quantity", function(req, res){
+  console.log("PUT : add Item to cart");
+
+  pg.connect(conString, function(err, client, done) {
+    if(err){
+      return console.error('error fetching client form pool', err);
+    }
+    if(req.session.loggedIn) {
+      client.query('UPDATE items_in_cart SET quantity = $3 WHERE shopping_cart_id = (SELECT shopping_cart_id FROM shopping_cart WHERE owner_id = $1) AND item_id = $2  ', [req.session.account_id, req.params.itemId, req.params.quantity],
+        function(err, result) {
+          done();
+          if(err) {
+            return console.error('error running query', err);
+          }
+          console.log(result.rows); 
+
+          res.json(true);
+        });
+      //Rule to update quantity in shopping_cart 
+      /* CREATE RULE update_item_count AS ON INSERT TO items_in_cart 
+      DO UPDATE shopping_cart SET total_items = total_items + 1 
+      WHERE owner_id IN 
+      (SELECT owner_id from shopping_cart 
+      where shopping_cart_id = NEW.shopping_cart_id)*/
+    
+    }
+    else {
+
+      res.json(false);
+    }
+  });
+});
+
 
 // REST Operation - HTTP PUT to sign Out
 app.put("/signOut", function(req, res){
