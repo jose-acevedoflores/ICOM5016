@@ -41,7 +41,7 @@ html
 							a(href="#", data-role="button") #{data.stores[i].name}
 							a(href="#", data-role="button") #{data.stores[i].categories[c]}
 						div(data-role="fieldcontain")
-							select(name="SortOrder", id="sortOrder")
+							select(name="SortOrder", id="sortOrder", onchange="orderView('#{data.stores[i].categories[c]}',#{data.stores[i].category_id})")
 								optgroup(label="Price")
 									option(value="highToLow") High to Low
 									option(value="lowToHigh") Low to High

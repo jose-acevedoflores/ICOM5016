@@ -214,7 +214,68 @@ function findItem(itemId){
 	});
 };
 
+function orderView(category, store){
 
+	var sortOrder = document.getElementById("sortOrder").value ; 
+
+	$.mobile.loading("show");
+	console.log("orderView function with categoryId = " + category +" and Store = " + store);
+	$.ajax({
+		url : "http://"+host+"/stores/"+store+"/"+category+"/"+sortOrder,
+		method: 'get',
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+
+			$(document).on('pagebeforeshow', "#"+category+"CategorySTORE"+store, function( event, ui ) {
+
+				console.log("#"+category+"CategorySTORE"+store+" on pagebeforeshow listener");
+				var itemList = data.items;
+				var len = itemList.length;
+				var list = $("#"+category+"CategoryItemListSTORE"+store);
+				list.empty();
+				var item;
+				for (var i=0; i < len; ++i){
+					item = itemList[i];
+
+					list.append("<li>" + 
+						"<a href='#' onclick=\"findItem(" +item.product_id + ")\">" + 
+						"<img src="+ item.photo_url + ">"  + 
+						"<h2>" + item.brand + " "+item.model + "</h2>" + 
+						"<p>" + item.description + "</p>" +
+						"<p> Rating:" + item.seller_id +" temp" + " </p>" + 
+						"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
+						"</a></li>");
+						
+				}
+				list.listview("refresh");
+				$(document).off('pagebeforeshow');
+				$.mobile.loading("hide");			
+			});
+
+
+			if($.mobile.activePage.attr("id") === category+"CategorySTORE"+store){
+
+				//Change to the page by hiding the panel
+				$.mobile.changePage("#"+category+"CategorySTORE"+store,
+		    	{
+					allowSamePageTransition : true,
+					transition              : 'none',
+					showLoadMsg             : false,
+					reloadPage              : false
+				});
+			}
+			else{
+				$.mobile.navigate("#"+category+"CategorySTORE"+store);
+			}
+		},
+		error: function(data, textStatus, jqXHR){
+			$.mobile.loading("hide");
+			console.log("textStatus: " + textStatus);
+			alert("NOOOO");
+		}
+	});
+}
 /*******************************************************************************************************************************************/
 // Shopping cart
 /*******************************************************************************************************************************************/
