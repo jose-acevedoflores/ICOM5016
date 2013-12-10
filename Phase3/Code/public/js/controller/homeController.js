@@ -476,7 +476,7 @@ function increaseBid(itemId){
 	$.mobile.loading("show");
 	console.log("incBid: "+ incBid);
 	$.ajax({
-		url : "http://"+host+"placedBids/item/"+itemId+"/"+incBid,
+		url : "http://"+host+"/placedBids/item/"+itemId+"/"+incBid,
 		method : "put",
 		contentType: "application/json",
 		dataType : "json",

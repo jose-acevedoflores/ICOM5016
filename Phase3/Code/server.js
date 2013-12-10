@@ -753,7 +753,7 @@ app.put("/placedBids/item/:id/:incBid", function(req, res){
       return console.error('error fetching client from pool', err);
     }
 
-    client.query("INSERT INTO bid(buyer_account_id, product_id, amount) VALUES( $1, '"+product_id+"', '"+ bid_amount +"')", [req.session.account_id],
+    client.query("INSERT INTO bid(buyer_account_id, product_id, amount) VALUES( $1, $2, $3)", [req.session.account_id, product_id, bid_amount],
 
       function(err, result) {
         //call `done()` to release the client back to the pool
@@ -761,7 +761,7 @@ app.put("/placedBids/item/:id/:incBid", function(req, res){
         if(err) {
           return console.error('error running query', err);
         }
-
+        res.json(true);
       });
   }); 
 });
