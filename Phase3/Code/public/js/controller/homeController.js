@@ -389,7 +389,7 @@ function removeItemFromCart(){
 			$.mobile.loading("hide");
 
 			$.mobile.changePage(
-		    $("#shoppingCart") ,
+		    $("#shoppingCart") , 
 		    {
 				allowSamePageTransition : true,
 				transition              : 'none',
@@ -440,9 +440,9 @@ function placedBids(){
 						"<p> Rating:" + item.rating + " </p>" + 
 						"<div data-role=\"fieldcontain\" class=\"ui-li-aside\">" +
 						//"<h2 class=\"ui-li-aside\"> Increase Bid:" +
-						"<label for=\"nextBid\"> Increase Bid" +
-						"<input id=\"nextBid\" class=\"ui-input-text ui-body-a ui-corner-all ui-shadow-inset\" data-inline=\"true\" value="+item.price+">" +
-						"<input  onclick=\"increaseBid()\" type=\"submit\" data-role=\"button\" data-inline=\"true\" value=\"Bid\">"+
+						"<label for=\"incBid" +item.id+"\"> Increase Bid" +
+						"<input id=\"incBid" +item.id+"\" class=\"ui-input-text ui-body-a ui-corner-all ui-shadow-inset\" data-inline=\"true\" value="+item.price+">" +
+						"<input  onclick=\"increaseBid("+item.id+")\" type=\"submit\" data-role=\"button\" data-inline=\"true\" value=\"Bid\">"+
 						"</div></a></li>"); //+
 						//"<a onclick=\"toIncreaseBid("+item.id+")\" href=\"#increaseBid\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\">increase bid</li>");
 
@@ -469,48 +469,37 @@ function toIncreaseBid(itemId){
 	itemToIncreaseBid = itemId;
 }
 
-function increaseBid(){
+function increaseBid(itemId){
+	
+	var incBid = document.getElementById("incBid" +itemId).value ;
+
 	$.mobile.loading("show");
-	console.log("Increase Bid: "+ itemToIncreaseBid);
-	console.log("BID");
-	var bid = $("#increaseBid");
-	var bidData = bid.serializeArray(bidData);
-	console.log("bid data : " + bidData);
-	var jsonBid = ConvertToJSON(bidData);
-	var readyBid = JSON.stringify(jsonBid);
-	console.log(bid);
+	console.log("incBid: "+ incBid);
 	$.ajax({
-		url : "http://"+host+"/placedBids/item"+itemToIncreaseBid,
+		url : "http://"+host+"placedBids/item/"+itemId+"/"+incBid,
 		method : "put",
-		data : readyBid,
 		contentType: "application/json",
 		dataType : "json",
-		
-
-	// $.mobile.loading("show");
-	// var form = $("#loginForm");
-	// var formData = form.serializeArray();
-	// console.log("form data : "+ formData);
-	// var user = ConvertToJSON(formData);
-	// console.log("User to login : " + JSON.stringify(user));
-	// var userJSON = JSON.stringify(user);
 		success : function(data, textStatus, jqXHR){
 
 			$.mobile.loading("hide");
 
-			$.mobile.changePage("#placedBids" ,
+			$.mobile.changePage(
+		    $("#placedBids") ,
 		    {
 				allowSamePageTransition : true,
 				transition              : 'none',
 				showLoadMsg             : false,
-				reloadPage              : true});
+				reloadPage              : true
+		    }
+			);
 		},
 		error: function(data, textStatus, jqXHR){
 			console.log("textStatus: " + textStatus);
-			alert("Data not found!");
+			$.mobile.loading("hide");
+			alert("Could not update quantity");
 		}
 	});
-	itemToIncreaseBid = undefined;
 }
 /*******************************************************************************************************************************************/
 // Items Sold 
