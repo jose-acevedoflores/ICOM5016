@@ -377,7 +377,7 @@ function placedBids(){
 						"<h2>" + item.model + "</h2>" + 
 						"<p>" + item.description + "</p>" +
 						"<p> Rating:" + item.rating + " </p>" + 
-						"<div data-role=\"fielcontain\" class=\"ui-li-aside\">" +
+						"<div data-role=\"fieldcontain\" class=\"ui-li-aside\">" +
 						//"<h2 class=\"ui-li-aside\"> Increase Bid:" +
 						"<label for=\"nextBid\"> Increase Bid" +
 						"<input id=\"nextBid\" class=\"ui-input-text ui-body-a ui-corner-all ui-shadow-inset\" data-inline=\"true\" value="+item.price+">" +

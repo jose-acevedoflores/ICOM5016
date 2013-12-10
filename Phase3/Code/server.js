@@ -615,7 +615,8 @@ app.put("/userLogin", function(req, res){
     console.log("PUT  : Login");
     console.log(req.body.hasOwnProperty('emailAddress'));
     var password = req.body.password;
-    var email = req.body.emailAddress;
+    var email = req.body.emailAddress.toString();
+    var email = email.toLowerCase();
         
     console.log(email);
     console.log(password);
@@ -699,60 +700,23 @@ app.put("/placedBids/item:id", function(req, res){
 	var id = req.params.id;
   var bid_amount = req.body;
 	console.log("PUT ITEM: " +id);
-  var client = new pg.Client(conString);
-  client.connect();
+ 
+  pg.connect(conString, function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
 
-  var query = client.query("SELECT bid.amount, bid.id FROM bid WHERE (bid.amount > $1 AND bid.id = $2)", [email, id]);
-    
-    query.on("row", function (row, result) {
-      result.addRow(row);
-    });
+    client.query("INSERT INTO bid(buyer_account_id, product_id, amount) VALUES( $1,'"+ id+"', '"+ bid_amount +"' )", [req.session.account_id],
 
-    query.on("end", function (result) {
-      var len = result.rows.length;
-      if (len==0) {
-        res.statusCode = 401;
-        res.send("There was an error with your e-mail/password combination.");
-      }
+      function(err, result) {
+        //call `done()` to release the client back to the pool
+        done();
+        if(err) {
+          return console.error('error running query', err);
+        }
 
-      else {
-        console.log(result.rows);
-
-
-
-        //var temp = {"items" : { "userName" : req.session.userName } };
-        res.json(true);
-          
-      }
-        
-      client.end();
-
-    });
-	// if((id < 0)){
-	// 	res.statusCode = 404;
-	// 	res.send("Item not found");
-	// }
-
-	// else {
-	// 	var target = -1;
-	// 	for (var i=0; i<placedBidsVar.length; ++i) {
-	// 		if(placedBidsVar[i].id === id) {
-	// 			target = i;
-	// 			break;
-	// 		}
-	// 	}
-	// 	if (target ==-1) {
-	// 		res.statusCode = 404;
-	// 		res.send("Item not foud");
-	// 	}
-
-	// 	else {
-	// 		var theItem = placedBidsVar[target];
-	// 		theItem += req.body.price;
-	// 		var response = {"item": theItem};
-	// 		res.json(response);
-	// 	}
-	// }
+      });
+  }); 
 });
 
 app.put("/userProfile/update/billingAddress", function(req, res) {
