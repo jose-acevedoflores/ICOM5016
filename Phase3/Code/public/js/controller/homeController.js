@@ -1015,7 +1015,7 @@ function itemsSelling(){
 					else if(item.product_type === 'auction'){
 						listAuctions.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
 							"<img src="+ item.picture + ">"  + 
-							"<h2>" + item.brand + " " +item.model + "</h2>" + 
+							"<h2>" + item.pname + "</h2>" + 
 							"<p>" + item.description + "</p>" +
 							"<p> Rating:" + item.rating + " </p>" + 
 							"<p class=\"ui-li-aside\"> Starting Price: " + item.price + "</p>" +
