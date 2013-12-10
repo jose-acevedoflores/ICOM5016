@@ -1,0 +1,118 @@
+div(data-role="panel", id="rightPanel", data-position="right", data-display="reveal", data-theme="b")	
+	div(class="nav_profile")
+		div(class="nav_name")
+			a(href="#home")
+				center
+					h3	Stores	
+				
+			ul(data-role="listview", data-inset="true")
+				-for(var g = 0 ; g < data.dataLength ; g++)	
+					li( data-role="list-divider", data-theme="a")
+						a(onclick="findStore(\"#{data.stores[g].category_id}\")") #{data.stores[g].name}
+					- for(var t = 0 ; t < data.stores[g].categoriesLength ; t++)	
+						li
+							a(onclick="findCategory(\"#{data.stores[g].category_id}\",\"#{data.stores[g].categories[t]}\")") #{data.stores[g].categories[t]}
+			
+
+
+div(data-role="panel", id="leftPanel", class="main_nav", data-display="reveal" , data-dismissible="true" ,data-theme="b")		
+	div(class="nav_profile")			
+		div(class="nav_name")
+			h3 
+
+			-if (data.loggedIn) {
+					strong Hi,
+					| 
+					a(href="#profilePage")  #{data.userName}
+
+			-	}
+			-else {
+					a(href="#login", data-role="button", data-inline="true",
+						data-icon="check", data-theme="a", data-transition="flip", dat-corners="true"
+						data-icon-shadow="true", data-mini="true") Log In 
+
+
+					| or
+					a(href= "#register", data-role="button", data-inline="true",
+						data-icon="plus", data-theme="a", data-transition="flip", data-corners="true"
+						data-icon-shadow="true", data-mini="true")  Register
+			-	}
+
+
+			ul(data-role="listview", data-inset="true" )	
+				li
+					a(onclick="shoppingCart()") Cart
+				li 
+					a(onclick="placedBids()") Placed Bids
+				li
+					a(onclick="itemsSelling()") Items Selling
+				li
+					a(onclick="itemsSold()") Items Sold
+				li 
+					a(href="#profilePage")	Account
+					
+			-if (data.loggedIn) {
+
+					a(data-role="button", data-theme="a", data-position="fixed", onclick="signOut()") Sign Out
+			-	}
+
+			-if (data.isAdmin) {
+				br 
+
+				ul(data-role="listview", data-inset="true" )
+					li(data-role="list-divider", data-theme="a") Admin Section	
+					li
+						a(href="#adminManageStore") Manage Stores
+					li 
+						a(href="#adminAddCategory") Add Category to Store
+					li
+						a(onclick="getUsersToManage()") Manage Users
+					li
+						a(onclick="getAdminsToManage()") Manage Admins
+					li
+						a(href="#adminGenerateReports")	Generate Reports
+						
+			-	}
+
+
+header(data-role="header", data-theme="a", data-position="fixed")
+	//- div(data-role="fieldcontain")
+	h1 BidData
+	-if (data.loggedIn) {
+		a(href="#leftPanel", data-role="button", data-inline="true") Menu
+	-}
+
+	-else {
+		a(href="#login", data-role="button", data-inline="true",
+					data-icon="check", data-theme="a", data-transition="flip", data-corners="true"
+					data-icon-shadow="true", data-mini="true", data-theme="c") Login 
+	-}
+	div(data-role="fieldcontain")
+	a(href="#rightPanel", data-role="button", data-inline="true", data-corners="true", data-mini="true") Stores
+	input(type="search", name="search-2" , class="mainSearch", data-theme="c" , value="")
+
+
+
+footer(data-role="footer", data-theme="a", data-position="fixed")
+	div(data-role="fieldcontain", data-mini = "true")
+		nav(data-role="navbar")
+			ul
+				li
+					a(href="#", data-icon = "back", data-rel="back", data-mini="true", data-inline="true") Back
+				li
+					a(href="#home", data-icon="home", data-mini="true", data-inline="true") Home
+				li
+					a(onclick="shoppingCart()", data-icon="grid", data-mini="true", data-inline="true") Shopping Cart
+				li
+					-if (data.loggedIn) {
+
+						a(href="#profilePage", data-icon="gear", data-mini="true", data-inline="true") Account
+
+					-}
+					-else {
+
+						a(href="#login", data-icon="gear", data-mini="true", data-inline="true") Account
+
+					-}
+
+

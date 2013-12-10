@@ -1,0 +1,587 @@
+!!!
+html
+	head
+		title Woot
+		meta(name="viewport", content="width=device-width, initial-scale=1")
+		link(rel="stylesheet", href="../css/jquery.mobile-1.3.1.css" )
+		script(src="../js/jquery-1.10.2.js")
+		script(src="../js/jquery.mobile-1.3.1.js")
+		script(type="text/javascript", src="../js/controller/homeController.js")
+
+	body 
+		div(data-role="page", id="home")
+			include common
+
+			div(data-role="content")
+				h1 Stores
+				p Browse our wonderful selection of merchandise. Check out today's hot deals 		
+				- for (var i = 0 ; i < data.dataLength ; i++)
+					ul(data-role="listview", id="List#{data.stores[i].category_id}" , data-inset="true", class="listsHome")	
+						li(data-role="list-divider", data-theme="a")
+							a(onclick="findStore(\"#{data.stores[i].category_id}\")")	#{data.stores[i].name}
+		// Add stores divs					
+		-for(var i = 0 ; i < data.dataLength ; i++)			
+			div(data-role="page", id="Store#{data.stores[i].category_id}")
+				include common
+				div(data-role="content", id="StoreContent#{data.stores[i].category_id}")
+					p Browse our wonderful selection of merchandise. Check out today's hot deals
+					h3 #{data.stores[i].name} 
+					- for(var c = 0 ; c < data.stores[i].categoriesLength ; c++)
+						ul(data-role="listview", id="#{data.stores[i].categories[c]}STORE#{data.stores[i].category_id}List", data-inset="true", class="listsHome")
+							li(data-role="list-divider", data-theme="a")
+								a(onclick="findCategory(\"#{data.stores[i].category_id}\",\"#{data.stores[i].categories[c]}\")") #{data.stores[i].categories[c]}	
+
+		//Add categories divs						
+		-for(var i = 0 ; i < data.dataLength ; i++)
+			-for(var c = 0 ; c < data.stores[i].categoriesLength ; c++)
+				div(data-role="page", id="#{data.stores[i].categories[c]}CategorySTORE#{data.stores[i].category_id}")				
+					include common
+					div(data-role="content")
+						div(data-role="controlgroup", data-type="horizontal", id="#{data.stores[i].categories[c]}CategoryNavigatorSTORE#{data.stores[i].category_id}") 	
+							a(href="#", data-role="button") #{data.stores[i].name}
+							a(href="#", data-role="button") #{data.stores[i].categories[c]}
+						div(data-role="fieldcontain")
+							select(name="SortOrder", id="sortOrder")
+								optgroup(label="Price")
+									option(value="highToLow") High to Low
+									option(value="lowToHigh") Low to High
+								optgroup(label="Brand")	
+									option(value="alphabetical") Alphabetical order (Brand)
+									option(value="revAlphabetical") Reverse Alphabetical (Brand)
+								optgroup(label="Item Name")
+									option(value="alphabetical") Alphabetical order (Item Name)
+									option(value="revAlphabetical") Reverse Alphabetical (Item Name)		
+						br			
+						ul(data-role="listview", data-inset="true", data-filter="true", id="#{data.stores[i].categories[c]}CategoryItemListSTORE#{data.stores[i].category_id}", data-filter-placeholder="Filter items")						
+
+        
+
+		div(data-role="page", id="shoppingCart")
+			include common	
+			div(data-role="content")
+				h3 Items in cart						
+				ul(data-role="listview", data-inset="true", id="cartItemList")
+				h3 Order Total: 	
+				h3(id="shoppingCartAmount") 
+				input(type="submit", value="Proceed to Checkout", onclick="checkoutCart()" )
+
+				div(data-role="popup", id="removeItemFromCart", data-theme="d", data-overlay-theme="b", class="ui-content", style="max-width:340px;")
+					h3 Delete from cart ?
+					p The item will be removed of your cart 
+					a(onclick="removeItemFromCart()", data-role="button", data-rel="back", data-theme="b", data-icon="check", data-inline="true", data-mini="true") Remove
+					a(href="#", data-role="button", data-rel="back", data-inline="true", data-mini="true") Cancel
+
+		// Placed Bids
+		div(data-role="page", id="placedBids")
+			include common
+			div(data-role="content")
+				h3 Recent Bids:
+
+				ul(data-role="listview", data-inset="true", id="bidItemList")
+
+				div(data-role="popup", id="increaseBid", data-theme="d", data-overlay-theme="b", class="ui-content")
+					
+					
+
+					div(data-role="content")
+						div(data-role="header", data-theme="c")
+							center
+								p Increase Bid
+						dive(data-role="content")
+							form(method="post", data-transition="pop")
+								fieldset(data-role="controlgroup")
+									ul
+										li
+									
+											p Next Acceptable Bid is: 
+										li
+											p(id="nextAcceptableBid")
+										li
+											label(for="upd-bid") Increase Bid:
+										li
+											input(type="text", name="newBid", placeholder="nextAcceptableBid")
+
+					center
+						a(onclick="increaseBid()", data-role="button", data-rel="back", data-theme="b", data-icon="check", data-inline="true", data-mini="true") Place Bid
+						a(href="#", data-role="button", data-rel="back", data-inline="true", data-mini="true") Cancel
+
+
+
+		div(data-role="page", id="itemsSold")
+			include common	
+			div(data-role="content")
+				h3 History of Sold Items
+				ul(data-role="listview", data-inset="true", id="itemsSoldList", data-filter="true", data-filter-placeholder="Search your Sold items")
+
+				input(type="submit", value="Load More", onclick="loadMoreItemsSold()" )	
+		
+		// Login
+		div(data-role="page", id="login")
+			include common
+			div(data-role="content")
+					h1 Login:
+					form(id ="loginForm", data-transition="pop")
+						fieldset(data-role="controlgroup")
+							ul
+								li
+									label(for="Email") Email:
+										input(id="userEmailAddress", class = "required", type ="text", name="emailAddress", placeholder="john_doe@domain.com")
+								li
+									label(for="Password") Password:
+										input(id="userPassword",class = "required", type ="password", name="password", placeholder ="Password")
+
+				
+					center
+						div(class ="ui-grid-a")
+							div(class="ui-block-a")
+								a(href="#home", data-icon = "delete", data-rel="back", data-inline="true", type="submit", value="Cancel", data-mini="true") Cancel
+							//- div(class="ui-block-b")
+
+							div(class="ui-block-b")
+								
+								a(href="#", type="submit",data-rel="back", data-inline="true", data-theme="b", value="Log In", onclick="loginForm()", data-mini="true", data-icon="check") Login
+							
+								//- a(href="#", type="submit",data-rel="back", data-inline="true", data-theme="c", onclick="loginForm()", data-mini="true", data-icon="check", data-icon-shadow="true") Login
+					hr
+					center
+						p New to BidData?
+					center
+						a(href= "#register", data-role="button", data-inline="false",
+							data-icon="plus", data-theme="c", data-transition="flip", data-corners="true"
+							data-icon-shadow="true")  Register
+
+
+					
+		// Register
+		div(data-role="page", id="register")
+			include common
+			div(data-role="content")
+				h1 Register:
+				form(id ="registerForm", data-transition="pop")
+					fieldset(data-role='controlgroup')
+						ul
+							li
+								label(for="fname") First Name:
+									input(id="fname", type ="text", name="fname", placeholder = "Firstname")
+							li
+								label(for="lname") Last Name:
+									input(id="lname",type ="text", name="lname", placeholder="Lastname")
+							li 
+								label(for="emailAddress") Email:
+									input(id="emailAddress", type="text", name="emailAddress", placeholder="john_doe@domain.com")
+							li
+								label(for="password") Password:
+									input(id="password", type="password", name="password", placeholder="Password")
+							li
+								label(for="confirmPassword") Confirm Password:
+									input(id="confirmPassword", type="password", name="confirmPassword", placeholder ="Password")
+							li
+								label(for="description") Description:
+									textarea(id="description", value="", name="description")
+							li
+								label(for="mailAddress") Mailing Address:
+									textarea(id="mailAddress", name="mailAddress")
+							li
+								label(for="billMailAddress") Billing Address:
+									textarea(id="billMailAddress", name="billMailAddress")
+							li
+								label(for="c_card") Credit Card Number:
+									input(id="c_card", name="c_card", placeholder="902902")
+							
+
+					center
+						a(data-role="button", data-inline="true",
+						data-icon="check", data-theme="a", data-transition="flip", dat-corners="true"
+						data-icon-shadow="true", data-mini="true", onclick="registerForm()") Register
+							
+						a(href="#home",data-role="button", data-inline="true",
+						data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+						data-icon-shadow="true", data-mini="true") Cancel
+		
+		// Items Selling
+		div(data-role="page", id = "itemsSelling" )		
+			include common
+			div(data-role="content")
+				h3 My Store:
+				center
+					a(href="#newItemPage", data-role="button", data-theme="a"
+						, data-transition="flip", data-icon="check", data-mini="true") Add Item
+				
+					ul(data-role="listview", data-inset="true", id="itemsSellingList")
+					ul(data-role="listview", data-inset="true", id="itemsAuctioningList")	
+
+		// Add New Item Form
+		div(data-role="page", id="newItemPage")
+			include common
+			div(data-role="content")
+				h1 Add New Item:
+				form(id ="newItemForm", data-transition="pop")
+					fieldset(data-role='controlgroup')
+						ul
+							li
+							
+								label(for="iName") Item Name:
+									input(id="iName", type ="text", name="iName", placeholder = "Item Name")
+							li
+								label(for="iDescript") Item Description:
+									input(id="iDescript",type ="text", name="iDescript", placeholder="Item Description")
+							li 
+								label(for="iPrice") Item Price:
+									input(id="iPrice", type="text", name="iPrice", placeholder="$1.99")
+							li
+								label(for="iPic") Item Picture:
+									input(id="iPic", type="text", name="iPic", accept="image/*", capture)
+							
+
+							p Selling or Auctioning?
+							li
+								label(for="selling Choice", class="select")
+									select(id="sellChoice", name="sellChoice")
+										option(value="selling", selected="selected") Selling
+										option(value="auctioning") Auctioning									
+								p
+
+							lis
+								label(for="bidEndDate") Auction end date
+									input(type="date", id="bidEndDate", value="", class="ui-input-text ui-body-c ui-corner-all ui-shadow-inset")
+
+									
+							//- li
+							//- 	label(for="confirmPassword") Confirm Password:
+							//- 		input(id="confirmPassword", type="password", name="confirmPassword"
+							//- 			placeholder ="Password")
+					center
+						a(data-role="button", data-inline="true",
+						data-icon="check", data-theme="a", data-transition="flip", dat-corners="true"
+						data-icon-shadow="true", data-mini="true", onclick="addItem()") Add Item
+							
+						a(href="#home",data-role="button", data-inline="true",
+						data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+						data-icon-shadow="true", data-mini="true") Cancel	
+			
+		// Profile
+		div(data-role="page", id = "profilePage", data-theme = "d")
+			include common
+			div(data-role= "content", data-theme="d", data-content-theme="b")
+					
+				div(class="ui-grid-a")
+					div(class="ui-block-a")
+						h3 #{data.userName}
+						br
+					div(class="ui-block-b")
+
+				div(class="ui-grid-a")
+					div(class="ui-block-a")
+						img(src ="#{data.userPicture}", width="120" height="120", border = "true", onclick="getUserProfileInfo()")
+
+						br
+						a(onclick= "getUserProfileInfo()", type="submit", data-inline="true", data-theme="b", data-mini="true") Edit Profile
+
+					div(class="ui-block-b")
+						p 
+							b Current Seller Rank: #{data.rank}
+						p 
+							em #{data.userDescription}
+				hr
+				p Be sure to check out:
+
+					a(onclick = "placedBids()", data-role= "button", data-inline = "false") Items #{data.userName} is bidding on
+					a(onclick= "itemsSelling()", data-role= "button", data-inline = "false") Items sold by #{data.userName}
+		
+		// Profile for admin to see
+		div(data-role="page", id = "xProfilePage", data-theme = "d")
+			include common
+			div(data-role= "content", data-theme="d", data-content-theme="b")
+				div(id="xUserProfile")
+				a(href="#", data-role="button", data-rel="back",
+									data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+									data-icon-shadow="true", data-mini="true") Delete User
+				
+
+		// Edit Profile
+		div(data-role="page", id = "editProfile")
+			include common
+			div(data-role="content")
+				h1 Edit Profile:
+				form(id ="editProfileInfoForm")
+					div(data-role="collapsible-set")
+						div(data-role="collapsible", data-theme="a", data-content-theme="d", data-iconpos="right", data-inset="false", data-collapsed-icon="arrow-d"
+						, data-expanded-icon="arrow-u")
+							legend Email Update
+							ul
+								label(for="updEmailAddress") Email:
+									input(id="updEmailAddress", value="#{data.email}", type="text", name="emailAddress", placeholder="john_doe@domain.com")
+								
+								
+								a(href="#home",data-role="button", data-inline="true",
+										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon-shadow="true", data-mini="true") Cancel
+								
+								// TODO implement editEmailInfo()
+								a(href="#home",data-role="button", data-inline="true",
+										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon-shadow="true", data-mini="true", onclick="editEmailInfo()") Save
+
+								div(data-role="collapsible-set")
+
+						div(data-role="collapsible", data-theme="a", data-content-theme="d", data-iconpos="right", data-inset="false", data-collapsed-icon="arrow-d"
+						, data-expanded-icon="arrow-u")
+							legend Password Update
+							ul
+								label(for="crntPasswor") Current Password:
+									input(id="crntPasswor",type="password", name="password", placeholder="Password")
+								label(for="updPassword") New Password:
+									input(id="updPassword", type="password", name="password", placeholder="Password")
+								label(for="updConfirmPassword") Confirm New Pasword:
+									input(id="updConfirmPassword", type="password", name="password", placeholder="Password")
+								
+								
+								a(href="#home",data-role="button", data-inline="true",
+										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon-shadow="true", data-mini="true") Cancel
+								
+								// TODO implement editEmailInfo()
+								a(href="#home",data-role="button", data-inline="true",
+										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon-shadow="true", data-mini="true", onclick="editPswrdInfo()") Save
+								
+						div(data-role="collapsible", data-theme="a", data-content-theme="d", data-iconpos="right", data-inset="false", data-collapsed-icon="arrow-d"
+						, data-expanded-icon="arrow-u")
+							legend	Edit Description
+							ul
+								label(for="description") Description:
+									textarea(id="description", value="", name="description")
+
+								a(href="#home",data-role="button", data-inline="true",
+										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon-shadow="true", data-mini="true") Cancel
+								
+								// TODO implement ditDesc()
+								a(href="#home",data-role="button", data-inline="true",
+										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon-shadow="true", data-mini="true", onclick="editDesc()") Save
+
+						div(data-role="collapsible", data-theme="a", data-content-theme="d", data-iconpos="right", data-inset="false", data-collapsed-icon="arrow-d"
+						, data-expanded-icon="arrow-u")
+							legend	Update Billing Address
+							ul
+								label(for="first_line_b") First Line:
+									textarea(id="first_line_b", name="first_line_b")
+
+								label(for="second_line_b") Second Line:
+									textarea(id="second_line_b", name="second_line_b")	
+
+								label(for="country_b") Country:
+									textarea(id="country_b", name="country_b")	
+
+								label(for="city_b") City:
+									textarea(id="city_b", name="city_b")	
+
+								label(for="zip_code_b") Zip Code:
+									textarea(id="zip_code_b", name="zip_code_b")	
+								a(href="#home",data-role="button", data-inline="true",
+										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon-shadow="true", data-mini="true") Cancel
+								
+								// TODO implement ditDesc()
+								a(href="#home",data-role="button", data-inline="true",
+										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon-shadow="true", data-mini="true", onclick="editBillAddress()") Save
+
+						div(data-role="collapsible", data-theme="a", data-content-theme="d", data-iconpos="right", data-inset="false", data-collapsed-icon="arrow-d"
+						, data-expanded-icon="arrow-u")
+							legend	Update Mailing Address
+							ul
+								label(for="first_line") First Line:
+									textarea(id="first_line", name="first_line")
+
+								label(for="second_line") Second Line:
+									textarea(id="second_line", name="second_line")	
+
+								label(for="country") Country:
+									textarea(id="country", name="country")	
+
+								label(for="city") City:
+									textarea(id="city", name="city")	
+
+								label(for="zip_code") Zip Code:
+									textarea(id="zip_code", name="zip_code")	
+
+								a(href="#home",data-role="button", data-inline="true",
+										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon-shadow="true", data-mini="true") Cancel
+								
+								// TODO implement ditDesc()
+								a(href="#home",data-role="button", data-inline="true",
+										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon-shadow="true", data-mini="true", onclick="editMailAddress()") Save
+
+						div(data-role="collapsible", data-theme="a", data-content-theme="d", data-iconpos="right", data-inset="false", data-collapsed-icon="arrow-d"
+						, data-expanded-icon="arrow-u")
+							legend Update Credit
+							ul
+
+								label(for="exp_card") Expiration Date
+									input(id="exp_card", name="exp_card")
+
+								label(for="sc_card") Security Code 
+									input(id="sc_card", name="sc_card")
+
+								label(for="nc_card") Name on Card
+									input(id="nc_card", name="nc_card")
+
+								label(for="tc_card") Type (Visa, MS)
+									input(id="tc_card", name="tc_card")
+
+								a(href="#home",data-role="button", data-inline="true",
+										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon-shadow="true", data-mini="true") Cancel
+								
+								// TODO implement ditDesc()
+								a(href="#home",data-role="button", data-inline="true",
+										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon-shadow="true", data-mini="true", onclick="editCCard()") Save
+										
+
+				//- form(id ="editProfileInfoForm", data-transition="pop")
+				//- 	fieldset(data-role='collapsible')
+				//- 		ul(id="editForm")
+							
+				//- 			li 
+				//- 				label(for="updEmailAddress") Email:
+				//- 					input(id="updEmailAddress", value="#{data.email}", type="text", name="emailAddress", placeholder="john_doe@domain.com")
+				//- 			li
+				//- 				label(for="updPassword") Password:
+				//- 					input(id="updPassword", value="#{data.password}", type="password", name="password", placeholder="Password")
+				//- 			li
+				//- 				label(for="updConfirmPassword") Confirm Password:
+				//- 					input(id="updConfirmPassword", value="#{data.password}", type="password", name="confirmPassword", placeholder ="Password")
+				//- 			li
+				//- 				label(for="description") Description:
+				//- 					textarea(id="description", value="", name="description")
+										
+				//- 			li
+				//- 				label(for="updBillMailAddress") Billing Address:
+				//- 					textarea(id="updBillMailAddress", name="updBillMailAddress")
+				//- 			li
+				//- 				label(for="updC_card") Credit Card Number:
+				//- 					input(id="updC_card", name="updC_card", placeholder="902902")
+					center
+						fieldset(class="ui-grid-a")
+							div(class="ui-block-a")
+								a(href="#home",data-role="button", data-inline="true",
+									data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+									data-icon-shadow="true", data-mini="true") Cancel
+								
+							div(class="ui-block-b")	
+								a(data-role="button", data-inline="true",
+									data-icon="check", data-theme="a", data-transition="flip", dat-corners="true"
+									data-icon-shadow="true", data-mini="true", onclick="editProfileInfo()") Save
+
+					form(id ="editProfileMailAddressForm", data-transition="pop")
+						fieldset(data-role='controlgroup')
+							ul(id="editMailForm")
+							
+								li
+									label(for="updMailAddress") Mailing Address:
+										textarea(id="updMailAddress", name="updMailAddress")
+								
+						center
+							fieldset(class="ui-grid-a")
+								div(class="ui-block-a")
+									a(href="#home",data-role="button", data-inline="true",
+										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon-shadow="true", data-mini="true") Cancel
+									
+								div(class="ui-block-b")	
+									a(data-role="button", data-inline="true",
+										data-icon="check", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon-shadow="true", data-mini="true", onclick="editProfileMail()") Save									
+		
+		
+
+		// ADMIN SECTION
+
+		div(data-role="page", id="adminManageStore")	
+			include common	
+			div(data-role="content")
+				ul(data-role="listview", id="adminStoreList", data-inset="true", data-filter="true", data-filter-placeholder="Available stores")
+					- for(var i = 0 ; i < data.dataLength ; i++)
+						li 
+							a #{data.stores[i].name} 
+							a(onclick="toRemoveStore(\"#{data.stores[i].name}\")", href="#adminRemoveStore", data-rel="popup", data-position-to="window", data-transition="pop") Remove Store
+
+				br			
+				a(data-role="button", href="#addStoreForms", data-rel="popup", data-position-to="window", data-transition="pop") Add Store
+
+				div(data-role="popup", id="addStoreForms", data-theme="d", data-overlay-theme="b", class="ui-content", style="max-width:340px;")
+					h3 Store Name
+					input(type="text", id="newStoreName")
+					h2 Add categories separated by semi-colon (;)	
+					input(type="text", id="categoryList")
+					a(onclick="addStore()", data-role="button", data-rel="back", data-theme="b", data-icon="check", data-inline="true", data-mini="true") Add 
+					a(onclick="cancelAddStore()", data-role="button", data-rel="back", data-inline="true", data-mini="true") Cancel				
+	
+				div(data-role="popup", id="adminRemoveStore", data-theme="d", data-overlay-theme="b", class="ui-content", style="max-width:340px;")
+					h3 Delete Store
+					p Warning, this will delete the store and all its categories 
+					a(onclick="removeStore()", data-role="button", data-rel="back", data-theme="b", data-icon="check", data-inline="true", data-mini="true") Remove
+					a(onclick="undoRemoveStore()", data-role="button", data-rel="back", data-inline="true", data-mini="true") Cancel				
+
+		div(data-role="page", id="adminAddCategory")	
+			include common	
+			div(data-role="content")
+				ul(data-role="listview", id="adminStoreListCAT", data-inset="true", data-filter="true", data-filter-placeholder="Available stores")
+					- for(var i = 0 ; i < data.dataLength ; i++)
+						li 
+							a #{data.stores[i].name} 
+							a(onclick="toAddCategoryToStore(\"#{data.stores[i].name}\")", href="#addCategoryForm", data-rel="popup", data-position-to="window", data-transition="pop") Add category 
+
+				br			
+
+				div(data-role="popup", id="addCategoryForm", data-theme="d", data-overlay-theme="b", class="ui-content", style="max-width:340px;")
+					h3 Store Name
+					a(onclick="addCategory()", data-role="button", data-rel="back", data-theme="b", data-icon="check", data-inline="true", data-mini="true") Add 
+					a(href="#", data-role="button", data-rel="back", data-inline="true", data-mini="true") Cancel
+
+		div(data-role="page", id="adminManageUser")
+			include common
+			div(data-role="content")
+				center
+					h1 Manage User:
+					ul(data-role="listview", data-inset="true", id="usersList")
+
+		div(data-role="page", id="adminManageAdmins")
+			include common
+			div(data-role="content")
+				center
+					h1 Manage Admins:
+					a(href="#register", data-role="button",
+									data-icon="plus", data-theme="a", data-transition="flip", dat-corners="true"
+									data-icon-shadow="true", data-mini="true") Add Admin
+					ul(data-role="listview", data-inset="true", id="adminsList")
+
+		div(data-role="page", id = "xAdminPage", data-theme = "d")
+			include common
+			div(data-role= "content", data-theme="d", data-content-theme="b")
+				div(id="xAdminProfile")
+				a(href="#", data-role="button", data-rel="back",
+									data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+									data-icon-shadow="true", data-mini="true") Delete Admin
+
+			div(data-role="page", id="cChildren")
+
+			div(data-role="page", id ="cMen")
+
+			div(data-role="page", id="cWomen")			
+			
+		// Items
+		
+		div(data-role="page", id = "itemsPage")
+			include common
+			div(data-role= "content", data-theme="b", data-content-theme="b")
+				ul(data-role="listview", id="itemsPageList")
+				br
+				a(onclick="addItemToCart()", data-role= "button", data-inline = "false") Add to cart
+				a(href = "#placedBids", data-role= "button", data-inline = "false") Place Bid
+				
