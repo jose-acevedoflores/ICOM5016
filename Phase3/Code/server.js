@@ -740,17 +740,20 @@ app.put("/userLogin", function(req, res){
 
 
 // REST Operation - HTTP PUT to update a bid
-app.put("/placedBids/item:id", function(req, res){
-	var id = req.params.id;
-  var bid_amount = req.body;
-	console.log("PUT ITEM: " +id);
+
+app.put("/placedBids/item/:id/:incBid", function(req, res){
+	var product_id = req.params.id;
+  var bid_amount = req.params.incBid;
+  var bidder_id = req.session.account_id;
+
+	console.log("PUT INCREASE BID: " + bidder_id+" "+ bid_amount);
  
   pg.connect(conString, function(err, client, done) {
     if(err) {
       return console.error('error fetching client from pool', err);
     }
 
-    client.query("INSERT INTO bid(buyer_account_id, product_id, amount) VALUES( $1,'"+ id+"', '"+ bid_amount +"' )", [req.session.account_id],
+    client.query("INSERT INTO bid(buyer_account_id, product_id, amount) VALUES( $1, '"+product_id+"', '"+ bid_amount +"')", [req.session.account_id],
 
       function(err, result) {
         //call `done()` to release the client back to the pool
