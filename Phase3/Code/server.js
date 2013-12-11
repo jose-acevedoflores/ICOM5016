@@ -1208,6 +1208,7 @@ app.post('/add_new_admin', function(req, res){
 
 app.post('/addStore/storeName/:storeName', function(req, res){
 	var storeToAdd = req.params.storeName;
+
 	if (!req.session.isAdmin) {
     req.json(false)
   }
@@ -1217,7 +1218,7 @@ app.post('/addStore/storeName/:storeName', function(req, res){
       return console.error('error fetching client from pool', err);
     }
 
-      client.query("INSERT INTO category(name, description, parent_category_id) VALUES( $1, $2, $3)", [storeToAdd, " ", 1],
+      client.query("INSERT INTO category(name) VALUES( $1)", [storeToAdd],
 
       function(err, result) {
         //call `done()` to release the client back to the pool
@@ -1225,8 +1226,8 @@ app.post('/addStore/storeName/:storeName', function(req, res){
         if(err) {
           return console.error('error running query', err);
         }
-        
         res.json(true);
+       
       });
   }); 
   }
