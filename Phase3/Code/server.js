@@ -477,7 +477,7 @@ app.get("/userProfile:id", function(req, res){
       return console.error('error fetching client form pool', err);
     }
     if(req.session.loggedIn) {
-      client.query('SELECT f_name ||\' \'|| l_name AS name, user_description AS description, rank, user_pic As picture FROM web_user WHERE (web_user.admin_flag = FALSE AND web_user.account_id = $1)',[id], 
+      client.query('SELECT account_id, f_name ||\' \'|| l_name AS name, user_description AS description, rank, user_pic As picture FROM web_user WHERE (web_user.admin_flag = FALSE AND web_user.account_id = $1)',[id], 
         function(err, result) {
           done();
           if(err) {
@@ -935,6 +935,29 @@ app.put("/itemInCart/update_quantity/:itemId/:quantity", function(req, res){
   });
 });
 
+app.put("/makeAdmin/:id", function(req, res){
+  var user_id = req.params.id;
+  
+
+  console.log("PUT makeAdmin: " + user_id);
+ 
+  pg.connect(conString, function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
+
+     client.query("UPDATE web_user SET admin_flag = $1 WHERE account_id = $2 ", [true, user_id],
+
+      function(err, result) {
+        //call `done()` to release the client back to the pool
+        done();
+        if(err) {
+          return console.error('error running query', err);
+        }
+        res.json(true);
+      });
+  }); 
+});
 
 // REST Operation - HTTP PUT to sign Out
 app.put("/signOut", function(req, res){

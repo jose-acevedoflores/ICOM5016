@@ -787,6 +787,7 @@ function addAdminForm(){
 // Update Profile
 /*******************************************************************************************************************************************/
 var currentUsr = {};
+var newAdminId = undefined
 
 function getUser(id) {
 	console.log("Admin manages");
@@ -798,7 +799,8 @@ function getUser(id) {
 		success : function(data, textStatus, jqXHR){
 			$(document).on('pagebeforeshow', "#xProfilePage", function( event, ui) {
 				console.log("xProfilePage on pagebeforeshow listener");
-				var xUser =data.user;
+				var xUser = data.user;
+				newAdminId = xUser[0].account_id;
 
 				var html = '<div class = \'ui-grid-a\'>'+
 					'<h3>'+xUser[0].name+'</h3>'+
@@ -1325,6 +1327,36 @@ function getAdmin(id) {
 			alert("Admin data not found!");
 		}
 	});
+}
+
+function makeAdmin(){
+	console.log("Make Admin: "+ newAdminId);
+	$.mobile.loading("show");
+	$.ajax({
+		url : "http://"+host+"/makeAdmin/"+newAdminId,
+		method : "put",
+		contentType: "application/json",
+		dataType : "json",
+		success : function(data, textStatus, jqXHR){
+
+			$.mobile.loading("hide");
+
+			$.mobile.changePage(
+		    "#home" ,
+		    {
+				allowSamePageTransition : true,
+				transition              : 'none',
+				showLoadMsg             : false,
+				reloadPage              : true
+		    }
+			);
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Data not found!");
+		}
+	});
+	newAdminId = undefined;
 }
 
 function addCategory(){
