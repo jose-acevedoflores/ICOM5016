@@ -49,8 +49,8 @@ html
 									option(value="alphabetical") Alphabetical order (Brand)
 									option(value="revAlphabetical") Reverse Alphabetical (Brand)
 								optgroup(label="Item Name")
-									option(value="alphabetical") Alphabetical order (Item Name)
-									option(value="revAlphabetical") Reverse Alphabetical (Item Name)		
+									option(value="alphabeticalN") Alphabetical order (Item Name)
+									option(value="revAlphabeticalN") Reverse Alphabetical (Item Name)		
 						br			
 						ul(data-role="listview", data-inset="true", data-filter="true", id="#{data.stores[i].categories[c]}CategoryItemListSTORE#{data.stores[i].category_id}", data-filter-placeholder="Filter items")						
 
@@ -301,6 +301,8 @@ html
 			include common
 			div(data-role= "content", data-theme="d", data-content-theme="b")
 				div(id="xUserProfile")
+				a(data-role="button", data-rel="back", data-theme="a", data-transition="flip", dat-corners="true", data-icon-shadow="true", data-mini="true"
+					onclick="makeAdmin()") Make Admin
 				a(href="#", data-role="button", data-rel="back",
 									data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
 									data-icon-shadow="true", data-mini="true") Delete User
@@ -327,7 +329,7 @@ html
 								
 								// TODO implement editEmailInfo()
 								a(href="#home",data-role="button", data-inline="true",
-										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon="check", data-theme="a", data-transition="flip", dat-corners="true"
 										data-icon-shadow="true", data-mini="true", onclick="editEmailInfo()") Save
 
 								div(data-role="collapsible-set")
@@ -350,7 +352,7 @@ html
 								
 								// TODO implement editEmailInfo()
 								a(href="#home",data-role="button", data-inline="true",
-										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon="check", data-theme="a", data-transition="flip", dat-corners="true"
 										data-icon-shadow="true", data-mini="true", onclick="editPswrdInfo()") Save
 								
 						div(data-role="collapsible", data-theme="a", data-content-theme="d", data-iconpos="right", data-inset="false", data-collapsed-icon="arrow-d"
@@ -366,7 +368,7 @@ html
 								
 								// TODO implement ditDesc()
 								a(href="#home",data-role="button", data-inline="true",
-										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon="check", data-theme="a", data-transition="flip", dat-corners="true"
 										data-icon-shadow="true", data-mini="true", onclick="editDesc()") Save
 
 						div(data-role="collapsible", data-theme="a", data-content-theme="d", data-iconpos="right", data-inset="false", data-collapsed-icon="arrow-d"
@@ -421,7 +423,7 @@ html
 								
 								// TODO implement ditDesc()
 								a(href="#home",data-role="button", data-inline="true",
-										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon="check", data-theme="a", data-transition="flip", dat-corners="true"
 										data-icon-shadow="true", data-mini="true", onclick="editMailAddress()") Save
 
 						div(data-role="collapsible", data-theme="a", data-content-theme="d", data-iconpos="right", data-inset="false", data-collapsed-icon="arrow-d"
@@ -447,7 +449,7 @@ html
 								
 								// TODO implement ditDesc()
 								a(href="#home",data-role="button", data-inline="true",
-										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+										data-icon="check", data-theme="a", data-transition="flip", dat-corners="true"
 										data-icon-shadow="true", data-mini="true", onclick="editCCard()") Save
 										
 
@@ -509,6 +511,33 @@ html
 		
 
 		// ADMIN SECTION
+		div(data-role="page", id="adminRegister")
+			include common
+			div(data-role="content")
+				h1 Register:
+				form(id ="aRegisterForm", data-transition="pop")
+					fieldset(data-role='controlgroup')
+						ul
+							li
+								label(for="aFname") First Name:
+									input(id="aFname", type ="text", name="aFname", placeholder = "Firstname")
+							li
+								label(for="aLname") Last Name:
+									input(id="aLname",type ="text", name="aLname", placeholder="Lastname")
+							li 
+								label(for="aEmailAddress") Email:
+									input(id="aEmailAddress", type="text", name="aEmailAddress", placeholder="john_doe@domain.com")
+							
+					center
+						
+							
+						a(href="#home",data-role="button", data-inline="true",
+						data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
+						data-icon-shadow="true", data-mini="true") Cancel
+
+						a(data-role="button", data-inline="true",
+						data-icon="check", data-theme="a", data-transition="flip", dat-corners="true"
+						data-icon-shadow="true", data-mini="true", onclick="addAdminForm()") Add Admin
 
 		div(data-role="page", id="adminManageStore")	
 			include common	
@@ -564,7 +593,7 @@ html
 			div(data-role="content")
 				center
 					h1 Manage Admins:
-					a(href="#register", data-role="button",
+					a(href="#adminRegister", data-role="button",
 									data-icon="plus", data-theme="a", data-transition="flip", dat-corners="true"
 									data-icon-shadow="true", data-mini="true") Add Admin
 					ul(data-role="listview", data-inset="true", id="adminsList")
@@ -573,6 +602,9 @@ html
 			include common
 			div(data-role= "content", data-theme="d", data-content-theme="b")
 				div(id="xAdminProfile")
+				a(data-role="button", data-rel="back", data-theme="a", data-transition="flip", dat-corners="true"
+									data-icon-shadow="true", data-mini="true", onclick="removeAdmin()") Remove Admin Rights
+
 				a(href="#", data-role="button", data-rel="back",
 									data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
 									data-icon-shadow="true", data-mini="true") Delete Admin
@@ -590,6 +622,6 @@ html
 			div(data-role= "content", data-theme="b", data-content-theme="b")
 				ul(data-role="listview", id="itemsPageList")
 				br
-				a(onclick="addItemToCart()", data-role= "button", data-inline = "false") Add to cart
-				a(href = "#placedBids", data-role= "button", data-inline = "false") Place Bid
+				a(id="addItemToCartAnchor" , onclick="addItemToCart()", data-role= "button", data-inline = "false") Add to cart
+				a(id="placeBidAnchor", onclick = "increaseBid(0,'incBidIP')", data-role= "button", data-inline = "false") Place Bid
 				

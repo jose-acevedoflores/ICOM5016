@@ -24,15 +24,31 @@ $(document).on('pagebeforeshow', "#home", function( event, ui ) {
 				item = itemList[i];
 				list = $("#List" + item.parent_category_id );
 
+				if(item.ptype === "sale"){
 				list.append("<li>" +
 					"<a href='#' onclick=\"findItem(" +item.product_id + ")\">" + 
 					"<img src="+ item.photo_url + ">"  + 
 					"<h2>" + item.product_name + "</h2>" + 
 					"<p>" + item.description + "</p>" +
 					"<p> Rating:" + item.seller_id + " temp" + " </p>" + 
-					"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
+					"<p class=\"ui-li-aside\"> Price: $" + item.price + "</p>" +
+					"</a></li>");	
+				}
+				else if(item.ptype === "auction"){
+					if(item.highest_bid_amount === null ) 
+						item.highest_bid_amount = item.price;
+
+				list.append("<li>" +
+					"<a href='#' onclick=\"findItem(" +item.product_id + ")\">" + 
+					"<img src="+ item.photo_url + ">"  + 
+					"<h2>" + item.product_name + "</h2>" + 
+					"<p>" + item.description + "</p>" +
+					"<p> Rating:" + item.seller_id + " temp" + " </p>" + 
+					"<p class='ui-li-aside'> Highest Bid: $" + item.highest_bid_amount+  "</p>"+
 					"</a></li>");
-				list.listview("refresh");	
+
+				}
+				list.listview("refresh");
 			}
 			
 		},
@@ -165,6 +181,8 @@ function findItem(itemId){
 
 	currentItemToAdd = itemId;
 
+	
+
 	$.mobile.loading("show");
 	console.log("findItem function with itemId = " + itemId);
 	$.ajax({
@@ -181,23 +199,34 @@ function findItem(itemId){
 				list.empty();
 				var item = data.item[0];
 
-				// list.append("<div(class=\"ui-grid-a\")>" + 
-				// 	"<div(class=\"ui-block-a\")>" +
-				// 	"<h3>" + item.itemName + "</h3></br>" +
-				// 	"<h6> Product ID: " + item.id + "</h6>" +
-				// 	"</div><div(class=\"ui-block-b\")></div></div>" +
-				// 	"<div(class=\"ui-grid-a\")>" + 
-				// 	"<div(class=\"ui-block-a\")>" + "<img src="+ item.picture + ">" +
-				// 	"</br></div>" + "<div(class=\"ui-block-b\")>" +
-				// 	"<p> Rating" + item.rating + "</p>" + 
-				// 	"<p>" + item.description + "</p></div></div>");
-						
-				list.append("<li data-theme=\"c\">" + 
+				if(item.ptype === "auction"){
+					$("#addItemToCartAnchor").hide();
+					$("#placeBidAnchor").show();
+
+					list.append("<li data-theme=\"c\">" + 
 					"<h3>" + item.pname + "</h3>" + 
 					"<h6> Product ID: " + item.id + "</h6>" +
 					"<img src="+ item.picture + ">" +
-					"<p> Rating: " + item.rating + "</p>" + 
-					"<p>" + item.description + "</p></li>");
+					"<p>" + item.description + "</p></li>"+
+					"<label for=\"incBidIP" +item.id+"\"> Place Bid" +
+					"<input style='width:60px' id=\"incBidIP" +item.id+"\" class=\"ui-input-text ui-body-a ui-corner-all ui-shadow-inset\" data-inline=\"true\" value="+item.amount+">");
+				}
+				else if(item.ptype === "sale"){
+					$("#placeBidAnchor").hide();
+					$("#addItemToCartAnchor").show();
+					
+					list.append("<li data-theme=\"c\">" + 
+					"<h3>" + item.pname + "</h3>" + 
+					"<h6> Product ID: " + item.id + "</h6>" +
+					"<img src="+ item.picture + ">" +
+					"<p> Price: " + item.amount + "</p>" + 
+					"<p>" + item.description + "</p>"+
+					"</li>" 
+					);
+					
+				}
+				
+				
 
 				list.listview("refresh");
 				
@@ -433,20 +462,33 @@ function placedBids(){
 					var totalAmount =0;
 					item = itemList[i];
 					console.log(item.id);
-
-					list.append("<li data-icon=\"false\" id=itemID"+item.id+"><a href=\"#\">" + 
-						"<img src="+ item.picture + ">"  + 
-						"<h2>" + item.pname + "</h2>" + 
-						"<p>" + item.description + "</p>" +
-						"<p> Rating:" + item.rating + " </p>" + 
-						"<div data-role=\"fieldcontain\" class=\"ui-li-aside\">" +
-						//"<h2 class=\"ui-li-aside\"> Increase Bid:" +
-						"<label for=\"incBid" +item.id+"\"> Increase Bid" +
-						"<input id=\"incBid" +item.id+"\" class=\"ui-input-text ui-body-a ui-corner-all ui-shadow-inset\" data-inline=\"true\" value="+item.price+">" +
-						"<input  onclick=\"increaseBid("+item.id+")\" type=\"submit\" data-role=\"button\" data-inline=\"true\" value=\"Bid\">"+
-						"</div></a></li>"); //+
-						//"<a onclick=\"toIncreaseBid("+item.id+")\" href=\"#increaseBid\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\">increase bid</li>");
-
+					if(item.whoiswin === "winning"){
+						list.append("<li data-icon=\"false\" id=itemID"+item.id+"><a href=\"#\">" + 
+							"<img src="+ item.picture + ">"  + 
+							"<h2>" + item.pname + "</h2>" + 
+							"<p>" + item.description + "</p>" +
+							"<p> Rating:" + item.rating + " </p>" + 
+							"<div data-role=\"fieldcontain\" class=\"ui-li-aside\">" +
+							//"<h2 class=\"ui-li-aside\"> Increase Bid:" +
+							"<label for=\"incBidPB" +item.id+"\"> Winning with" +
+							"<input id=\"incBidPB" +item.id+"\" class=\"ui-input-text ui-body-a ui-corner-all ui-shadow-inset\" data-inline=\"true\" value="+item.bid_amount+">" +
+							"<input  onclick=\"increaseBid("+item.id+", 'incBidPB')\" type=\"submit\" data-role=\"button\" data-inline=\"true\" value=\"Bid\">"+
+							"</div></a></li>"); 
+					}
+					else {
+						list.append("<li data-icon=\"false\" id=itemID"+item.id+"><a href=\"#\">" + 
+							"<img src="+ item.picture + ">"  + 
+							"<h2>" + item.pname + "</h2>" + 
+							"<p>" + item.description + "</p>" +
+							"<p> Rating:" + item.rating + " </p>" + 
+							"<div data-role=\"fieldcontain\" class=\"ui-li-aside\">" +
+							//"<h2 class=\"ui-li-aside\"> Increase Bid:" +
+							"<label for=\"incBidPB" +item.id+"\"> Increase Bid" +
+							"<input id=\"incBidPB" +item.id+"\" class=\"ui-input-text ui-body-a ui-corner-all ui-shadow-inset\" data-inline=\"true\" value="+item.bid_amount+">" +
+							"<input  onclick=\"increaseBid("+item.id+", 'incBidPB')\" type=\"submit\" data-role=\"button\" data-inline=\"true\" value=\"Bid\">"+
+							"</div></a></li>"); 
+					}
+	
 					list.listview("refresh");	
 					var totalAmountField = $("#nextAcceptableBid");
 					totalAmountField.empty();
@@ -465,19 +507,21 @@ function placedBids(){
 
 }
 
-var itemToIncreaseBid;
-function toIncreaseBid(itemId){
-	itemToIncreaseBid = itemId;
-}
-
-function increaseBid(itemId){
+function increaseBid(itemId, currentPage){
 	
-	var incBid = document.getElementById("incBid" +itemId).value ;
+
+	if(currentPage === "incBidIP"){
+		itemId = currentItemToAdd;
+	}
+
+	var incBid =document.getElementById(currentPage +itemId).value ;
+
+
 
 	$.mobile.loading("show");
 	console.log("incBid: "+ incBid);
 	$.ajax({
-		url : "http://"+host+"placedBids/item/"+itemId+"/"+incBid,
+		url : "http://"+host+"/placedBids/item/"+itemId+"/"+incBid,
 		method : "put",
 		contentType: "application/json",
 		dataType : "json",
@@ -609,6 +653,8 @@ function loginForm(){
 
 }
 
+
+
 /*******************************************************************************************************************************************/
 // Sign Out
 /*******************************************************************************************************************************************/
@@ -676,6 +722,8 @@ function registerForm(){
 	$.mobile.loading("show");
 	var form = $("#registerForm");
 	var formData = form.serializeArray();
+	var email;
+	var password;
 	console.log("form Data: " + formData);
 	var newUser = ConvertToJSON(formData);
 	console.log("New User: " + JSON.stringify(newUser));
@@ -689,6 +737,39 @@ function registerForm(){
 		success : function(data, textStatus, jqXHR){
 			$.mobile.loading("hide");
 			$.mobile.navigate("#home");
+			loginForm(email, password);
+			console.log("To home");
+
+		},
+		error : function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			$.mobile.loading("hide");
+			alert("Data could not be added!");
+		}
+	});
+
+}
+
+function addAdminForm(){
+	console.log("Add Admin");
+	$.mobile.loading("show");
+	var form = $("#aRegisterForm");
+	var formData = form.serializeArray();
+	
+	console.log("form Data: " + formData);
+	var newUser = ConvertToJSON(formData);
+	console.log("New Admin: " + JSON.stringify(newUser));
+	var newUserJSON = JSON.stringify(newUser);
+	$.ajax({
+		url : "http://"+host+"/add_new_admin",
+		method: 'post',
+		data : newUserJSON,
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+			$.mobile.loading("hide");
+			$.mobile.navigate("#home");
+			loginForm(email, password);
 			console.log("To home");
 
 		},
@@ -706,6 +787,7 @@ function registerForm(){
 // Update Profile
 /*******************************************************************************************************************************************/
 var currentUsr = {};
+var newAdminId = undefined
 
 function getUser(id) {
 	console.log("Admin manages");
@@ -717,7 +799,8 @@ function getUser(id) {
 		success : function(data, textStatus, jqXHR){
 			$(document).on('pagebeforeshow', "#xProfilePage", function( event, ui) {
 				console.log("xProfilePage on pagebeforeshow listener");
-				var xUser =data.user;
+				var xUser = data.user;
+				newAdminId = xUser[0].account_id;
 
 				var html = '<div class = \'ui-grid-a\'>'+
 					'<h3>'+xUser[0].name+'</h3>'+
@@ -1059,7 +1142,7 @@ function itemsSelling(){
 					else if(item.product_type === 'auction'){
 						listAuctions.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
 							"<img src="+ item.picture + ">"  + 
-							"<h2>" + item.brand + " " +item.model + "</h2>" + 
+							"<h2>" + item.pname + "</h2>" + 
 							"<p>" + item.description + "</p>" +
 							"<p> Rating:" + item.rating + " </p>" + 
 							"<p class=\"ui-li-aside\"> Starting Price: " + item.price + "</p>" +
@@ -1088,6 +1171,7 @@ function itemsSelling(){
 // Admin Section
 /*******************************************************************************************************************************************/
 var storeToRemove = undefined;
+var oldAdminId = undefined;
 //Sets storeToRemove in order for the call to removeStore to work with the parameter.
 function toRemoveStore(storeName){
 	console.log("Store to remove: " + storeName);
@@ -1246,7 +1330,7 @@ function getAdmin(id) {
 			$(document).on('pagebeforeshow', "#xAdminPage", function( event, ui) {
 				console.log("xAdminPage on pagebeforeshow listener");
 				var xAdmin =data.user;
-
+				oldAdminId = id;
 				var html = '<div class = \'ui-grid-a\'>'+
 					'<h3>'+xAdmin[0].name+'</h3>'+
 					'<br></br>'+
@@ -1287,6 +1371,66 @@ function getAdmin(id) {
 			alert("Admin data not found!");
 		}
 	});
+}
+
+function makeAdmin(){
+	console.log("Make Admin: "+ newAdminId);
+	$.mobile.loading("show");
+	$.ajax({
+		url : "http://"+host+"/makeAdmin/"+newAdminId,
+		method : "put",
+		contentType: "application/json",
+		dataType : "json",
+		success : function(data, textStatus, jqXHR){
+
+			$.mobile.loading("hide");
+
+			$.mobile.changePage(
+		    "#home" ,
+		    {
+				allowSamePageTransition : true,
+				transition              : 'none',
+				showLoadMsg             : false,
+				reloadPage              : true
+		    }
+			);
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Data not found!");
+		}
+	});
+	newAdminId = undefined;
+}
+
+function removeAdmin(){
+	console.log("Remove Admin: "+ oldAdminId);
+	$.mobile.loading("show");
+	$.ajax({
+		url : "http://"+host+"/removeAdmin/"+oldAdminId,
+		method : "put",
+		contentType: "application/json",
+		dataType : "json",
+		success : function(data, textStatus, jqXHR){
+
+			$.mobile.loading("hide");
+
+			$.mobile.changePage(
+		    "#home" ,
+		    {
+				allowSamePageTransition : true,
+				transition              : 'none',
+				showLoadMsg             : false,
+				reloadPage              : true
+		    }
+			);
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Data not found!");
+		}
+	});
+	oldAdminId = undefined;
 }
 
 function addCategory(){

@@ -143,7 +143,7 @@ app.get('/home',function(req, res ) {
     	return console.error('error fetching client from pool', err);
   	}
 
-  	client.query('SELECT * FROM sale_product, (SELECT category_id,name AS category_name, parent_category_id FROM category )AS newcat WHERE sale_product.category_id = newcat.category_id',
+  	client.query(' SELECT photo_url, parent_category_id, product_id, product_name,seller_id, description, \'sale\' AS ptype , price, 0 AS highest_bid_amount FROM sale_product natural join (SELECT category_id,name AS category_name, parent_category_id FROM category )AS newcat UNION SELECT photo_url, parent_category_id, product_id, product_name,seller_id, description, \'auction\' AS ptype , starting_price AS price, amount AS highest_bid_amount FROM auction_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category )AS newcat NATURAL LEFT JOIN (SELECT bid_id AS highest_bid, amount FROM bid ) as from_bid',
 
   		function(err, result) {
     		//call `done()` to release the client back to the pool
@@ -243,6 +243,12 @@ app.get('/stores/:store/:category/:sortOrder' , function(req, res){
     else if(sortOrder === "revAlphabetical"){
        q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2 ORDER BY brand DESC';
     }
+    else if(sortOrder === "alphabeticalN"){
+         q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2 ORDER BY product_name ';
+    }
+    else if(sortOrder ==="revAlphabeticalN"){
+         q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2 ORDER BY product_name DESC';
+    }
     client.query(q, [store,category],
 
       function(err, result) {
@@ -299,7 +305,8 @@ app.get("/item/:itemId", function(req,res) {
     		return console.error('error fetching client from pool', err);
   	}
 
-  	client.query('SELECT product_id AS id, product_name AS pname, description, photo_url AS picture FROM product WHERE product_id = $1', [itemId],
+  	client.query('SELECT  id, brand , model,  pname, description,  picture, ptype, amount, starting_price FROM (SELECT product_id AS id, brand , model, product_name AS pname, description, photo_url AS picture, \'sale\' AS ptype , price AS amount , 0 AS starting_price FROM sale_product UNION SELECT product_id AS id, brand , model, product_name AS pname, description, photo_url AS picture, \'auction\' AS ptype, highest_bid_amount as amount, starting_price FROM auction_product NATURAL LEFT JOIN (SELECT bid_id AS highest_bid, amount AS highest_bid_amount FROM bid ) AS temp )  AS together WHERE id = $1', [itemId],
+
 
   		function(err, result) {
     		//call `done()` to release the client back to the pool
@@ -308,6 +315,11 @@ app.get("/item/:itemId", function(req,res) {
     		if(err) {
 	   			return console.error('error running query', err);
     		}
+
+        if(result.rows[0].ptype === "auction" && result.rows[0].amount === null){
+            result.rows[0].amount = result.rows[0].starting_price;
+        }
+
     		console.log(result.rows);
 
     		var temp = {"item" : result.rows};
@@ -375,7 +387,7 @@ app.get('/placedBids', function(req, res) {
     if(req.session.loggedIn)  
     { 
 
-      client.query('SELECT product_id AS id, photo_url AS picture, starting_price AS price, brand, model, product_name AS pname, description FROM auction_product WHERE auction_product.product_id IN (SELECT product_id FROM bid NATURAL JOIN auction_product WHERE bid.buyer_account_id = $1)', [req.session.account_id],
+      client.query('SELECT product_id AS id, photo_url AS picture, starting_price AS price, brand, model, product_name AS pname, description, bid_amount, highest_bidder_id, \'winning\' AS whoiswin FROM auction_product NATURAL JOIN (SELECT bid_id AS highest_bid, amount AS bid_amount, buyer_account_id AS highest_bidder_id FROM bid ) AS temp WHERE auction_product.product_id IN (SELECT product_id FROM bid NATURAL JOIN auction_product WHERE bid.buyer_account_id = $1)', [req.session.account_id],
 
       function(err, result) {
         //call `done()` to release the client back to the pool
@@ -384,8 +396,12 @@ app.get('/placedBids', function(req, res) {
         if(err) {
           return console.error('error running query', err);
         }
-        console.log(result.rows);
-
+        
+        for (var i = 0 ; i < result.rows.length; i++) {
+          if(result.rows[i].highest_bidder_id != req.session.account_id )
+            result.rows[i].whoiswin = "losing";
+        };
+        console.log("GET : PlacedBids RESULT: "+  result.rows);
         var temp = {"items" : result.rows};
         res.json(temp);
       });
@@ -494,7 +510,7 @@ app.get("/userProfile:id", function(req, res){
       return console.error('error fetching client form pool', err);
     }
     if(req.session.loggedIn) {
-      client.query('SELECT f_name ||\' \'|| l_name AS name, user_description AS description, rank, user_pic As picture FROM web_user WHERE (web_user.admin_flag = FALSE AND web_user.account_id = $1)',[id], 
+      client.query('SELECT account_id, f_name ||\' \'|| l_name AS name, user_description AS description, rank, user_pic As picture FROM web_user WHERE (web_user.admin_flag = FALSE AND web_user.account_id = $1)',[id], 
         function(err, result) {
           done();
           if(err) {
@@ -778,17 +794,22 @@ app.put("/placedBids/item/:id/:incBid", function(req, res){
     if(err) {
       return console.error('error fetching client from pool', err);
     }
+    if(req.session.loggedIn){
+      client.query("INSERT INTO bid(buyer_account_id, product_id, amount) VALUES( $1, $2, $3)", [req.session.account_id, product_id, bid_amount],
 
-    client.query("INSERT INTO bid(buyer_account_id, product_id, amount) VALUES( $1, '"+product_id+"', '"+ bid_amount +"')", [req.session.account_id],
-
-      function(err, result) {
-        //call `done()` to release the client back to the pool
-        done();
-        if(err) {
-          return console.error('error running query', err);
-        }
-
-      });
+        function(err, result) {
+          //call `done()` to release the client back to the pool
+          done();
+          if(err) {
+            return console.error('error running query', err);
+          }
+          res.json(true);
+        });
+    }
+    else{
+      console.log("not logged in bid");
+      res.json(false);
+    }
   }); 
 });
 
@@ -819,7 +840,7 @@ app.put("/userProfile/update/mailingAddress", function(req, res) {
     if(err) {
       return console.error('error fetching client from pool', err);
     }
-
+    if(req.session.loggedIn) {
     client.query("INSERT INTO address(first_line, second_line, city, country, zip_code, owner_id, billing_flag) VALUES( '"+ req.body.first_line +"','"+ req.body.second_line +"', '"+ req.body.city +"', '"+ req.body.country +"', '"+ req.body.zip_code +"', $1, false)",[req.session.account_id],
 
       function(err, result) {
@@ -830,6 +851,11 @@ app.put("/userProfile/update/mailingAddress", function(req, res) {
         }
 
       });
+     }
+     else {
+      console.log("Not Log In")
+      res.json(false)
+     }
   }); 
 
 });
@@ -947,7 +973,68 @@ app.put("/itemInCart/update_quantity/:itemId/:quantity", function(req, res){
   });
 });
 
+app.put("/makeAdmin/:id", function(req, res){
+  var user_id = req.params.id;
+  
 
+  console.log("PUT makeAdmin: " + user_id);
+  if (req.session.isAdmin) {
+
+  pg.connect(conString, function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
+
+     client.query("UPDATE web_user SET admin_flag = $1 WHERE account_id = $2 ", [true, user_id],
+
+      function(err, result) {
+        //call `done()` to release the client back to the pool
+        done();
+        if(err) {
+          return console.error('error running query', err);
+        }
+        res.json(true);
+      });
+   
+  
+ 
+  });
+  }
+  else {
+    req.json(false);
+  } 
+});
+
+app.put("/removeAdmin/:id", function(req, res){
+  var user_id = req.params.id;
+  
+
+    console.log("PUT removeAdmin: " + user_id);
+   if(req.session.isAdmin) {
+    pg.connect(conString, function(err, client, done) {
+      if(err) {
+        return console.error('error fetching client from pool', err);
+      }
+
+       client.query("UPDATE web_user SET admin_flag = $1 WHERE account_id = $2 ", [false, user_id],
+
+        function(err, result) {
+          //call `done()` to release the client back to the pool
+          done();
+          if(err) {
+            return console.error('error running query', err);
+          }
+          res.json(true);
+        });
+     
+
+    }); 
+  }
+  else{
+    req.json(false);
+
+  }
+});
 // REST Operation - HTTP PUT to sign Out
 app.put("/signOut", function(req, res){
   loggedIn = false;
@@ -981,12 +1068,62 @@ app.post('/register/newUser', function(req, res) {
   		res.statusCode = 400;
   		return res.send("Error: Password doesn't match");
 	}
-  	var newUser = new User( req.body.fname, req.body.lname, req.body.password, req.body.emailAddress);
-  	console.log("New User: " + JSON.stringify(newUser));
-  	newUser.id = userNextId++;
-  	userList.push(newUser);
-  	res.json(true);
+
+  pg.connect(conString, function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
+
+      client.query("INSERT INTO web_user(f_name, l_name, password, email_address, admin_flag, user_description, rank, user_pic) VALUES( $1, $2, $3, $4, $5, $6, $7, $8)", [req.body.fname, req.body.lname, req.body.password, req.body.emailAddress, false, req.body.description,
+      0.0, "http://www.icm.espol.edu.ec/estudiantes/2005/200511889/images/Juan%20Pueblo.jpg"],
+
+      function(err, result) {
+        //call `done()` to release the client back to the pool
+        done();
+        if(err) {
+          return console.error('error running query', err);
+        }
+        
+        res.json(true);
+      });
+  }); 
+  	
+  
 });
+
+app.post('/add_new_admin', function(req, res){
+  console.log("POST : New Admin");
+  if (!req.session.isAdmin) {
+    req.json(false)
+  }
+
+  else {
+  if(!req.body.hasOwnProperty('aFname') || !req.body.hasOwnProperty('aLname')
+      || !req.body.hasOwnProperty('aEmailAddress') ){
+      res.statusCode = 400;
+      return res.send('Error: Missing fields for user registration.');
+    }
+
+  pg.connect(conString, function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
+
+      client.query("INSERT INTO web_user(f_name, l_name, password, email_address, admin_flag, user_description, rank, user_pic) VALUES( $1, $2, $3, $4, $5, $6, $7, $8)", [req.body.aFname, req.body.aLname, 'admin', req.body.aEmailAddress, true, '',
+      0.0, 'http://www.icm.espol.edu.ec/estudiantes/2005/200511889/images/Juan%20Pueblo.jpg'],
+
+      function(err, result) {
+        //call `done()` to release the client back to the pool
+        done();
+        if(err) {
+          return console.error('error running query', err);
+        }
+        
+        res.json(true);
+      });
+  }); 
+}
+})
 
 app.post('/addStore/storeName/:storeName', function(req, res){
 	var storeToAdd = req.params.storeName;
