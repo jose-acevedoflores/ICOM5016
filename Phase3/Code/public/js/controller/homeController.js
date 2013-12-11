@@ -91,7 +91,7 @@ function findStore(store){
 						list.append("<li>"+
 							"<a href='#' onclick=\"findItem(" +item.product_id + ")\">" + 
 							"<img src="+ item.photo_url + ">"  + 
-							"<h2>" + item.pname + "</h2>" + 
+							"<h2>" + item.product_name + "</h2>" + 
 							"<p>" + item.description + "</p>" +
 							"<p> Rating:" + item.seller_id +" temp" + " </p>" + 
 							"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +

@@ -143,7 +143,7 @@ app.get('/home',function(req, res ) {
     	return console.error('error fetching client from pool', err);
   	}
 
-  	client.query(' SELECT photo_url, parent_category_id, product_id, product_name,seller_id, description, \'sale\' AS ptype , price, 0 AS highest_bid_amount FROM sale_product natural join (SELECT category_id,name AS category_name, parent_category_id FROM category )AS newcat UNION SELECT photo_url, parent_category_id, product_id, product_name,seller_id, description, \'auction\' AS ptype , starting_price AS price, amount AS highest_bid_amount FROM auction_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category )AS newcat NATURAL LEFT JOIN (SELECT bid_id AS highest_bid, amount FROM bid ) as from_bid',
+  	client.query(' SELECT photo_url, parent_category_id, product_id, product_name,seller_id, description, \'sale\' AS ptype , price, 0 AS highest_bid_amount, is_active FROM sale_product natural join (SELECT category_id,name AS category_name, parent_category_id FROM category )AS newcat WHERE is_active = TRUE UNION SELECT photo_url, parent_category_id, product_id, product_name,seller_id, description, \'auction\' AS ptype , starting_price AS price, amount AS highest_bid_amount, is_active FROM auction_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category )AS newcat NATURAL LEFT JOIN (SELECT bid_id AS highest_bid, amount FROM bid ) as from_bid WHERE is_active = TRUE',
 
   		function(err, result) {
     		//call `done()` to release the client back to the pool
@@ -200,7 +200,7 @@ app.get('/stores/:store/:category' , function(req, res){
   		return console.error('error fetching client from pool', err);
   	}
 
-  	client.query('SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2 ORDER BY price DESC', [store,category],
+  	client.query('SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2 AND  is_active = TRUE ORDER BY price DESC', [store,category],
 
   		function(err, result) {
     		//call `done()` to release the client back to the pool
@@ -232,22 +232,22 @@ app.get('/stores/:store/:category/:sortOrder' , function(req, res){
 
     var q ;
     if(sortOrder === "lowToHigh"){
-      q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2 ORDER BY price ';
+      q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2 AND  is_active = TRUE ORDER BY price ';
     }
     else if(sortOrder === "highToLow"){
-      q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2 ORDER BY price DESC';
+      q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2 AND is_active = TRUE  ORDER BY price DESC';
     }
     else if(sortOrder === "alphabetical"){
-      q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2 ORDER BY brand ';
+      q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2 AND is_active = TRUE  ORDER BY brand ';
     }
     else if(sortOrder === "revAlphabetical"){
-       q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2 ORDER BY brand DESC';
+       q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2 AND is_active = TRUE  ORDER BY brand DESC';
     }
     else if(sortOrder === "alphabeticalN"){
-         q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2 ORDER BY product_name ';
+         q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2 AND is_active = TRUE  ORDER BY product_name ';
     }
     else if(sortOrder ==="revAlphabeticalN"){
-         q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2 ORDER BY product_name DESC';
+         q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2 AND is_active = TRUE ORDER BY product_name DESC';
     }
     client.query(q, [store,category],
 
@@ -276,7 +276,7 @@ app.get('/stores/:store' , function(req, res){
   		return console.error('error fetching client from pool', err);
   	}
 
-  	client.query('SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1', [store],
+  	client.query('SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND  is_active = TRUE', [store],
 
   		function(err, result) {
     		//call `done()` to release the client back to the pool
