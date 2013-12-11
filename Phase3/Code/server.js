@@ -965,6 +965,29 @@ app.put("/makeAdmin/:id", function(req, res){
   }); 
 });
 
+app.put("/removeAdmin/:id", function(req, res){
+  var user_id = req.params.id;
+  
+
+  console.log("PUT removeAdmin: " + user_id);
+ 
+  pg.connect(conString, function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
+
+     client.query("UPDATE web_user SET admin_flag = $1 WHERE account_id = $2 ", [false, user_id],
+
+      function(err, result) {
+        //call `done()` to release the client back to the pool
+        done();
+        if(err) {
+          return console.error('error running query', err);
+        }
+        res.json(true);
+      });
+  }); 
+});
 // REST Operation - HTTP PUT to sign Out
 app.put("/signOut", function(req, res){
   loggedIn = false;
@@ -1035,7 +1058,7 @@ app.post('/add_new_admin', function(req, res){
       return console.error('error fetching client from pool', err);
     }
 
-      client.query("INSERT INTO web_user(f_name, l_name, password, email_address, admin_flag, user_description, rank, user_pic) VALUES( $1, $2, $3, $4, $5, $6, $7, $8)", [req.body.aFname, req.body.aLname, 'admin', req.body.emailAddress, true, '',
+      client.query("INSERT INTO web_user(f_name, l_name, password, email_address, admin_flag, user_description, rank, user_pic) VALUES( $1, $2, $3, $4, $5, $6, $7, $8)", [req.body.aFname, req.body.aLname, 'admin', req.body.aEmailAddress, true, '',
       0.0, 'http://www.icm.espol.edu.ec/estudiantes/2005/200511889/images/Juan%20Pueblo.jpg'],
 
       function(err, result) {

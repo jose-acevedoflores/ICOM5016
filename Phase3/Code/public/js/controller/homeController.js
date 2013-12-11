@@ -754,8 +754,7 @@ function addAdminForm(){
 	$.mobile.loading("show");
 	var form = $("#aRegisterForm");
 	var formData = form.serializeArray();
-	var email;
-	var password;
+	
 	console.log("form Data: " + formData);
 	var newUser = ConvertToJSON(formData);
 	console.log("New Admin: " + JSON.stringify(newUser));
@@ -1128,6 +1127,7 @@ function itemsSelling(){
 // Admin Section
 /*******************************************************************************************************************************************/
 var storeToRemove = undefined;
+var oldAdminId = undefined;
 //Sets storeToRemove in order for the call to removeStore to work with the parameter.
 function toRemoveStore(storeName){
 	console.log("Store to remove: " + storeName);
@@ -1286,7 +1286,7 @@ function getAdmin(id) {
 			$(document).on('pagebeforeshow', "#xAdminPage", function( event, ui) {
 				console.log("xAdminPage on pagebeforeshow listener");
 				var xAdmin =data.user;
-
+				oldAdminId = id;
 				var html = '<div class = \'ui-grid-a\'>'+
 					'<h3>'+xAdmin[0].name+'</h3>'+
 					'<br></br>'+
@@ -1357,6 +1357,36 @@ function makeAdmin(){
 		}
 	});
 	newAdminId = undefined;
+}
+
+function removeAdmin(){
+	console.log("Remove Admin: "+ oldAdminId);
+	$.mobile.loading("show");
+	$.ajax({
+		url : "http://"+host+"/removeAdmin/"+oldAdminId,
+		method : "put",
+		contentType: "application/json",
+		dataType : "json",
+		success : function(data, textStatus, jqXHR){
+
+			$.mobile.loading("hide");
+
+			$.mobile.changePage(
+		    "#home" ,
+		    {
+				allowSamePageTransition : true,
+				transition              : 'none',
+				showLoadMsg             : false,
+				reloadPage              : true
+		    }
+			);
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Data not found!");
+		}
+	});
+	oldAdminId = undefined;
 }
 
 function addCategory(){
