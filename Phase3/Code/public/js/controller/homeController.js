@@ -354,7 +354,7 @@ function shoppingCart(){
 			});
 			$.mobile.navigate("#shoppingCart");
 		},
-		error: function(data, textStatus, jqXHR){
+			error: function(data, textStatus, jqXHR){
 			$.mobile.loading("hide");
 			console.log("textStatus: " + textStatus);
 			alert("Data in Shopping Cart not found!");
@@ -864,7 +864,7 @@ function getUser(id) {
 				console.log("xProfilePage on pagebeforeshow listener");
 				var xUser = data.user;
 				newAdminId = xUser[0].account_id;
-
+				userId = id;
 				var html = '<div class = \'ui-grid-a\'>'+
 					'<h3>'+xUser[0].name+'</h3>'+
 					'<br></br>'+
@@ -1235,6 +1235,7 @@ function itemsSelling(){
 /*******************************************************************************************************************************************/
 var storeToRemove = undefined;
 var oldAdminId = undefined;
+var userId = undefined;
 //Sets storeToRemove in order for the call to removeStore to work with the parameter.
 function toRemoveStore(storeName){
 	console.log("Store to remove: " + storeName);
@@ -1394,6 +1395,7 @@ function getAdmin(id) {
 				console.log("xAdminPage on pagebeforeshow listener");
 				var xAdmin =data.user;
 				oldAdminId = id;
+				userId = id
 				var html = '<div class = \'ui-grid-a\'>'+
 					'<h3>'+xAdmin[0].name+'</h3>'+
 					'<br></br>'+
@@ -1495,6 +1497,38 @@ function removeAdmin(){
 	});
 	oldAdminId = undefined;
 }
+
+function deleteUser(){
+	$.mobile.loading("show");
+	console.log("delete user: "+ userId);
+	$.ajax({
+		url : "http://"+host+"/user/delete/"+userId,
+		method : "delete",
+		contentType: "application/json",
+		dataType : "json",
+		success : function(data, textStatus, jqXHR){
+
+			$.mobile.loading("hide");
+
+			$.mobile.changePage(
+		    $("#home") , 
+		    {
+				allowSamePageTransition : true,
+				transition              : 'none',
+				showLoadMsg             : false,
+				reloadPage              : true
+		    }
+			);
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Data not found!");
+		}
+	});
+	userId = undefined;
+}
+
+
 
 function addCategory(){
 	console.log("add category");

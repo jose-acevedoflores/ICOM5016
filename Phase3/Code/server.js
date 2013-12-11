@@ -1208,14 +1208,28 @@ app.post('/add_new_admin', function(req, res){
 
 app.post('/addStore/storeName/:storeName', function(req, res){
 	var storeToAdd = req.params.storeName;
-	generate.data.stores.push(
-		{
-			"name" : storeToAdd,
-			"categories" : [],
-			"categoriesLength" : 0
-		});
-	console.log(generate);
-	res.json(true);
+	if (!req.session.isAdmin) {
+    req.json(false)
+  }
+  else {
+    pg.connect(conString, function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
+
+      client.query("INSERT INTO category(name, description, parent_category_id) VALUES( $1, $2, $3)", [storeToAdd, " ", 1],
+
+      function(err, result) {
+        //call `done()` to release the client back to the pool
+        done();
+        if(err) {
+          return console.error('error running query', err);
+        }
+        
+        res.json(true);
+      });
+  }); 
+  }
 });
 
 
@@ -1292,7 +1306,33 @@ app.del("/removeStore/storeName/:storeName", function(req, res){
 	res.json(true);
 });
 
+app.del("/user/delete/:id", function(req, res){
+  var userId = req.params.id;
+  console.log("DEL: id= " +userId);
+
+  //QUERY DB to update the total_items count of this user and the items_in_cart entries.
+  pg.connect(conString, function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
+
+    client.query('DELETE FROM web_user WHERE account_id = $1', [userId],
+
+      function(err, result) {
+        //call `done()` to release the client back to the pool
+        done();
+        if(err) {
+          return console.error('error running query', err);
+        }
+        res.json(true);
+      });
+  }); 
+
+});
+
 http.createServer(app).listen(app.get('port'), function(){
         console.log('Express server listening on port ' + app.get('port'));
 });
+
+
 
