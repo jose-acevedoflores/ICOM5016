@@ -71,6 +71,14 @@ html
 					a(onclick="removeItemFromCart()", data-role="button", data-rel="back", data-theme="b", data-icon="check", data-inline="true", data-mini="true") Remove
 					a(href="#", data-role="button", data-rel="back", data-inline="true", data-mini="true") Cancel
 
+		// Search Results
+		div(data-role="page", id="searchResults")
+			include common	
+			div(data-role="content")
+				h3 Search Results						
+				ul(data-filter = "true", data-role="listview", data-inset="true", id="resultList")
+
+
 		// Placed Bids
 		div(data-role="page", id="placedBids")
 			include common

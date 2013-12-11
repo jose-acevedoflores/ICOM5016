@@ -162,6 +162,32 @@ app.get('/home',function(req, res ) {
 });
 
 
+app.get('/search/:label', function(req,res){
+
+    var label = req.params.label;
+
+    console.log("GET: search label: " + label);
+    pg.connect(conString, function(err, client, done) {
+      if (err) {
+        return console.error('Error making search', err);
+      }
+
+      client.query("SELECT  id, brand , model,  pname, description,  picture, ptype, amount, starting_price FROM (SELECT product_id AS id, brand , model, product_name AS pname, description, photo_url AS picture, \'sale\' AS ptype , price AS amount , 0 AS starting_price FROM sale_product UNION SELECT product_id AS id, brand , model, product_name AS pname, description, photo_url AS picture, \'auction\' AS ptype, highest_bid_amount as amount, starting_price FROM auction_product NATURAL LEFT JOIN (SELECT bid_id AS highest_bid, amount AS highest_bid_amount FROM bid ) AS temp )  AS together WHERE pname LIKE $1", ['%'+label+'%'],
+        
+        function(err,result) {
+          done();
+
+          if (err) {
+            return console.error('Error running main search query', err);
+          }
+          console.log(result.rows);
+
+          var temp = {"items" : result.rows};
+          res.json(temp);
+        });
+    });
+});
+
 app.get('/stores/:store/:category' , function(req, res){
 
 	var store = req.params.store;

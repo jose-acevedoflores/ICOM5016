@@ -333,6 +333,7 @@ function shoppingCart(){
 	});
 }
 
+
 function updateQuantity(itemId){
 
 	var newQuant =	document.getElementById("nextBid" +itemId).value ;
@@ -978,6 +979,49 @@ function editCCard(){
 // Items Selling
 /*******************************************************************************************************************************************/
 
+function searchItems(label) {
+	console.log("search function is called");
+	$.mobile.loading("show");
+	$.ajax({
+		url : "http://" + host + "/search/" + label,
+		contentType : "application/json",
+		success : function(data, textStatus, jqXHR){
+
+		$(document).on('pagebeforeshow', "#searchResults", function( event, ui ) {
+				console.log("searchResults on pagebeforeshow listener");
+				listResult = $("#resultList");
+
+				var itemList = data.items;
+				var len = itemList.length;
+				listResult.empty();
+				var item;
+
+				for (var i=0; i < len; ++i){
+					item = itemList[i];
+					
+					listResult.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
+						"<img src="+ item.picture + ">"  + 
+						"<h2>" +item.pname+ "</h2>" + 
+						"<p>" + item.description + "</p>" +
+						"<p> Brand: " + item.brand + " </p>" + 
+						"<p class=\"ui-li-aside\"> Price: " + item.amount + "</p>" +
+						"</a>");
+
+					listResult.listview("refresh");
+				}
+
+		$.mobile.loading("hide");
+		});
+		$.mobile.navigate("#searchResults");
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			$.mobile.loading("hide");
+			alert("Data not found!");
+		}
+	});
+}
+
 function itemsSelling(){
 	console.log("Items Selling function");
 	$.mobile.loading("show");
@@ -1284,24 +1328,24 @@ function addItemToCart(){
 }
 
 
-//This enables the search bar to send queries to the server
-$(document).ready(function() {
-	$(".mainSearch").on("keypress" ,function(e) { 
-		if(e.keyCode == 13)
-		{
-			var temp = $('.mainSearch').val();
-			$.ajax({
-				url : "http://"+host+"/search/"+temp,
-				contentType: "application/json",
-				success : function(data, textStatus, jqXHR){
+// //This enables the search bar to send queries to the server
+// $(document).ready(function() {
+// 	$(".mainSearch").on("keypress" ,function(e) { 
+// 		if(e.keyCode == 13)
+// 		{
+// 			var temp = $('.mainSearch').val();
+// 			$.ajax({
+// 				url : "http://"+host+"/search/"+temp,
+// 				contentType: "application/json",
+// 				success : function(data, textStatus, jqXHR){
 					
-				},
-				error: function(data, textStatus, jqXHR){
-					console.log("textStatus: " + textStatus);
-					alert("Data not found!");
-				}
-			});
-		}
-	});
-});
+// 				},
+// 				error: function(data, textStatus, jqXHR){
+// 					console.log("textStatus: " + textStatus);
+// 					alert("Data not found!");
+// 				}
+// 			});
+// 		}
+// 	});
+// });
 
