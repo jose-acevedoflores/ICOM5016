@@ -143,7 +143,7 @@ app.get('/home',function(req, res ) {
     	return console.error('error fetching client from pool', err);
   	}
 
-  	client.query('SELECT * FROM sale_product, (SELECT category_id,name AS category_name, parent_category_id FROM category )AS newcat WHERE sale_product.category_id = newcat.category_id',
+  	client.query(' SELECT photo_url, parent_category_id, product_id, product_name,seller_id, description, \'sale\' AS ptype , price, 0 AS highest_bid_amount FROM sale_product natural join (SELECT category_id,name AS category_name, parent_category_id FROM category )AS newcat UNION SELECT photo_url, parent_category_id, product_id, product_name,seller_id, description, \'auction\' AS ptype , starting_price AS price, amount AS highest_bid_amount FROM auction_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category )AS newcat NATURAL LEFT JOIN (SELECT bid_id AS highest_bid, amount FROM bid ) as from_bid',
 
   		function(err, result) {
     		//call `done()` to release the client back to the pool
@@ -273,7 +273,7 @@ app.get("/item/:itemId", function(req,res) {
     		return console.error('error fetching client from pool', err);
   	}
 
-  	client.query('SELECT product_id AS id, brand , model, product_name AS pname, description, photo_url AS picture FROM product WHERE product_id = $1', [itemId],
+  	client.query('SELECT  id, brand , model,  pname, description,  picture, ptype, amount, starting_price FROM (SELECT product_id AS id, brand , model, product_name AS pname, description, photo_url AS picture, \'sale\' AS ptype , price AS amount , 0 AS starting_price FROM sale_product UNION SELECT product_id AS id, brand , model, product_name AS pname, description, photo_url AS picture, \'auction\' AS ptype, highest_bid_amount as amount, starting_price FROM auction_product NATURAL LEFT JOIN (SELECT bid_id AS highest_bid, amount AS highest_bid_amount FROM bid ) AS temp )  AS together WHERE id = $1', [itemId],
 
   		function(err, result) {
     		//call `done()` to release the client back to the pool
@@ -282,6 +282,11 @@ app.get("/item/:itemId", function(req,res) {
     		if(err) {
 	   			return console.error('error running query', err);
     		}
+
+        if(result.rows[0].ptype === "auction" && result.rows[0].amount === null){
+            result.rows[0].amount = result.rows[0].starting_price;
+        }
+
     		console.log(result.rows);
 
     		var temp = {"item" : result.rows};
@@ -756,17 +761,22 @@ app.put("/placedBids/item/:id/:incBid", function(req, res){
     if(err) {
       return console.error('error fetching client from pool', err);
     }
+    if(req.session.loggedIn){
+      client.query("INSERT INTO bid(buyer_account_id, product_id, amount) VALUES( $1, $2, $3)", [req.session.account_id, product_id, bid_amount],
 
-    client.query("INSERT INTO bid(buyer_account_id, product_id, amount) VALUES( $1, $2, $3)", [req.session.account_id, product_id, bid_amount],
-
-      function(err, result) {
-        //call `done()` to release the client back to the pool
-        done();
-        if(err) {
-          return console.error('error running query', err);
-        }
-        res.json(true);
-      });
+        function(err, result) {
+          //call `done()` to release the client back to the pool
+          done();
+          if(err) {
+            return console.error('error running query', err);
+          }
+          res.json(true);
+        });
+    }
+    else{
+      console.log("not logged in bid");
+      res.json(false);
+    }
   }); 
 });
 

@@ -24,15 +24,31 @@ $(document).on('pagebeforeshow', "#home", function( event, ui ) {
 				item = itemList[i];
 				list = $("#List" + item.parent_category_id );
 
+				if(item.ptype === "sale"){
 				list.append("<li>" +
 					"<a href='#' onclick=\"findItem(" +item.product_id + ")\">" + 
 					"<img src="+ item.photo_url + ">"  + 
 					"<h2>" + item.product_name + "</h2>" + 
 					"<p>" + item.description + "</p>" +
 					"<p> Rating:" + item.seller_id + " temp" + " </p>" + 
-					"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
+					"<p class=\"ui-li-aside\"> Price: $" + item.price + "</p>" +
+					"</a></li>");	
+				}
+				else if(item.ptype === "auction"){
+					if(item.highest_bid_amount === null ) 
+						item.highest_bid_amount = item.price;
+
+				list.append("<li>" +
+					"<a href='#' onclick=\"findItem(" +item.product_id + ")\">" + 
+					"<img src="+ item.photo_url + ">"  + 
+					"<h2>" + item.product_name + "</h2>" + 
+					"<p>" + item.description + "</p>" +
+					"<p> Rating:" + item.seller_id + " temp" + " </p>" + 
+					"<p class='ui-li-aside'> Highest Bid: $" + item.highest_bid_amount+  "</p>"+
 					"</a></li>");
-				list.listview("refresh");	
+
+				}
+				list.listview("refresh");
 			}
 			
 		},
@@ -165,6 +181,8 @@ function findItem(itemId){
 
 	currentItemToAdd = itemId;
 
+	
+
 	$.mobile.loading("show");
 	console.log("findItem function with itemId = " + itemId);
 	$.ajax({
@@ -181,23 +199,34 @@ function findItem(itemId){
 				list.empty();
 				var item = data.item[0];
 
-				// list.append("<div(class=\"ui-grid-a\")>" + 
-				// 	"<div(class=\"ui-block-a\")>" +
-				// 	"<h3>" + item.itemName + "</h3></br>" +
-				// 	"<h6> Product ID: " + item.id + "</h6>" +
-				// 	"</div><div(class=\"ui-block-b\")></div></div>" +
-				// 	"<div(class=\"ui-grid-a\")>" + 
-				// 	"<div(class=\"ui-block-a\")>" + "<img src="+ item.picture + ">" +
-				// 	"</br></div>" + "<div(class=\"ui-block-b\")>" +
-				// 	"<p> Rating" + item.rating + "</p>" + 
-				// 	"<p>" + item.description + "</p></div></div>");
-						
-				list.append("<li data-theme=\"c\">" + 
+				if(item.ptype === "auction"){
+					$("#addItemToCartAnchor").hide();
+					$("#placeBidAnchor").show();
+
+					list.append("<li data-theme=\"c\">" + 
 					"<h3>" + item.pname + "</h3>" + 
 					"<h6> Product ID: " + item.id + "</h6>" +
 					"<img src="+ item.picture + ">" +
-					"<p> Rating: " + item.rating + "</p>" + 
-					"<p>" + item.description + "</p></li>");
+					"<p>" + item.description + "</p></li>"+
+					"<label for=\"incBidIP" +item.id+"\"> Place Bid" +
+					"<input style='width:60px' id=\"incBidIP" +item.id+"\" class=\"ui-input-text ui-body-a ui-corner-all ui-shadow-inset\" data-inline=\"true\" value="+item.amount+">");
+				}
+				else if(item.ptype === "sale"){
+					$("#placeBidAnchor").hide();
+					$("#addItemToCartAnchor").show();
+					
+					list.append("<li data-theme=\"c\">" + 
+					"<h3>" + item.pname + "</h3>" + 
+					"<h6> Product ID: " + item.id + "</h6>" +
+					"<img src="+ item.picture + ">" +
+					"<p> Price: " + item.amount + "</p>" + 
+					"<p>" + item.description + "</p>"+
+					"</li>" 
+					);
+					
+				}
+				
+				
 
 				list.listview("refresh");
 				
@@ -440,9 +469,9 @@ function placedBids(){
 							"<p> Rating:" + item.rating + " </p>" + 
 							"<div data-role=\"fieldcontain\" class=\"ui-li-aside\">" +
 							//"<h2 class=\"ui-li-aside\"> Increase Bid:" +
-							"<label for=\"incBid" +item.id+"\"> Winning with" +
-							"<input id=\"incBid" +item.id+"\" class=\"ui-input-text ui-body-a ui-corner-all ui-shadow-inset\" data-inline=\"true\" value="+item.bid_amount+">" +
-							"<input  onclick=\"increaseBid("+item.id+")\" type=\"submit\" data-role=\"button\" data-inline=\"true\" value=\"Bid\">"+
+							"<label for=\"incBidPB" +item.id+"\"> Winning with" +
+							"<input id=\"incBidPB" +item.id+"\" class=\"ui-input-text ui-body-a ui-corner-all ui-shadow-inset\" data-inline=\"true\" value="+item.bid_amount+">" +
+							"<input  onclick=\"increaseBid("+item.id+", 'incBidPB')\" type=\"submit\" data-role=\"button\" data-inline=\"true\" value=\"Bid\">"+
 							"</div></a></li>"); 
 					}
 					else {
@@ -453,9 +482,9 @@ function placedBids(){
 							"<p> Rating:" + item.rating + " </p>" + 
 							"<div data-role=\"fieldcontain\" class=\"ui-li-aside\">" +
 							//"<h2 class=\"ui-li-aside\"> Increase Bid:" +
-							"<label for=\"incBid" +item.id+"\"> Increase Bid" +
-							"<input id=\"incBid" +item.id+"\" class=\"ui-input-text ui-body-a ui-corner-all ui-shadow-inset\" data-inline=\"true\" value="+item.bid_amount+">" +
-							"<input  onclick=\"increaseBid("+item.id+")\" type=\"submit\" data-role=\"button\" data-inline=\"true\" value=\"Bid\">"+
+							"<label for=\"incBidPB" +item.id+"\"> Increase Bid" +
+							"<input id=\"incBidPB" +item.id+"\" class=\"ui-input-text ui-body-a ui-corner-all ui-shadow-inset\" data-inline=\"true\" value="+item.bid_amount+">" +
+							"<input  onclick=\"increaseBid("+item.id+", 'incBidPB')\" type=\"submit\" data-role=\"button\" data-inline=\"true\" value=\"Bid\">"+
 							"</div></a></li>"); 
 					}
 	
@@ -477,14 +506,16 @@ function placedBids(){
 
 }
 
-var itemToIncreaseBid;
-function toIncreaseBid(itemId){
-	itemToIncreaseBid = itemId;
-}
-//TODO
-function increaseBid(itemId){
+function increaseBid(itemId, currentPage){
 	
-	var incBid = document.getElementById("incBid" +itemId).value ;
+
+	if(currentPage === "incBidIP"){
+		itemId = currentItemToAdd;
+	}
+
+	var incBid =document.getElementById(currentPage +itemId).value ;
+
+
 
 	$.mobile.loading("show");
 	console.log("incBid: "+ incBid);
