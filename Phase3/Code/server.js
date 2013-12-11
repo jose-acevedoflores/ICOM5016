@@ -813,7 +813,7 @@ app.put("/userProfile/update/mailingAddress", function(req, res) {
     if(err) {
       return console.error('error fetching client from pool', err);
     }
-
+    if(req.session.loggedIn) {
     client.query("INSERT INTO address(first_line, second_line, city, country, zip_code, owner_id, billing_flag) VALUES( '"+ req.body.first_line +"','"+ req.body.second_line +"', '"+ req.body.city +"', '"+ req.body.country +"', '"+ req.body.zip_code +"', $1, false)",[req.session.account_id],
 
       function(err, result) {
@@ -824,6 +824,11 @@ app.put("/userProfile/update/mailingAddress", function(req, res) {
         }
 
       });
+     }
+     else {
+      console.log("Not Log In")
+      res.json(false)
+     }
   }); 
 
 });
@@ -946,7 +951,8 @@ app.put("/makeAdmin/:id", function(req, res){
   
 
   console.log("PUT makeAdmin: " + user_id);
- 
+  if (req.session.isAdmin) {
+
   pg.connect(conString, function(err, client, done) {
     if(err) {
       return console.error('error fetching client from pool', err);
@@ -962,31 +968,45 @@ app.put("/makeAdmin/:id", function(req, res){
         }
         res.json(true);
       });
-  }); 
+   
+  
+ 
+  });
+  }
+  else {
+    req.json(false);
+  } 
 });
 
 app.put("/removeAdmin/:id", function(req, res){
   var user_id = req.params.id;
   
 
-  console.log("PUT removeAdmin: " + user_id);
- 
-  pg.connect(conString, function(err, client, done) {
-    if(err) {
-      return console.error('error fetching client from pool', err);
-    }
+    console.log("PUT removeAdmin: " + user_id);
+   if(req.session.isAdmin) {
+    pg.connect(conString, function(err, client, done) {
+      if(err) {
+        return console.error('error fetching client from pool', err);
+      }
 
-     client.query("UPDATE web_user SET admin_flag = $1 WHERE account_id = $2 ", [false, user_id],
+       client.query("UPDATE web_user SET admin_flag = $1 WHERE account_id = $2 ", [false, user_id],
 
-      function(err, result) {
-        //call `done()` to release the client back to the pool
-        done();
-        if(err) {
-          return console.error('error running query', err);
-        }
-        res.json(true);
-      });
-  }); 
+        function(err, result) {
+          //call `done()` to release the client back to the pool
+          done();
+          if(err) {
+            return console.error('error running query', err);
+          }
+          res.json(true);
+        });
+     
+
+    }); 
+  }
+  else{
+    req.json(false);
+
+  }
 });
 // REST Operation - HTTP PUT to sign Out
 app.put("/signOut", function(req, res){
@@ -1046,7 +1066,11 @@ app.post('/register/newUser', function(req, res) {
 
 app.post('/add_new_admin', function(req, res){
   console.log("POST : New Admin");
+  if (!req.session.isAdmin) {
+    req.json(false)
+  }
 
+  else {
   if(!req.body.hasOwnProperty('aFname') || !req.body.hasOwnProperty('aLname')
       || !req.body.hasOwnProperty('aEmailAddress') ){
       res.statusCode = 400;
@@ -1071,6 +1095,7 @@ app.post('/add_new_admin', function(req, res){
         res.json(true);
       });
   }); 
+}
 })
 
 app.post('/addStore/storeName/:storeName', function(req, res){
