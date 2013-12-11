@@ -340,6 +340,7 @@ function shoppingCart(){
 						"<a onclick=\"toRemove("+item.id+")\" href=\"#removeItemFromCart\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\">remove from cart</li>");
 					list.listview("refresh");	
 				}
+				getCreditCards();
 				if(len!=0) // Case to protect when the user doesn't have any items in cart
 				{
 					var totalAmountField = $("#shoppingCartAmount");
@@ -400,9 +401,71 @@ var itemToRemove;
 function toRemove(itemId){
 	itemToRemove = itemId;
 }
+
+function getCreditCards(){
+	console.log("Checkout get credit cards");
+
+	$.ajax({
+		url : "http://"+host+"/shoppingCart/checkout/getCreditCards",
+		method : "get",
+		contentType: "application/json",
+		dataType : "json",
+		success : function(data, textStatus, jqXHR){
+
+			var list = $("#cc_list_checkout");
+			list.empty();
+			var item;
+			for(var i=0; i < data.items.length ; i++){
+				item = data.items[i];
+
+				list.append("<li id=ccID"+item.cc_id+"><a href=\"#\" onclick='checkoutCart("+item.cc_id+")'>" + 
+						"<h2>" + item.name_on_card + "</h2>" + 
+						"<p>" + item.type + "</p>" +
+						"<p> Expiration date:" + item.expiration_date_month+"/"+item.expiration_date_year + " </p>" + 
+						"</a></li>"
+					);
+
+			}
+			list.listview("refresh");
+			$.mobile.loading("hide");
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Data not found!");
+		}
+	});
+}
+
 //TODO set function to respond to cancel button.
-function checkoutCart(){
-	console.log("Checkout");
+function checkoutCart(cc_id){
+	console.log("Checkout cart ");
+	var date = new Date();
+
+	$.mobile.loading("show");
+	var items = {
+		"date" : date.getFullYear() + "-" +(date.getMonth()+1) + "-"+ date.getDate(),
+		"time" : date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds(),
+		"cc_id" : cc_id
+	};
+
+	items = JSON.stringify(items);
+	$.ajax({
+		url : "http://"+host+"/shoppingCart/checkout",
+		method : "put",
+		data: items,
+		contentType: "application/json",
+		dataType : "json",
+		success : function(data, textStatus, jqXHR){
+
+			$.mobile.loading("hide");
+			alert("Order Processed");
+			document.location.href = "http://"+host;
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Data not found!");
+		}
+	});
 }
 
 function removeItemFromCart(){

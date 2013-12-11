@@ -63,14 +63,15 @@ html
 				ul(data-role="listview", data-inset="true", id="cartItemList")
 				h3 Order Total: 	
 				h3(id="shoppingCartAmount") 
-				input(type="submit", value="Proceed to Checkout", onclick="checkoutCart()" )
+				h2 Pay with
+				ul(data-role="listview", data-inset="true", id="cc_list_checkout")
 
 				div(data-role="popup", id="removeItemFromCart", data-theme="d", data-overlay-theme="b", class="ui-content", style="max-width:340px;")
 					h3 Delete from cart ?
 					p The item will be removed of your cart 
 					a(onclick="removeItemFromCart()", data-role="button", data-rel="back", data-theme="b", data-icon="check", data-inline="true", data-mini="true") Remove
 					a(href="#", data-role="button", data-rel="back", data-inline="true", data-mini="true") Cancel
-
+				
 		// Placed Bids
 		div(data-role="page", id="placedBids")
 			include common

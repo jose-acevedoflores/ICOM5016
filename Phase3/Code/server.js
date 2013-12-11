@@ -658,6 +658,34 @@ app.get("/manageAdmins", function(req, res){
   });
 });
 
+app.get("/shoppingCart/checkout/getCreditCards", function(req, res){
+   console.log("Get : checkout credit_cards");
+
+  pg.connect(conString, function(err, client, done) {
+    if(err){
+      return console.error('error fetching client form pool', err);
+    }
+    if(req.session.loggedIn) {
+      client.query('SELECT * FROM credit_card WHERE owner_id = $1 ', [req.session.account_id],  
+        function(err, result) {
+          done();
+          if(err) {
+            return console.error('error running query', err);
+          }
+          console.log(result.rows); 
+          
+          var temp = {"items" : result.rows};
+          res.json(temp);
+        });
+
+    }
+    else {
+      var temp = {"items": "empty"};
+      res.json(temp);
+    }
+  });
+});
+
 app.get("/search/:query", function(req, res)  {
 	var query = req.params.query;
 	console.log("GET: query= "+query);
@@ -939,6 +967,59 @@ app.put("/itemInCart/update_quantity/:itemId/:quantity", function(req, res){
       res.json(false);
     }
   });
+});
+
+app.put("/shoppingCart/checkout", function(req,res){
+
+  console.log("PUT: checkout ");
+   pg.connect(conString, function(err, client, done) {
+    if(err){
+      return console.error('error fetching client form pool', err);
+    }
+    if(req.session.loggedIn) {
+
+
+      client.query('INSERT INTO invoice(buyer_account_id, date, time ,amount,cc_id, invoice_id) VALUES($1, $3  , $2, (SELECT total_amount FROM shopping_cart WHERE owner_id = $1) , $4, DEFAULT) RETURNING invoice_id ', [req.session.account_id, req.body.time, req.body.date, req.body.cc_id],
+        function(err, result) {
+          done();
+          if(err) {
+            return console.error('error running query', err);
+          }
+          var invoice_id = result.rows[0].invoice_id;
+          pg.connect(conString, function(err, client, done){
+            if(err){
+              done();
+              return console.error('error fetching client form pool', err);
+            }
+            client.query('SELECT  product_id, quantity , shopping_cart_id FROM sale_product NATURAL JOIN (SELECT *, item_id AS product_id FROM shopping_cart NATURAL JOIN items_in_cart WHERE owner_id = $1 ) AS TempName', [req.session.account_id] ,  
+              function(err, result) {
+                  
+                  if(err) {
+                      return console.error('error running query', err);
+                  }
+                  for(var i = 0 ; i < result.rows.length ; i++)
+                  {
+                    client.query("INSERT INTO has_invoice(product_id, invoice_id, quantity) VALUES("+result.rows[i].product_id+" , "+invoice_id+","+result.rows[i].quantity+")");
+                  } 
+                  for(var i = 0 ; i < result.rows.length ; i++)
+                  {
+                    client.query("DELETE FROM items_in_cart WHERE item_id ="+result.rows[i].product_id+" AND shopping_cart_id = "+result.rows[i].shopping_cart_id+" ");
+                  } 
+                  done();
+                  res.json(true);
+              } 
+            );//End of second query
+          });//end of second pg.connect
+
+         
+        });//end of first query
+    }// Logged in if
+    else {
+
+      res.json(false);
+    }
+  }); // end of first pg.connect
+
 });
 
 app.put("/makeAdmin/:id", function(req, res){
