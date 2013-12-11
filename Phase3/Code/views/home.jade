@@ -37,9 +37,7 @@ html
 				div(data-role="page", id="#{data.stores[i].categories[c]}CategorySTORE#{data.stores[i].category_id}")				
 					include common
 					div(data-role="content")
-						div(data-role="controlgroup", data-type="horizontal", id="#{data.stores[i].categories[c]}CategoryNavigatorSTORE#{data.stores[i].category_id}") 	
-							a(href="#", data-role="button") #{data.stores[i].name}
-							a(href="#", data-role="button") #{data.stores[i].categories[c]}
+				
 						div(data-role="fieldcontain")
 							select(name="SortOrder", id="sortOrder", onchange="orderView('#{data.stores[i].categories[c]}',#{data.stores[i].category_id})")
 								optgroup(label="Price")
@@ -454,62 +452,6 @@ html
 										data-icon="check", data-theme="a", data-transition="flip", dat-corners="true"
 										data-icon-shadow="true", data-mini="true", onclick="editCCard()") Save
 										
-
-				//- form(id ="editProfileInfoForm", data-transition="pop")
-				//- 	fieldset(data-role='collapsible')
-				//- 		ul(id="editForm")
-							
-				//- 			li 
-				//- 				label(for="updEmailAddress") Email:
-				//- 					input(id="updEmailAddress", value="#{data.email}", type="text", name="emailAddress", placeholder="john_doe@domain.com")
-				//- 			li
-				//- 				label(for="updPassword") Password:
-				//- 					input(id="updPassword", value="#{data.password}", type="password", name="password", placeholder="Password")
-				//- 			li
-				//- 				label(for="updConfirmPassword") Confirm Password:
-				//- 					input(id="updConfirmPassword", value="#{data.password}", type="password", name="confirmPassword", placeholder ="Password")
-				//- 			li
-				//- 				label(for="description") Description:
-				//- 					textarea(id="description", value="", name="description")
-										
-				//- 			li
-				//- 				label(for="updBillMailAddress") Billing Address:
-				//- 					textarea(id="updBillMailAddress", name="updBillMailAddress")
-				//- 			li
-				//- 				label(for="updC_card") Credit Card Number:
-				//- 					input(id="updC_card", name="updC_card", placeholder="902902")
-					center
-						fieldset(class="ui-grid-a")
-							div(class="ui-block-a")
-								a(href="#home",data-role="button", data-inline="true",
-									data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
-									data-icon-shadow="true", data-mini="true") Cancel
-								
-							div(class="ui-block-b")	
-								a(data-role="button", data-inline="true",
-									data-icon="check", data-theme="a", data-transition="flip", dat-corners="true"
-									data-icon-shadow="true", data-mini="true", onclick="editProfileInfo()") Save
-
-					form(id ="editProfileMailAddressForm", data-transition="pop")
-						fieldset(data-role='controlgroup')
-							ul(id="editMailForm")
-							
-								li
-									label(for="updMailAddress") Mailing Address:
-										textarea(id="updMailAddress", name="updMailAddress")
-								
-						center
-							fieldset(class="ui-grid-a")
-								div(class="ui-block-a")
-									a(href="#home",data-role="button", data-inline="true",
-										data-icon="delete", data-theme="a", data-transition="flip", dat-corners="true"
-										data-icon-shadow="true", data-mini="true") Cancel
-									
-								div(class="ui-block-b")	
-									a(data-role="button", data-inline="true",
-										data-icon="check", data-theme="a", data-transition="flip", dat-corners="true"
-										data-icon-shadow="true", data-mini="true", onclick="editProfileMail()") Save									
-		
 		
 
 		// ADMIN SECTION
