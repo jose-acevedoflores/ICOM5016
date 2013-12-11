@@ -162,6 +162,32 @@ app.get('/home',function(req, res ) {
 });
 
 
+app.get('/search/:label', function(req,res){
+
+    var label = req.params.label;
+
+    console.log("GET: search label: " + label);
+    pg.connect(conString, function(err, client, done) {
+      if (err) {
+        return console.error('Error making search', err);
+      }
+
+      client.query("SELECT  id, brand , model,  pname, description,  picture, ptype, amount, starting_price FROM (SELECT product_id AS id, brand , model, product_name AS pname, description, photo_url AS picture, \'sale\' AS ptype , price AS amount , 0 AS starting_price FROM sale_product UNION SELECT product_id AS id, brand , model, product_name AS pname, description, photo_url AS picture, \'auction\' AS ptype, highest_bid_amount as amount, starting_price FROM auction_product NATURAL LEFT JOIN (SELECT bid_id AS highest_bid, amount AS highest_bid_amount FROM bid ) AS temp )  AS together WHERE pname LIKE $1", ['%'+label+'%'],
+        
+        function(err,result) {
+          done();
+
+          if (err) {
+            return console.error('Error running main search query', err);
+          }
+          console.log(result.rows);
+
+          var temp = {"items" : result.rows};
+          res.json(temp);
+        });
+    });
+});
+
 app.get('/stores/:store/:category' , function(req, res){
 
 	var store = req.params.store;
@@ -280,6 +306,7 @@ app.get("/item/:itemId", function(req,res) {
   	}
 
   	client.query('SELECT  id, brand , model,  pname, description,  picture, ptype, amount, starting_price FROM (SELECT product_id AS id, brand , model, product_name AS pname, description, photo_url AS picture, \'sale\' AS ptype , price AS amount , 0 AS starting_price FROM sale_product UNION SELECT product_id AS id, brand , model, product_name AS pname, description, photo_url AS picture, \'auction\' AS ptype, highest_bid_amount as amount, starting_price FROM auction_product NATURAL LEFT JOIN (SELECT bid_id AS highest_bid, amount AS highest_bid_amount FROM bid ) AS temp )  AS together WHERE id = $1', [itemId],
+
 
   		function(err, result) {
     		//call `done()` to release the client back to the pool
@@ -841,7 +868,7 @@ app.put("/userProfile/update/mailingAddress", function(req, res) {
     if(err) {
       return console.error('error fetching client from pool', err);
     }
-
+    if(req.session.loggedIn) {
     client.query("INSERT INTO address(first_line, second_line, city, country, zip_code, owner_id, billing_flag) VALUES( '"+ req.body.first_line +"','"+ req.body.second_line +"', '"+ req.body.city +"', '"+ req.body.country +"', '"+ req.body.zip_code +"', $1, false)",[req.session.account_id],
 
       function(err, result) {
@@ -852,6 +879,11 @@ app.put("/userProfile/update/mailingAddress", function(req, res) {
         }
 
       });
+     }
+     else {
+      console.log("Not Log In")
+      res.json(false)
+     }
   }); 
 
 });
@@ -1027,7 +1059,8 @@ app.put("/makeAdmin/:id", function(req, res){
   
 
   console.log("PUT makeAdmin: " + user_id);
- 
+  if (req.session.isAdmin) {
+
   pg.connect(conString, function(err, client, done) {
     if(err) {
       return console.error('error fetching client from pool', err);
@@ -1043,31 +1076,45 @@ app.put("/makeAdmin/:id", function(req, res){
         }
         res.json(true);
       });
-  }); 
+   
+  
+ 
+  });
+  }
+  else {
+    req.json(false);
+  } 
 });
 
 app.put("/removeAdmin/:id", function(req, res){
   var user_id = req.params.id;
   
 
-  console.log("PUT removeAdmin: " + user_id);
- 
-  pg.connect(conString, function(err, client, done) {
-    if(err) {
-      return console.error('error fetching client from pool', err);
-    }
+    console.log("PUT removeAdmin: " + user_id);
+   if(req.session.isAdmin) {
+    pg.connect(conString, function(err, client, done) {
+      if(err) {
+        return console.error('error fetching client from pool', err);
+      }
 
-     client.query("UPDATE web_user SET admin_flag = $1 WHERE account_id = $2 ", [false, user_id],
+       client.query("UPDATE web_user SET admin_flag = $1 WHERE account_id = $2 ", [false, user_id],
 
-      function(err, result) {
-        //call `done()` to release the client back to the pool
-        done();
-        if(err) {
-          return console.error('error running query', err);
-        }
-        res.json(true);
-      });
-  }); 
+        function(err, result) {
+          //call `done()` to release the client back to the pool
+          done();
+          if(err) {
+            return console.error('error running query', err);
+          }
+          res.json(true);
+        });
+     
+
+    }); 
+  }
+  else{
+    req.json(false);
+
+  }
 });
 // REST Operation - HTTP PUT to sign Out
 app.put("/signOut", function(req, res){
@@ -1127,7 +1174,11 @@ app.post('/register/newUser', function(req, res) {
 
 app.post('/add_new_admin', function(req, res){
   console.log("POST : New Admin");
+  if (!req.session.isAdmin) {
+    req.json(false)
+  }
 
+  else {
   if(!req.body.hasOwnProperty('aFname') || !req.body.hasOwnProperty('aLname')
       || !req.body.hasOwnProperty('aEmailAddress') ){
       res.statusCode = 400;
@@ -1152,6 +1203,7 @@ app.post('/add_new_admin', function(req, res){
         res.json(true);
       });
   }); 
+}
 })
 
 app.post('/addStore/storeName/:storeName', function(req, res){
