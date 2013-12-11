@@ -217,6 +217,12 @@ app.get('/stores/:store/:category/:sortOrder' , function(req, res){
     else if(sortOrder === "revAlphabetical"){
        q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2 ORDER BY brand DESC';
     }
+    else if(sortOrder === "alphabeticalN"){
+         q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2 ORDER BY product_name ';
+    }
+    else if(sortOrder ==="revAlphabeticalN"){
+         q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2 ORDER BY product_name DESC';
+    }
     client.query(q, [store,category],
 
       function(err, result) {
