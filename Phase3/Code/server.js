@@ -1311,11 +1311,13 @@ app.post('/newItem', function(req, res){
     }
 
     var q;
+    var test;
+
     if(req.body.sellChoice === "selling"){
-      q =  "INSERT INTO sale_product(seller_id, description, photo_url, category_id, price) VALUES( $1, '"+req.body.iDescript+"', '"+ req.body.iPic +"', 9, '"+ req.body.iPrice +"' )";
+      q =  "INSERT INTO sale_product(seller_id, description, photo_url, category_id, price) VALUES( $1, '"+req.body.iDescript+"', '"+ req.body.iPic +"', '"+req.body.selectCategory+ "', '" +req.body.iPrice+"' )";
     }
     else if(req.body.sellChoice === "auctioning"){
-      q = "INSERT INTO auction_product(seller_id, description, photo_url, category_id, starting_price) VALUES( $1, "+req.body.iDescript+", "+ req.body.iPic +", 9, "+ req.body.iPrice +" )";
+      q = "INSERT INTO auction_product(seller_id, description, photo_url, category_id, starting_price) VALUES( $1, "+req.body.iDescript+", "+ req.body.iPic +", '"+req.body.selectCategory+ "', '"+req.body.iPrice +"' )";
     }
     client.query(q, [req.session.account_id],
 
@@ -1323,7 +1325,7 @@ app.post('/newItem', function(req, res){
         //call `done()` to release the client back to the pool
         done();
         if(err) {
-          return console.error('error running query', err);
+          return console.error('Error adding item', err);
         }
         res.json(true);
       });

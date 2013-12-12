@@ -253,6 +253,17 @@ html
 								label(for="bidEndDate") Auction end date
 									input(type="date", id="bidEndDate", value="", class="ui-input-text ui-body-c ui-corner-all ui-shadow-inset")
 
+							fieldset(for= "categoryChoice" data-role="controlgroup")
+
+									br
+									label Category:
+										select(id="selectCategory" name="selectCategory" )
+											-for(var g = 0 ; g < data.dataLength ; g++)	
+												option(value = "#{data.stores[g].category_id}") #{data.stores[g].name}
+									br
+									label Sub Category:
+										input(type="text" name="selectSubcategory" id="select")
+
 									
 							//- li
 							//- 	label(for="confirmPassword") Confirm Password:
