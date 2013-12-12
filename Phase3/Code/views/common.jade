@@ -89,7 +89,7 @@ header(data-role="header", data-theme="a", data-position="fixed")
 	-}
 	div(data-role="fieldcontain")
 	a(href="#rightPanel", data-role="button", data-inline="true", data-corners="true", data-mini="true") Stores
-	input(onchange = "searchItems(document.getElementById('search_input').value)" , type="search", id = "search_input", data-inline = "true", name="search-2" , class="mainSearch", data-theme="c" n, placeholder = "Search items...")
+	input(onchange = "searchItems(document.getElementById('search_input#{data.searchCounter}').value)" , type="search", id = "search_input#{data.searchCounter++}", data-inline = "true", name="search-2" , class="mainSearch", data-theme="c" n, placeholder = "Search items...")
 
 
 footer(data-role="footer", data-theme="a", data-position="fixed")

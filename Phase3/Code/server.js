@@ -57,7 +57,8 @@ app.get('/', function(request, response) {
       "userPicture" : undefined,
       "rank" : 0,
       "email" : "",
-      "password" : ""
+      "password" : "",
+      "searchCounter" : 0 
 		}
 	};
 
