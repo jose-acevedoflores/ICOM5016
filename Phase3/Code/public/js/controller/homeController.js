@@ -1237,9 +1237,9 @@ var storeToRemove = undefined;
 var oldAdminId = undefined;
 var userId = undefined;
 //Sets storeToRemove in order for the call to removeStore to work with the parameter.
-function toRemoveStore(storeName){
-	console.log("Store to remove: " + storeName);
-	storeToRemove = storeName;
+function toRemoveStore(storeId){
+	console.log("Store to remove: " + storeId);
+	storeToRemove = storeId;
 }
 
 //Clears storeToRemove
@@ -1278,7 +1278,7 @@ function removeStore(){
 	console.log("REMOVE STORE "+ storeToRemove);
 	$.mobile.loading("show");
 	$.ajax({
-		url : "http://"+host+"/removeStore/storeName/"+storeToRemove,
+		url : "http://"+host+"/removeStore/storeId/"+storeToRemove,
 		method : "delete",
 		contentType: "application/json",
 		dataType : "json",
@@ -1532,11 +1532,34 @@ function deleteUser(){
 
 function addCategory(){
 	console.log("add category");
+	var catName = $("#newCategoryName").val();
+	
+	$.mobile.loading("show");
+	$.ajax({
+		url : "http://"+host+"/addCategory/categoryName/"+storeToAdd+"/"+catName,
+		method : "post",
+		contentType: "application/json",
+		dataType : "json",
+		success : function(data, textStatus, jqXHR){
+
+			$.mobile.loading("hide");
+		
+			
+			document.location.href = "http://"+host;
+		},
+		error: function(data, textStatus, jqXHR){
+			console.log("textStatus: " + textStatus);
+			alert("Data not found!");
+		}
+	});
+	storeToAdd = undefined;
 }
+
+
 var storeToAdd = undefined;
 function toAddCategoryToStore(currentStore){
 	console.log(currentStore);
-	storeToAdd = currentStore;
+    storeToAdd = currentStore;
 }
 
 function cancelAddStore(){

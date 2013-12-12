@@ -69,7 +69,7 @@ app.get('/', function(request, response) {
     	return console.error('error fetching client from pool', err);
   	}
 
-  	client.query('SELECT * FROM  category', function(err, result) {
+  	client.query('SELECT * FROM  category WHERE is_active = true', function(err, result) {
     		//call `done()` to release the client back to the pool
     		done();
 
@@ -1233,6 +1233,34 @@ app.post('/addStore/storeName/:storeName', function(req, res){
   }
 });
 
+app.post('/addCategory/categoryName/:storeName/:catName', function(req, res){
+  var storeName = req.params.storeName;
+  var catToAdd = req.params.catName;
+
+  if (!req.session.isAdmin) {
+    req.json(false)
+  }
+  else {
+    pg.connect(conString, function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
+
+      client.query("INSERT INTO category(name, parent_category_id) VALUES( $1, $2)", [catToAdd, storeName],
+
+      function(err, result) {
+        //call `done()` to release the client back to the pool
+        done();
+        if(err) {
+          return console.error('error running query', err);
+        }
+        res.json(true);
+       
+      });
+  }); 
+  }
+});
+
 
 app.post('/newItem', function(req, res){
 
@@ -1293,18 +1321,29 @@ app.del("/shoppingCart/delete/:id", function(req, res){
 
 });
 
-app.del("/removeStore/storeName/:storeName", function(req, res){
-	var storeToRemove = req.params.storeName;
+app.del("/removeStore/storeId/:storeId", function(req, res){
+	var storeToRemove = req.params.storeId;
 	console.log("DELETE: "+storeToRemove);
-	for(var i = 0 ; i < generate.data.dataLength; i++){
-		if(generate.data.stores[i].name === storeToRemove)
-		{
-			generate.data.stores.splice(i,1);
-			break;
-		}
+	 
 
-	}
-	res.json(true);
+  //QUERY DB to update the total_items count of this user and the items_in_cart entries.
+  pg.connect(conString, function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
+
+    client.query('UPDATE category SET is_active = false WHERE parent_category_id = $1', [storeToRemove],
+
+      function(err, result) {
+        //call `done()` to release the client back to the pool
+        done();
+        if(err) {
+          return console.error('error running query', err);
+        }
+        res.json(true);
+      });
+  }); 
+
 });
 
 app.del("/user/delete/:id", function(req, res){
@@ -1317,7 +1356,7 @@ app.del("/user/delete/:id", function(req, res){
       return console.error('error fetching client from pool', err);
     }
 
-    client.query('DELETE FROM web_user WHERE account_id = $1', [userId],
+    client.query('UPDATE web_user SET is_active = false WHERE account_id = $1', [userId],
 
       function(err, result) {
         //call `done()` to release the client back to the pool

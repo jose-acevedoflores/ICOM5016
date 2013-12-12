@@ -490,7 +490,7 @@ html
 					- for(var i = 0 ; i < data.dataLength ; i++)
 						li 
 							a #{data.stores[i].name} 
-							a(onclick="toRemoveStore(\"#{data.stores[i].name}\")", href="#adminRemoveStore", data-rel="popup", data-position-to="window", data-transition="pop") Remove Store
+							a(onclick="toRemoveStore(\"#{data.stores[i].category_id}\")", href="#adminRemoveStore", data-rel="popup", data-position-to="window", data-transition="pop") Remove Store
 
 				br			
 				a(data-role="button", href="#addStoreForms", data-rel="popup", data-position-to="window", data-transition="pop") Add Store
@@ -514,12 +514,13 @@ html
 					- for(var i = 0 ; i < data.dataLength ; i++)
 						li 
 							a #{data.stores[i].name} 
-							a(onclick="toAddCategoryToStore(\"#{data.stores[i].name}\")", href="#addCategoryForm", data-rel="popup", data-position-to="window", data-transition="pop") Add category 
+							a(onclick="toAddCategoryToStore(\"#{data.stores[i].category_id}\")", href="#addCategoryForm", data-rel="popup", data-position-to="window", data-transition="pop") Add category 
 
 				br			
 
 				div(data-role="popup", id="addCategoryForm", data-theme="d", data-overlay-theme="b", class="ui-content", style="max-width:340px;")
-					h3 Store Name
+					h3 Category Name
+					input(type="text", id="newCategoryName")
 					a(onclick="addCategory()", data-role="button", data-rel="back", data-theme="b", data-icon="check", data-inline="true", data-mini="true") Add 
 					a(href="#", data-role="button", data-rel="back", data-inline="true", data-mini="true") Cancel
 
