@@ -982,15 +982,28 @@ app.put("/addItemToCart/:itemId", function(req, res){
       return console.error('error fetching client form pool', err);
     }
     if(req.session.loggedIn) {
-      client.query('INSERT INTO items_in_cart(shopping_cart_id, item_id, quantity) VALUES((SELECT shopping_cart_id FROM shopping_cart WHERE owner_id = $1), $2, 1) ', [req.session.account_id, req.params.itemId],
+      client.query('SELECT * FROM items_in_cart WHERE shopping_cart_id = (SELECT shopping_cart_id FROM shopping_cart WHERE owner_id = $1) AND item_id = $2 ', [req.session.account_id, req.params.itemId],
         function(err, result) {
-          done();
+         
           if(err) {
             return console.error('error running query', err);
           }
           console.log(result.rows); 
-
-          res.json(true);
+          if(result.rows == 0 ){
+           client.query('INSERT INTO items_in_cart(shopping_cart_id, item_id, quantity) VALUES((SELECT shopping_cart_id FROM shopping_cart WHERE  owner_id = $1), $2, 1) ',[req.session.account_id, req.params.itemId], function(err, result) {
+             if(err) {
+                return console.error('error running query', err);
+              }
+              done();
+              res.json(true);
+            });
+          }
+          else{
+            console.log("ITEM IS ALREADY IN CART");
+            done();
+            res.json(false);
+          }
+          
         });
       //Rule to update quantity in shopping_cart 
       /* CREATE RULE update_item_count AS ON INSERT TO items_in_cart 
