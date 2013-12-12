@@ -272,7 +272,7 @@ function orderView(category, store){
 						"<img src="+ item.photo_url + ">"  + 
 						"<h2>" + item.product_name + "</h2>" + 
 						"<p>" + item.description + "</p>" +
-						"<p> Rating:" + item.seller_id +" temp" + " </p>" + 
+						"<p> Seller: " + item.f_name + " " + item.l_name+  " </p>" + 
 						"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
 						"</a></li>");
 						
@@ -530,7 +530,7 @@ function placedBids(){
 							"<img src="+ item.picture + ">"  + 
 							"<h2>" + item.pname + "</h2>" + 
 							"<p>" + item.description + "</p>" +
-							"<p> Rating:" + item.rating + " </p>" + 
+							"<p> Seller: " + item.f_name + " " + item.l_name+  " </p>" + 
 							"<div data-role=\"fieldcontain\" class=\"ui-li-aside\">" +
 							//"<h2 class=\"ui-li-aside\"> Increase Bid:" +
 							"<label for=\"incBidPB" +item.id+"\"> Winning with" +
@@ -543,7 +543,7 @@ function placedBids(){
 							"<img src="+ item.picture + ">"  + 
 							"<h2>" + item.pname + "</h2>" + 
 							"<p>" + item.description + "</p>" +
-							"<p> Rating:" + item.rating + " </p>" + 
+							"<p> Seller: " + item.f_name + " " + item.l_name+  " </p>" + 
 							"<div data-role=\"fieldcontain\" class=\"ui-li-aside\">" +
 							//"<h2 class=\"ui-li-aside\"> Increase Bid:" +
 							"<label for=\"incBidPB" +item.id+"\"> Increase Bid" +
@@ -650,7 +650,6 @@ function itemsSold(){
 
 						"<h2>" +  item.pname + "</h2>" + 
 						"<p>" + item.description + "</p>" +
-						"<p> Rating:" + item.rating + " </p>" + 
 
 						
 						"<p class=\"ui-li-aside\"> Purchased Price: $" + item.price + "</p>" +
@@ -1196,7 +1195,7 @@ function itemsSelling(){
 							"<img src="+ item.picture + ">"  + 
 							"<h2>" +item.pname+ "</h2>" + 
 							"<p>" + item.description + "</p>" +
-							"<p> Rating:" + item.rating + " </p>" + 
+
 							"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
 							"</a>");
 
@@ -1207,7 +1206,6 @@ function itemsSelling(){
 							"<img src="+ item.picture + ">"  + 
 							"<h2>" + item.pname + "</h2>" + 
 							"<p>" + item.description + "</p>" +
-							"<p> Rating:" + item.rating + " </p>" + 
 							"<p class=\"ui-li-aside\"> Starting Price: " + item.price + "</p>" +
 							"</a>");
 

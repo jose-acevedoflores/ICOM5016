@@ -233,22 +233,22 @@ app.get('/stores/:store/:category/:sortOrder' , function(req, res){
 
     var q ;
     if(sortOrder === "lowToHigh"){
-      q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2 AND  is_active = TRUE ORDER BY price ';
+      q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod NATURAL JOIN (select l_name, f_name, account_id as seller_id from web_user) as webu  WHERE parent_category_id = $1 AND category_name = $2 AND  is_active = TRUE ORDER BY price ';
     }
     else if(sortOrder === "highToLow"){
-      q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2 AND is_active = TRUE  ORDER BY price DESC';
+      q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod NATURAL JOIN (select l_name, f_name, account_id as seller_id from web_user) as webu WHERE parent_category_id = $1 AND category_name = $2 AND is_active = TRUE  ORDER BY price DESC';
     }
     else if(sortOrder === "alphabetical"){
-      q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2 AND is_active = TRUE  ORDER BY brand ';
+      q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod NATURAL JOIN (select l_name, f_name, account_id as seller_id from web_user) as webu WHERE parent_category_id = $1 AND category_name = $2 AND is_active = TRUE  ORDER BY brand ';
     }
     else if(sortOrder === "revAlphabetical"){
-       q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2 AND is_active = TRUE  ORDER BY brand DESC';
+       q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod NATURAL JOIN (select l_name, f_name, account_id as seller_id from web_user) as webu WHERE parent_category_id = $1 AND category_name = $2 AND is_active = TRUE  ORDER BY brand DESC';
     }
     else if(sortOrder === "alphabeticalN"){
-         q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2 AND is_active = TRUE  ORDER BY product_name ';
+         q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod NATURAL JOIN (select l_name, f_name, account_id as seller_id from web_user) as webu WHERE parent_category_id = $1 AND category_name = $2 AND is_active = TRUE  ORDER BY product_name ';
     }
     else if(sortOrder ==="revAlphabeticalN"){
-         q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod WHERE parent_category_id = $1 AND category_name = $2 AND is_active = TRUE ORDER BY product_name DESC';
+         q = 'SELECT * FROM sale_product NATURAL JOIN (SELECT category_id,name AS category_name, parent_category_id FROM category) AS mod NATURAL JOIN (select l_name, f_name, account_id as seller_id from web_user) as webu WHERE parent_category_id = $1 AND category_name = $2 AND is_active = TRUE ORDER BY product_name DESC';
     }
     client.query(q, [store,category],
 
@@ -388,7 +388,7 @@ app.get('/placedBids', function(req, res) {
     if(req.session.loggedIn)  
     { 
 
-      client.query('SELECT product_id AS id, photo_url AS picture, starting_price AS price, brand, model, product_name AS pname, description, bid_amount, highest_bidder_id, \'winning\' AS whoiswin FROM auction_product NATURAL JOIN (SELECT bid_id AS highest_bid, amount AS bid_amount, buyer_account_id AS highest_bidder_id FROM bid ) AS temp WHERE auction_product.product_id IN (SELECT product_id FROM bid NATURAL JOIN auction_product WHERE bid.buyer_account_id = $1)', [req.session.account_id],
+      client.query('SELECT product_id AS id, seller_id, l_name, f_name, photo_url AS picture, starting_price AS price, brand, model, product_name AS pname, description, bid_amount, highest_bidder_id, \'winning\' AS whoiswin FROM auction_product NATURAL JOIN (SELECT bid_id AS highest_bid, amount AS bid_amount, buyer_account_id AS highest_bidder_id FROM bid ) AS temp NATURAL JOIN (select l_name, f_name, account_id as seller_id from web_user) as webu WHERE auction_product.product_id IN (SELECT product_id FROM bid NATURAL JOIN auction_product WHERE bid.buyer_account_id = $1)', [req.session.account_id],
 
       function(err, result) {
         //call `done()` to release the client back to the pool
