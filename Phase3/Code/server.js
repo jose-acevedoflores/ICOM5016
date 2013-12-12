@@ -1328,10 +1328,10 @@ app.post('/newItem', function(req, res){
     var test;
 
     if(req.body.sellChoice === "selling"){
-      q =  "INSERT INTO sale_product(seller_id, description, photo_url, category_id, price) VALUES( $1, '"+req.body.iDescript+"', '"+ req.body.iPic +"', '"+req.body.selectCategory+ "', '" +req.body.iPrice+"' )";
+      q =  "INSERT INTO sale_product(seller_id, description, photo_url, category_id, price, product_name, biding_time) VALUES( $1, '"+req.body.iDescript+"', '"+ req.body.iPic +"', '"+req.body.selectCategory+ "', '" +req.body.iPrice+"', '"+req.body.iName+"', '"+req.body.bidEndDate+"' )";
     }
     else if(req.body.sellChoice === "auctioning"){
-      q = "INSERT INTO auction_product(seller_id, description, photo_url, category_id, starting_price) VALUES( $1, "+req.body.iDescript+", "+ req.body.iPic +", '"+req.body.selectCategory+ "', '"+req.body.iPrice +"' )";
+      q = "INSERT INTO auction_product(seller_id, description, photo_url, category_id, starting_price, product_name, biding_time) VALUES( $1, '"+req.body.iDescript+"', '"+ req.body.iPic +"', '"+req.body.selectCategory+ "', '"+req.body.iPrice +"', '"+req.body.iName+"' , '"+req.body.bidEndDate+"')";
     }
     client.query(q, [req.session.account_id],
 
