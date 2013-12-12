@@ -748,7 +748,7 @@ function signOut(){
 function addItem(){
 	console.log("Add Item");
 	$.mobile.loading("show");
-	var form = $("#searchnewItemForm");
+	var form = $("#newItemForm");
 	var formData = form.serializeArray();
 	console.log("form data : "+ formData);
 	var user = ConvertToJSON(formData);
