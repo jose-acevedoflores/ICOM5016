@@ -30,7 +30,7 @@ $(document).on('pagebeforeshow', "#home", function( event, ui ) {
 					"<img src="+ item.photo_url + ">"  + 
 					"<h2>" + item.product_name + "</h2>" + 
 					"<p>" + item.description + "</p>" +
-					"<p> Rating:" + item.seller_id + " temp" + " </p>" + 
+					"<p> Seller: " + item.f_name + " " + item.l_name+  " </p>" + 
 					"<p class=\"ui-li-aside\"> Price: $" + item.price + "</p>" +
 					"</a></li>");	
 				}
@@ -43,7 +43,7 @@ $(document).on('pagebeforeshow', "#home", function( event, ui ) {
 					"<img src="+ item.photo_url + ">"  + 
 					"<h2>" + item.product_name + "</h2>" + 
 					"<p>" + item.description + "</p>" +
-					"<p> Rating:" + item.seller_id + " temp" + " </p>" + 
+					"<p> Seller: " + item.f_name + " " + item.l_name+  " </p>" + 
 					"<p class='ui-li-aside'> Highest Bid: $" + item.highest_bid_amount+  "</p>"+
 					"</a></li>");
 
@@ -93,7 +93,7 @@ function findStore(store){
 							"<img src="+ item.photo_url + ">"  + 
 							"<h2>" + item.product_name + "</h2>" + 
 							"<p>" + item.description + "</p>" +
-							"<p> Rating:" + item.seller_id +" temp" + " </p>" + 
+							"<p> Seller: " + item.f_name + " " + item.l_name+  " </p>" + 
 							"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
 							"</a></li>");
 
@@ -143,7 +143,7 @@ function findCategory(store, category){
 						"<img src="+ item.photo_url + ">"  + 
 						"<h2>" + item.product_name + "</h2>" + 
 						"<p>" + item.description + "</p>" +
-						"<p> Rating:" + item.seller_id +" temp" + " </p>" + 
+						"<p> Seller: " + item.f_name + " " + item.l_name+  " </p>" + 
 						"<p class=\"ui-li-aside\"> Price: " + item.price + "</p>" +
 						"</a></li>");
 						
