@@ -749,7 +749,7 @@ function signOut(){
 function addItem(){
 	console.log("Add Item");
 	$.mobile.loading("show");
-	var form = $("#newItemForm");
+	var form = $("#searchnewItemForm");
 	var formData = form.serializeArray();
 	console.log("form data : "+ formData);
 	var user = ConvertToJSON(formData);
@@ -1145,7 +1145,7 @@ function searchItems(label) {
 				for (var i=0; i < len; ++i){
 					item = itemList[i];
 					
-					listResult.append("<li id=itemID"+item.id+"><a href=\"#\">" + 
+					listResult.append("<li id=itemID"+item.id+"><a onclick=\"findItem(" +item.id + ")\">" + 
 						"<img src="+ item.picture + ">"  + 
 						"<h2>" +item.pname+ "</h2>" + 
 						"<p>" + item.description + "</p>" +
