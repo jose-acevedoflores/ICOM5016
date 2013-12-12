@@ -567,4 +567,24 @@ html
 				br
 				a(id="addItemToCartAnchor" , onclick="addItemToCart()", data-role= "button", data-inline = "false") Add to cart
 				a(id="placeBidAnchor", onclick = "increaseBid(0,'incBidIP')", data-role= "button", data-inline = "false") Place Bid
-				
+
+		// reports
+		// -if(data.isAdmin)	{
+		div(data-role="page", id = "adminGenerateReports")
+			include common
+			div(data-role= "content", data-theme="b", data-content-theme="b")
+				div(data-role="fieldcontain")
+						select(name="reports", id="whichReport", onchange="generateReports()")
+							optgroup(label="Time")
+								option(value="todaySales") Today sales
+								option(value="monthlySales") Monthly Sales
+							optgroup(label="Other")	
+								option(value="alphabetical") Alphabetical order (Brand)
+								option(value="revAlphabetical") Reverse Alphabetical (Brand)
+							
+
+				ul(data-role="listview", id="adminGenerateReportsList", data-inset="true")
+				br	
+		// -}
+
+

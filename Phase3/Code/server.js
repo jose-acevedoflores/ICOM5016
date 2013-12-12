@@ -719,6 +719,45 @@ app.get("/search/:query", function(req, res)  {
 	res.json(true);
 });
 
+app.get("/reports/:reportType", function(req, res){
+  var reportType = req.params.reportType;
+  console.log("GET: reports " + reportType);
+
+  pg.connect(conString, function(err, client, done) {
+    if(err){
+      return console.error('error fetching client form pool', err);
+    }
+    if(req.session.loggedIn && req.session.isAdmin) {
+
+      var q;
+      if(reportType === "todaySales"){
+       q = 'SELECT distinct(invoice_id),buyer_account_id, amount FROM invoice NATURAL JOIN has_invoice WHERE date_part(\'day\' , invoice.date) =   date_part(\'day\', current_date) ';
+      }
+      else if(reportType === "monthlySales"){
+         q = 'SELECT distinct(invoice_id),buyer_account_id, amount FROM invoice NATURAL JOIN has_invoice WHERE date_part(\'day\' , invoice.date) =   date_part(\'day\', current_date) '
+      }
+      client.query(q,  
+
+        function(err, result) {
+          done();
+          if(err) {
+            return console.error('error running query', err);
+          }
+          console.log("reports: "+result.rows); 
+          
+          var temp = {"items" : result.rows};
+          res.json(temp);
+        });
+
+    }
+    else {
+      var temp = {"items": "empty"};
+      res.json(temp);
+    }
+  });
+
+});
+
 /***************************************************************************************************************************************************
 **************************************************  PUT METHODS ******************************************************
 ****************************************************************************************************************************************************/

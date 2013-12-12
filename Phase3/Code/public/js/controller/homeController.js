@@ -1591,7 +1591,55 @@ function addItemToCart(){
 	});
 }
 
+function adminGenerateReports(){
 
+	$.mobile.loading("show");
+	console.log("adminGenerateReports ");
+	$.ajax({
+		url : "http://"+host+"/reports/todaySales",
+		method: 'get',
+		contentType: "application/json",
+		dataType:"json",
+		success : function(data, textStatus, jqXHR){
+						
+		$(document).on('pagebeforeshow', "#adminGenerateReports", function( event, ui) {
+
+				console.log("adminGenerateReports on pagebeforeshow listener");
+				var len  = data.items.length;
+				var list  = $("#adminGenerateReportsList");
+				list.empty();
+				var item;
+
+				for (var i = 0; i < len; ++i) {
+					item = data.items[i];
+					list.append("<li  data-icon=\"false\">"+
+						"<a href=\"#\">" +
+						"<h1> Amount : " +item.amount+"</h1>"+
+						"</a></li>");
+					
+				}
+				list.listview("refresh");
+				
+
+				$.mobile.loading("hide");			
+			});
+
+			$.mobile.navigate("#adminGenerateReports");
+
+		},
+		error: function(data, textStatus, jqXHR){
+			$.mobile.loading("hide");
+			console.log("textStatus: " + textStatus);
+			alert("error in generating reports");
+		}
+	});
+}
+
+function generateReports(){
+
+
+	console.log("REPORTS "+document.getElementById("whichReport").value);
+}
 // //This enables the search bar to send queries to the server
 // $(document).ready(function() {
 // 	$(".mainSearch").on("keypress" ,function(e) { 
